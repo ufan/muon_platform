@@ -26,13 +26,13 @@ The platform is not a generic IoT device and not only a detector. Its value come
 
 Use these documents as the canonical context when modifying this repo:
 
-1. `00_product_context/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
-2. `01_requirements/SRD.md` for top-level system requirements, functional requirements, reliability, verification, lifecycle, and traceability.
-3. `02_architecture/PLATFORM_ARCHITECTURE.md` for the master platform architecture.
-4. `02_architecture/SYSTEM_ARCHITECTURE.md` for detailed system-layer structure.
+1. `product_landscape.md` for product vision, application domains, deployment modes, and system composition.
+2. `01_requirements/`
+3. `02_architecture` 
 5. `03_adr/` for architecture decisions that constrain implementation choices.
-6. `04_ai_agent/` for AI-agent workflow, coding rules, prompts, and generated architecture support material.
 
+Iteration-driven design is adopted for this product development.
+The documents in this project are supposed to be revised frequently.
 When documents disagree, prefer the more specific ADR or architecture document, then update or flag the conflicting text instead of silently choosing one.
 
 ## Documentation Rules
@@ -48,20 +48,20 @@ When documents disagree, prefer the more specific ADR or architecture document, 
 
 The platform is a modular scientific instrument composed of independent technical domains:
 
-- detector and DAQ
-- high voltage
-- gas control
-- pose and motion
-- central computing
-- reconstruction
-- data platform
-- digital twin and applications
+- Low voltage power supply: essential for the whole system
+- Detector and DAQ: central component of the instrument
+-_High voltage supply:  essential life-support for Micromegas detector
+- Gas control: another essential life-support for Micromegas detector
+- Pose/Position Sensing and motion control: deployed condition data essential for data products
+- Environmental Sensing: environmantal condition data essential both for instrument health and data products
+- Central computing: brain of the instrument, coordinates all the subsystems
+- Reconstruction: directly affect the data product quality and data pipeline diagonosis
+- Data platform: high value data products generation, persistence and distribution to end user
+- Digital twin and applications: application/field specific ui/ux products
 
-Respect the separation between the control plane and data plane.
-
-Control-plane services handle hardware control, configuration, health monitoring, safety, and instrument state. Examples include DAQ, HV, gas, pose, health, and configuration services.
-
-The data plane handles high-rate scientific data: raw data, Muon EDM, reconstruction, physics products, density products, and analytics storage.
+Respect the separation between the control plane and data plane:
+- Control-plane services handle hardware control, configuration, health monitoring, safety, and instrument state. Examples include DAQ, HV, gas, pose, health, and configuration services.
+- Data-plane handles high-rate scientific data: raw data, muon event data model (EDM), reconstruction, physics products, density products, and analytics storage.
 
 ## Hardware Abstraction
 
@@ -71,15 +71,18 @@ Required boundary:
 
 ```text
 Hardware
-  -> Firmware / domain controller
-  -> Service API
-  -> Central software
+  -> Firmware / Domain controller / Hardware Bus
+  -> Domain Service API
+  -> Central Aggregation Layer
   -> Application
 ```
 
 Domain controllers are peer subsystems with deterministic local control and stable interfaces. Hardware details must remain isolated behind services.
 
-Preferred service technologies are protobuf and gRPC. Zenoh may be used where distributed communication is required. Hardware links may include RS485, Modbus RTU, CAN-FD, or Ethernet depending on subsystem needs.
+DAQ domain controller should be treated separately from others. All other domain controllers will be attached to the central controller through shared internal bus system. DAQ domain has independent high-rate tolerant bus such as USB or Ethernet. 
+For other domain controllers, dedicated bus may be assigned initially, but ultimately one single shared bus for all. RS485 is the baseline support, but ultimately the bus protocol migrated to CAN-FD.
+
+Preferred service technologies are protobuf and gRPC. Zenoh/ZeroMQ may be used where distributed communication is required.
 
 ## Reconstruction And Data Rules
 
@@ -106,8 +109,8 @@ Rules:
 - keep serialization outside algorithm logic
 - record provenance for scientific results
 - avoid private side channels, hidden global state, and ad hoc data exchange between algorithms
+- centralized event and condition store preferred, so that minimum dependecny between alogrithms
 - keep reconstruction pipelines configurable and suitable for DAG execution
-- centralized event and condition store so that minimum dependecny between alogrithms
 
 Every scientific result should be traceable to instrument version, firmware version, detector configuration, geometry version, calibration version, algorithm version, software version, and timestamp.
 
@@ -134,6 +137,7 @@ Development target:
 
 Deployment target:
 
+- Linux x86/x64 desktops
 - Linux ARM64 edge appliance
 - systemd services
 - Debian packages initially
@@ -143,7 +147,7 @@ Maintain ARM64 compatibility in technology choices, assumptions, configuration, 
 
 ## Technology Direction
 
-Current architecture direction:
+Initial architecture direction:
 
 - Zephyr RTOS for MCU firmware
 - Linux ARM64 for central computing
