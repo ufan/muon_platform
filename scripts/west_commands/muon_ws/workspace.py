@@ -150,8 +150,31 @@ class Workspace:
             raise WorkspaceError(f"manifest file not found: {self.manifest_file}")
         for p in seen.values():
             p.abspath = os.path.normpath(os.path.join(self.topdir, p.path))
+        self._borrow_hub_metadata(seen)
         self.projects = list(seen.values())
         self.manifest_self_name = manifest_self_name
+
+    def _borrow_hub_metadata(self, seen):
+        """In a repo-rooted workspace the hub is a plain project and its west.yml is not the
+        manifest. West's `self` cannot carry userdata, so projects without userdata (e.g. the
+        manifest repo daq) take role/maturity/verify/... from the hub's entry of the same name."""
+        hub = seen.get(HUB_NAME)
+        if hub is None or hub.is_manifest:
+            return
+        hub_manifest = os.path.join(hub.abspath, "west.yml")
+        if not os.path.isfile(hub_manifest):
+            return
+        try:
+            _, hub_projects, _, _ = _parse_projects(_load_yaml(hub_manifest), hub_manifest)
+        except (WorkspaceError, KeyError):
+            return
+        by_name = {p.name: p for p in hub_projects}
+        for p in seen.values():
+            src = by_name.get(p.name)
+            if src and not p.userdata and src.userdata:
+                p.userdata = dict(src.userdata)
+            if src and not p.groups and src.groups and not p.is_manifest:
+                p.groups = list(src.groups)
 
     # ---- queries -------------------------------------------------------
     def get(self, name):
