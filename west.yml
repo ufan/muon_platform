@@ -49,12 +49,13 @@ manifest:
 
     - name: daq
       repo-path: muon_daq                  # private on GitHub
-      # Once muon_daq is pushed and `west update -k daq` has run once (ADR-009 §13):
-      #   replace `groups:` with  import: {name-blocklist: [platform]}
-      #   (west forbids groups + import) and remove usb-app2-legacy below.
       path: daq
       revision: prototype/fx3-gen1
-      groups: [online]
+      # Imports daq/west.yml: daq declares its own legacy reference (usb-app2-legacy).
+      # The hub is blocklisted (daq lists it as a plain project); west forbids
+      # `groups` together with `import`, so daq is selected by name (ADR-009 §13).
+      import:
+        name-blocklist: [platform]
       userdata:
         role: device control, raw stream capture, persistence and fan-out
         maturity: active
@@ -131,17 +132,3 @@ manifest:
         deploy: dev
         spec: platform/legacy_inventory.md
         reference_for: [analysis, conditions]
-
-    # Transitional: moves to daq/west.yml when the daq import is enabled (see `daq` above).
-    - name: usb-app2-legacy
-      remote: jw-1404
-      repo-path: usb_app2
-      path: legacy/usb_app2
-      revision: daemon-dev                  # `deploy` = field-deployed reference
-      groups: [legacy]
-      userdata:
-        role: prototype DAQ software tested on the current hardware; primary behaviour reference for DAQ iteration 1
-        maturity: legacy
-        deploy: dev
-        spec: daq/doc/guides/prototype-reference.md
-        reference_for: [daq]
