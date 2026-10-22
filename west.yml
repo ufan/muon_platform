@@ -37,7 +37,7 @@ manifest:
   projects:
     # ---- active / incubating -------------------------------------------
     - name: contracts
-      repo-path: muon_contracts            # to be created on GitHub
+      repo-path: muon_contracts            # private on GitHub
       # contracts has no west.yml of its own yet; nothing to import (ADR-009 §13).
       path: contracts
       groups: [contracts, online, offline]
