@@ -1,0 +1,161 @@
+"""muon-ws command line (also wrapped by the west extension commands)."""
+
+import argparse
+import os
+import sys
+
+import yaml
+
+from . import agents, catalog, refs
+from .workspace import Workspace, WorkspaceError
+
+
+def _selection(parser):
+    parser.add_argument("projects", nargs="*", metavar="PROJECT", help="project names or paths")
+    parser.add_argument("-g", "--group", action="append", default=[], help="select projects in GROUP (repeatable)")
+
+
+def build_parser():
+    ap = argparse.ArgumentParser(prog="muon-ws", description=__doc__)
+    ap.add_argument("-C", dest="start", help="run as if started in this directory")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    r = sub.add_parser("refs", help="legacy reference checkouts (read-only lock, ADR-009 §15)")
+    rs = r.add_subparsers(dest="refs_cmd", required=True)
+    s = rs.add_parser("sync", help="clone and lock the legacy refs of the current project(s)")
+    s.add_argument("names", nargs="*", help="legacy projects (default: refs of the current project)")
+    s.add_argument("--all", action="store_true", help="all legacy projects in the manifest")
+    s.add_argument("--update", action="store_true", help="move clean checkouts to the pinned revision")
+    s.add_argument("--refs-dir", help="standalone only: parent directory for legacy/ (recorded in .muon/local.yml)")
+    st = rs.add_parser("status", help="show lock state of legacy refs")
+    st.add_argument("names", nargs="*")
+    st.add_argument("--all", action="store_true")
+    b = rs.add_parser("build-dir", help="print the out-of-tree build directory for a legacy ref")
+    b.add_argument("name")
+
+    a = sub.add_parser("agents", help="generated agent files for all AI tools (ADR-009 §14)")
+    asub = a.add_subparsers(dest="agents_cmd", required=True)
+    sy = asub.add_parser("sync", help="generate shims, skill links and tool adapters")
+    sy.add_argument("--check", action="store_true", help="exit non-zero if anything is stale")
+    sy.add_argument("--force", action="store_true", help="replace a hand-written root AGENTS.md (kept as .orig)")
+    sy.add_argument("--no-fetch", action="store_true", help="do not fetch the hub when it is not checked out")
+    asub.add_parser("adapters", help="list per-tool adapter status")
+
+    c = sub.add_parser("catalog", help="list projects")
+    _selection(c)
+    c.add_argument("-a", "--all", action="store_true", help="include inactive projects")
+    c.add_argument("--markdown", action="store_true")
+
+    v = sub.add_parser("verify", help="run each project's userdata.verify command")
+    _selection(v)
+
+    x = sub.add_parser("xbranch", help="create or switch to a topic branch across projects")
+    x.add_argument("branch")
+    _selection(x)
+    x.add_argument("-n", "--dry-run", action="store_true")
+    return ap
+
+
+def _refs_targets(ws, args):
+    if args.all:
+        return ws.legacy_projects()
+    if args.names:
+        out = []
+        for n in args.names:
+            p = ws.get(n)
+            if p is None or not p.is_legacy:
+                raise ValueError(f"{n}: not a legacy project in this manifest")
+            out.append(p)
+        return out
+    ctx = ws.context_projects()
+    return ws.legacy_refs_for([p.name for p in ctx])
+
+
+def cmd_refs(ws, args):
+    if args.refs_cmd == "build-dir":
+        p = ws.get(args.name)
+        if p is None or not p.is_legacy:
+            raise ValueError(f"{args.name}: not a legacy project")
+        print(ws.legacy_build_dir(p))
+        return 0
+    if args.refs_cmd == "sync" and args.refs_dir:
+        if ws.shape != "standalone":
+            raise ValueError("--refs-dir is only for standalone clones; west workspaces use the topdir")
+        os.makedirs(os.path.join(ws.repo_root, ".muon"), exist_ok=True)
+        with open(os.path.join(ws.repo_root, ".muon", "local.yml"), "w", encoding="utf-8") as f:
+            yaml.safe_dump({"refs_dir": os.path.abspath(args.refs_dir)}, f)
+        ws = Workspace(ws.start)
+    targets = _refs_targets(ws, args)
+    if not targets:
+        print("no legacy references declared for this context (see `reference_for` in the manifest)")
+        return 0
+    if args.refs_cmd == "status":
+        for p in targets:
+            s = refs.status(p.abspath)
+            if not s["cloned"]:
+                print(f"  {p.name:24} missing    {p.path}")
+                continue
+            state = "LOCKED" if s["locked"] else "UNLOCKED"
+            print(f"  {p.name:24} {state:9} {p.path}  push_disabled={s['push_disabled']} hooks={s['hooks']} "
+                  f"read_only={s['first_writable'] is None} {s['branch'] or s['head']} (pinned {p.revision}) dirty={s['dirty']}")
+        return 0 if all(refs.status(p.abspath).get("locked", True) or not refs.status(p.abspath)["cloned"]
+                        for p in targets) else 1
+    rc = 0
+    for p in targets:
+        try:
+            print(f"  {p.name}: {refs.sync(p, update=args.update)}  ({p.path})")
+        except RuntimeError as e:
+            print(f"  {p.name}: ERROR {e}")
+            rc = 1
+    return rc
+
+
+def cmd_agents(ws, args):
+    if args.agents_cmd == "adapters":
+        for k, v in agents.ADAPTERS.items():
+            print(f"  {k:12} {v}")
+        return 0
+    hub = agents.hub_source(ws, fetch=not args.no_fetch and not args.check)
+    plan = agents.build_plan(ws, hub)
+    stale = agents.run(plan, check=args.check, force=args.force)
+    if args.check:
+        if stale:
+            print("stale:\n  " + "\n  ".join(stale) + "\n(run `muon-ws agents sync`)")
+            return 1
+        print("agent files are up to date")
+    elif not stale:
+        print("agent files are up to date")
+    return 0
+
+
+def main(argv=None, start=None):
+    args = build_parser().parse_args(argv)
+    try:
+        ws = Workspace(args.start or start)
+        if args.cmd == "refs":
+            return cmd_refs(ws, args)
+        if args.cmd == "agents":
+            return cmd_agents(ws, args)
+        if args.cmd == "catalog":
+            if args.all and not args.projects and not args.group:
+                projects = ws.members()
+            else:
+                projects = catalog.select(ws, args.projects, args.group)
+            rows = catalog.catalog_rows(ws, projects)
+            print(catalog.markdown_table(rows) if args.markdown else catalog.text_table(rows))
+            return 0
+        if args.cmd == "verify":
+            return 0 if catalog.verify(ws, catalog.select(ws, args.projects, args.group)) else 1
+        if args.cmd == "xbranch":
+            if not args.projects and not args.group:
+                raise ValueError("name the projects or groups to branch (cross-repo changes are explicit)")
+            catalog.xbranch(ws, catalog.select(ws, args.projects, args.group), args.branch, args.dry_run)
+            return 0
+    except (WorkspaceError, ValueError, RuntimeError) as e:
+        print(f"muon-ws: error: {e}", file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

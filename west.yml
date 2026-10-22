@@ -1,0 +1,147 @@
+# Muon platform workspace manifest (ADR-009).
+#
+# userdata keys (read by `west catalog`, `west verify`, `west agents-sync`):
+#   role      one-line responsibility
+#   maturity  legacy | reference | incubating | active | stable  (ADR-009 §5)
+#   deploy    edge | server | dev
+#   spec      entry point for the project's specification
+#   verify    plain shell command run from the project root (never calls west; ADR-009 §12)
+#   reference_for  (legacy only) projects this legacy repo is a reference for
+#
+# Legacy projects live in legacy/<dir>, are named <dir>-legacy, and are fetched and
+# locked read-only with `west refs sync` -- never with a bare `west update` (ADR-009 §15).
+# Do not run `west update` on a project until it is clean and pushed (ADR-009 §11).
+
+manifest:
+  version: "1.2"
+
+  remotes:
+    - name: github
+      url-base: git@github.com:ufan
+    # Additional remotes are allowed for legacy/reference projects only.
+    - name: gitee
+      url-base: git@gitee.com:chinamyworld
+    - name: jw-1404
+      url-base: git@github.com:jw-1404
+
+  defaults:
+    remote: github
+    revision: main
+
+  group-filter: [-legacy]
+
+  self:
+    path: platform
+    west-commands: scripts/west-commands.yml
+
+  projects:
+    # ---- active / incubating -------------------------------------------
+    - name: contracts
+      repo-path: muon_contracts            # to be created on GitHub
+      # contracts has no west.yml of its own yet; nothing to import (ADR-009 §13).
+      path: contracts
+      groups: [contracts, online, offline]
+      userdata:
+        role: shared wire, raw-capture, pipeline-record, service-API and state-machine contracts
+        maturity: incubating
+        deploy: dev
+        spec: contracts/README.md
+
+    - name: daq
+      repo-path: muon_daq                  # to be created on GitHub
+      # Once muon_daq is pushed and `west update -k daq` has run once (ADR-009 §13):
+      #   replace `groups:` with  import: {name-blocklist: [platform]}
+      #   (west forbids groups + import) and remove usb-app2-legacy below.
+      path: daq
+      revision: prototype/fx3-gen1
+      groups: [online]
+      userdata:
+        role: device control, raw stream capture, persistence and fan-out
+        maturity: active
+        deploy: edge
+        spec: daq/SPEC.md
+        verify: cmake -S . -B build/verify -DCMAKE_BUILD_TYPE=Debug && cmake --build build/verify -j && ./build/verify/muon_daq_state_machine_smoke
+
+    # ---- reference ------------------------------------------------------
+    - name: config
+      remote: gitee                         # to migrate to GitHub
+      repo-path: muon_config
+      path: config
+      revision: dev
+      groups: [config, online, offline]
+      userdata:
+        role: per-site detector configuration (mapping, alignment, z positions); future `conditions`
+        maturity: reference
+        deploy: dev
+
+    - name: study
+      repo-path: muon_study
+      path: study
+      groups: [research]
+      userdata:
+        role: studies and timeline
+        maturity: reference
+        deploy: dev
+
+    - name: muon-tools
+      remote: gitee
+      repo-path: muon_tools
+      path: tools/muon_tools
+      groups: [tools]
+      userdata:
+        role: small offline utilities (ADC level, rate estimate)
+        maturity: reference
+        deploy: dev
+
+    - name: rate-estimate
+      remote: gitee
+      repo-path: muon_rate_estimate
+      path: tools/rate_estimate
+      groups: [tools, sim]
+      userdata:
+        role: muon rate estimation
+        maturity: reference
+        deploy: dev
+
+    # ---- legacy (reference only; disabled by default; ADR-009 §5, §15) ---
+    # Shared legacy references are declared here. A legacy repo used by a single
+    # project is declared in that project's own west.yml (ADR-009 §13).
+    - name: muon400-process-legacy
+      remote: gitee
+      repo-path: muon400_process
+      path: legacy/muon400_process
+      revision: deploy
+      submodules: true                      # src/fx3
+      groups: [legacy]
+      userdata:
+        role: legacy MUON400 chain (fx3 readout, unpack/decode, hit, track)
+        maturity: legacy
+        deploy: dev
+        spec: platform/legacy_inventory.md
+        reference_for: [daq, preprocess, recon]
+
+    - name: analysis-legacy
+      remote: gitee
+      repo-path: muon_analysis
+      path: legacy/analysis
+      groups: [legacy]
+      userdata:
+        role: legacy ROOT macros, notebooks and baseline studies
+        maturity: legacy
+        deploy: dev
+        spec: platform/legacy_inventory.md
+        reference_for: [analysis, conditions]
+
+    # Transitional: moves to daq/west.yml when the daq import is enabled (see `daq` above).
+    - name: usb-app2-legacy
+      remote: jw-1404
+      repo-path: usb_app2
+      path: legacy/usb_app2
+      revision: daemon-dev                  # `deploy` = field-deployed reference
+      groups: [legacy]
+      userdata:
+        role: prototype DAQ software tested on the current hardware; primary behaviour reference for DAQ iteration 1
+        maturity: legacy
+        deploy: dev
+        spec: daq/doc/guides/prototype-reference.md
+        reference_for: [daq]

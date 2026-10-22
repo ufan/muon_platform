@@ -6,7 +6,21 @@ You are a senior software architect for a scientific muography instrument platfo
 
 Work with the judgment expected for complex scientific instruments: module design, subsystem integration, system architecture, hardware control, reconstruction software, and particle-physics data analysis and field deployment and maintenance.
 
-This repository contains official design documents only. It is the upstream specification source for downstream hardware, firmware, services, reconstruction, simulation, digital-twin, and application projects.
+This guide applies to the whole muon platform workspace and is read by every AI coding tool (`CLAUDE.md`/`GEMINI.md` are shims that import it). It lives in the `platform` hub repository and is copied to the workspace root by `west agents-sync` / `muon-ws agents sync`. **Paths below are relative to the west workspace root.** Project-level `AGENTS.md` files add local rules; when they conflict with this guide, flag the conflict instead of silently choosing.
+
+## Workspace and Workflow
+
+- The workspace is a west multi-repository workspace ([ADR-009](platform/03_adr/ADR-009_workspace_repository_model.md)). `platform/west.yml` is the authoritative project list. Run `west catalog -a` to see every project with its maturity, role, groups, spec and `reference_for`. West is needed only at workspace level. Every repo builds, tests and runs without it (ADR-009 §12). Procedures: [WORKSPACE_GUIDE](platform/04_workflow/WORKSPACE_GUIDE.md).
+- Respect project maturity: `legacy` is read-only reference, never a dependency, and lives in `legacy/<dir>`, locked read-only on disk with commits and pushes disabled (`west refs sync`; ADR-009 §15). Host-local trees in `legacy/` listed in `platform/legacy_inventory.md` (not in any manifest, hence not locked) are equally read-only. Never unlock, `chmod`, edit or build inside any of it. Build legacy code out of tree (`muon-ws refs build-dir <name>`). `reference` is modified only on explicit request. `incubating`/`active` follow the spec-driven workflow. `stable` needs an ADR for breaking changes.
+- Development is spec-driven and bottom-up, one domain at a time ([ADR-010](platform/03_adr/ADR-010_spec_driven_domain_iteration.md)). Current iteration: **DAQ** (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
+- Changes to `contracts/`, and promoting a prototype into the spec baseline, start as a change proposal in `platform/changes/` (template in `platform/changes/_template/`). Intra-repo work, including prototyping, follows that project's own `AGENTS.md` and needs no proposal (prototype lane, ADR-010 §8). Agents may draft proposals, ADRs and contract changes, but a human approves them.
+- Shared contracts live in the `contracts` project and are consumed at the revision pinned in `platform/west.yml`. Never copy or vendor them.
+- A cross-repository change uses the same topic branch in every affected project (`west xbranch <branch> <projects>`) plus a manifest update in `platform/west.yml` (ADR-009 §8). Contract changes land first.
+- Verification: `west verify` (all active projects) or `west verify <project>`. Definition of done: verification passes; specs, docs and tests are updated; tests reference spec/requirement IDs.
+- Never run `west update` on projects with uncommitted or unpushed work. Never push, create remotes or delete branches without the user's confirmation.
+- Parallel agents work in separate git worktrees or branches, never in a shared working tree.
+- Playbook skills (Agent Skills format) live in `platform/.agents/skills/`: `muon-new-change`, `muon-new-project`, `muon-legacy-archaeology`, `muon-domain-iteration`, `muon-verify`, `muon-bump-manifest`. `agents sync` links them into the workspace root and into every project for all tools. Agents without skill support read the `SKILL.md` files directly.
+- Legacy code inventory: `platform/legacy_inventory.md`. Coarse platform map: `platform/02_architecture/LANDSCAPE.md`.
 
 ## Product Context
 
@@ -24,20 +38,21 @@ The platform is not a generic IoT device and not only a detector. Its value come
 
 ## Source Documents
 
-Use these documents as the canonical context when modifying this repo:
+Use these documents as the canonical platform context:
 
-1. `product_landscape.md` for product vision, application domains, deployment modes, and system composition.
-2. `01_requirements/`
-3. `02_architecture` 
-5. `03_adr/` for architecture decisions that constrain implementation choices.
+1. `platform/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
+2. `platform/01_requirements/` for system requirements.
+3. `platform/02_architecture/` for platform architecture and the coarse landscape map (`LANDSCAPE.md`).
+4. `platform/03_adr/` for architecture decisions that constrain implementation choices.
+5. `platform/guide/` for design notes that are not yet decisions.
 
 Iteration-driven design is adopted for this product development.
-The documents in this project are supposed to be revised frequently.
+The platform documents are supposed to be revised frequently.
 When documents disagree, prefer the more specific ADR or architecture document, then update or flag the conflicting text instead of silently choosing one.
 
 ## Documentation Rules
 
-- Preserve this repo as a documentation-only architecture baseline.
+- The hub holds platform-level documents, the manifest and workspace tooling only. Implementation code belongs in component projects.
 - Keep architecture language precise enough for downstream implementation projects to follow.
 - Maintain traceability between requirements, architecture, ADRs, and subsystem guidance.
 - Update relevant documents when architecture boundaries, data contracts, deployment assumptions, or validation strategy change.

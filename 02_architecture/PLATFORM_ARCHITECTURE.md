@@ -523,6 +523,10 @@ AI-assisted engineering model:
 
 # 16. Repository Philosophy
 
+> **Superseded by [ADR-009](../03_adr/ADR-009_workspace_repository_model.md)** (2026-10-21):
+> west multi-repository workspace with a `platform` hub. The list below is a
+> historical sketch of domains, not the repository layout.
+
 Recommended:
 
     muon-platform/

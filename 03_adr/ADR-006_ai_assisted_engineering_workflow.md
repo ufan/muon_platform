@@ -19,6 +19,10 @@ The goal:
 
 # 2. Repository Organization
 
+> **Superseded by [ADR-009](ADR-009_workspace_repository_model.md)** (2026-10-21).
+> The monorepo layout below is kept for history only. The platform uses a
+> west multi-repository workspace with a `platform` hub repository.
+
 Recommended structure:
 
     muon-platform/
@@ -81,6 +85,9 @@ before modifying code.
 ------------------------------------------------------------------------
 
 # 4. Specification Driven Development
+
+> Detailed by [ADR-010](ADR-010_spec_driven_domain_iteration.md): spec
+> layers, change proposals, and the per-domain iteration playbook.
 
 Before implementation:
 

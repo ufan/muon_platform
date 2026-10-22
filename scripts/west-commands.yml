@@ -1,0 +1,18 @@
+west-commands:
+  - file: scripts/west_commands/muon.py
+    commands:
+      - name: catalog
+        class: Catalog
+        help: list projects with maturity, role, groups and reference_for
+      - name: verify
+        class: Verify
+        help: run each project's userdata.verify command
+      - name: agents-sync
+        class: AgentsSync
+        help: generate agent files for all AI tools (rules, skills, adapters)
+      - name: xbranch
+        class: XBranch
+        help: create or switch to the same topic branch across projects
+      - name: refs
+        class: Refs
+        help: "legacy references: sync (clone + read-only lock), status, build-dir"

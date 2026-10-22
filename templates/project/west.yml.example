@@ -1,0 +1,29 @@
+# Optional repository-owned manifest (ADR-009 §13). Rename to west.yml.
+# Remote names and URLs must match platform/west.yml. Never import the hub.
+manifest:
+  version: "1.2"
+  remotes:
+    - name: github
+      url-base: git@github.com:ufan
+  defaults:
+    remote: github
+    revision: main
+  group-filter: [-legacy]
+  self:
+    path: <name>
+  projects:
+    - name: contracts
+      repo-path: muon_contracts
+      path: contracts
+      groups: [contracts]
+    - name: platform                       # plain project: docs, skills, west extensions
+      repo-path: muon_platform
+      path: platform
+      west-commands: scripts/west-commands.yml
+    # - name: <dir>-legacy                 # single-owner legacy reference
+    #   remote: <remote>
+    #   repo-path: <repo>
+    #   path: legacy/<dir>
+    #   revision: legacy-final
+    #   groups: [legacy]
+    #   userdata: {maturity: legacy, reference_for: [<name>], role: ...}
