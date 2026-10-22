@@ -48,7 +48,7 @@ manifest:
         spec: contracts/README.md
 
     - name: daq
-      repo-path: muon_daq                  # to be created on GitHub
+      repo-path: muon_daq                  # private on GitHub
       # Once muon_daq is pushed and `west update -k daq` has run once (ADR-009 §13):
       #   replace `groups:` with  import: {name-blocklist: [platform]}
       #   (west forbids groups + import) and remove usb-app2-legacy below.
