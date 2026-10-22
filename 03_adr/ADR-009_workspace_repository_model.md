@@ -47,7 +47,7 @@ doubles as its manifest repo.
   AGENTS.md CLAUDE.md GEMINI.md  generated (§14)
   .agents/skills/muon-*  .claude/skills/muon-*   generated skill links (§14)
   platform/                  hub: west.yml, AGENTS.md, docs (01_requirements, 02_architecture, 03_adr, 04_workflow, guide),
-                             changes/, templates/, tools/muon_ws/, scripts/, .agents/skills/
+                             changes/, templates/, scripts/ (west extensions), .agents/skills/
   contracts/                 wire / pipeline / persistence / api / fsm schemas (versioned independently)
   daq/                       acquisition service (active); carries its own west.yml (§13)
   config/  study/  tools/...
@@ -167,9 +167,11 @@ repository. Every repository works from a plain `git clone`. Its `userdata.verif
 plain shell command run from the repository root, and its agent rules degrade gracefully
 when `../platform` is absent.
 
-All workspace logic lives in one Python tool, `muon-ws` (`platform/tools/muon_ws`, installable
-with `uv tool install`). The west extension commands are thin wrappers around it, so the
-same operations work in a standalone clone without west.
+West is the **single interface** for workspace features. Single-repository work uses a
+repo-rooted workspace (§13), not a bare clone with a separate tool. The muon commands are west
+extensions. Their implementation is the internal Python package
+`platform/scripts/west_commands/muon_ws`, which is not a user-facing tool. (Revised 2026-10-22: an earlier
+standalone `muon-ws` CLI was dropped to keep one entry point.)
 
 Procedures: [04_workflow/WORKSPACE_GUIDE.md](../04_workflow/WORKSPACE_GUIDE.md).
 
@@ -205,7 +207,7 @@ Antigravity, Gemini CLI, Cursor, ...).
 - **Canonical, committed:** `AGENTS.md` in every repository holds the rules, and skills follow the Agent Skills
   open standard in `platform/.agents/skills/<skill>/SKILL.md` (prefix `muon-`).
   `platform/.claude/skills` is a committed symlink to `../.agents/skills`.
-- **Generated, never hand-edited, git-ignored in projects** (`west agents-sync` / `muon-ws agents sync`):
+- **Generated, never hand-edited, git-ignored in projects** (`west agents-sync`):
   - `CLAUDE.md` and `GEMINI.md` shims that import `@AGENTS.md`;
   - a workspace-root `AGENTS.md` (hub rules plus catalog);
   - per-skill links `.agents/skills/muon-*` and `.claude/skills/muon-*` at the workspace root
@@ -221,12 +223,12 @@ Antigravity, Gemini CLI, Cursor, ...).
 | Claude Code | `CLAUDE.md` (imports `@AGENTS.md`; parent dirs too) | `.claude/skills` |
 | Gemini CLI | `GEMINI.md` (imports `@AGENTS.md`) | `.gemini/skills`, `.agents/skills` |
 
-Adding a tool means adding a shim or adapter to `muon_ws.agents`. Canonical sources do not change.
+Adding a tool means adding a shim or adapter in `scripts/west_commands/muon_ws/agents.py`. Canonical sources do not change.
 
 ## 15. Legacy Guardrails
 
 Legacy protection does not depend on any single AI tool, and it works in every workspace
-shape, including a standalone clone.
+shape (full or repo-rooted).
 
 | Layer | Mechanism | Applies to |
 |---|---|---|
@@ -235,9 +237,9 @@ shape, including a standalone clone.
 | L3 ergonomics | generated tool-native settings that grant read access to `../legacy/*` and deny writes (Claude: `.claude/settings.local.json`; Codex: not needed, its sandbox keeps paths outside the repo read-only; others: adapter slots) | individual tools |
 
 Host-local trees in `legacy/` that are not in any manifest (see `legacy_inventory.md`) are
-covered by L2 only. West has no local-only project type, and `muon-ws` works from manifests.
+covered by L2 only. West has no local-only project type, and the commands work from manifests.
 
-Legacy references are fetched and updated **only** with `muon-ws refs sync` (`west refs sync`),
+Legacy references are fetched and updated **only** with `west refs sync`,
 which clones or updates them and then re-applies L1. A bare `west update` of a legacy project is
 not used. Legacy code that must run (golden-data generation) is built out of tree in
-`<topdir>/.legacy-build/<dir>` (`muon-ws refs build-dir <name>`).
+`<topdir>/.legacy-build/<dir>` (`west refs build-dir <name>`).

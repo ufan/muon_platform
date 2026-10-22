@@ -1,10 +1,8 @@
-"""muon-ws command line (also wrapped by the west extension commands)."""
+"""Internal argument dispatcher for the muon west extension commands (`west <cmd> ...`)."""
 
 import argparse
-import os
 import sys
 
-import yaml
 
 from . import agents, catalog, refs
 from .workspace import Workspace, WorkspaceError
@@ -16,8 +14,7 @@ def _selection(parser):
 
 
 def build_parser():
-    ap = argparse.ArgumentParser(prog="muon-ws", description=__doc__)
-    ap.add_argument("-C", dest="start", help="run as if started in this directory")
+    ap = argparse.ArgumentParser(prog="west", description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     r = sub.add_parser("refs", help="legacy reference checkouts (read-only lock, ADR-009 §15)")
@@ -26,7 +23,6 @@ def build_parser():
     s.add_argument("names", nargs="*", help="legacy projects (default: refs of the current project)")
     s.add_argument("--all", action="store_true", help="all legacy projects in the manifest")
     s.add_argument("--update", action="store_true", help="move clean checkouts to the pinned revision")
-    s.add_argument("--refs-dir", help="standalone only: parent directory for legacy/ (recorded in .muon/local.yml)")
     st = rs.add_parser("status", help="show lock state of legacy refs")
     st.add_argument("names", nargs="*")
     st.add_argument("--all", action="store_true")
@@ -38,7 +34,6 @@ def build_parser():
     sy = asub.add_parser("sync", help="generate shims, skill links and tool adapters")
     sy.add_argument("--check", action="store_true", help="exit non-zero if anything is stale")
     sy.add_argument("--force", action="store_true", help="replace a hand-written root AGENTS.md (kept as .orig)")
-    sy.add_argument("--no-fetch", action="store_true", help="do not fetch the hub when it is not checked out")
     asub.add_parser("adapters", help="list per-tool adapter status")
 
     c = sub.add_parser("catalog", help="list projects")
@@ -78,13 +73,6 @@ def cmd_refs(ws, args):
             raise ValueError(f"{args.name}: not a legacy project")
         print(ws.legacy_build_dir(p))
         return 0
-    if args.refs_cmd == "sync" and args.refs_dir:
-        if ws.shape != "standalone":
-            raise ValueError("--refs-dir is only for standalone clones; west workspaces use the topdir")
-        os.makedirs(os.path.join(ws.repo_root, ".muon"), exist_ok=True)
-        with open(os.path.join(ws.repo_root, ".muon", "local.yml"), "w", encoding="utf-8") as f:
-            yaml.safe_dump({"refs_dir": os.path.abspath(args.refs_dir)}, f)
-        ws = Workspace(ws.start)
     targets = _refs_targets(ws, args)
     if not targets:
         print("no legacy references declared for this context (see `reference_for` in the manifest)")
@@ -115,12 +103,12 @@ def cmd_agents(ws, args):
         for k, v in agents.ADAPTERS.items():
             print(f"  {k:12} {v}")
         return 0
-    hub = agents.hub_source(ws, fetch=not args.no_fetch and not args.check)
+    hub = agents.hub_source(ws)
     plan = agents.build_plan(ws, hub)
     stale = agents.run(plan, check=args.check, force=args.force)
     if args.check:
         if stale:
-            print("stale:\n  " + "\n  ".join(stale) + "\n(run `muon-ws agents sync`)")
+            print("stale:\n  " + "\n  ".join(stale) + "\n(run `west agents-sync`)")
             return 1
         print("agent files are up to date")
     elif not stale:
@@ -131,7 +119,7 @@ def cmd_agents(ws, args):
 def main(argv=None, start=None):
     args = build_parser().parse_args(argv)
     try:
-        ws = Workspace(args.start or start)
+        ws = Workspace(start)
         if args.cmd == "refs":
             return cmd_refs(ws, args)
         if args.cmd == "agents":
@@ -152,7 +140,7 @@ def main(argv=None, start=None):
             catalog.xbranch(ws, catalog.select(ws, args.projects, args.group), args.branch, args.dry_run)
             return 0
     except (WorkspaceError, ValueError, RuntimeError) as e:
-        print(f"muon-ws: error: {e}", file=sys.stderr)
+        print(f"error: {e}", file=sys.stderr)
         return 2
     return 0
 

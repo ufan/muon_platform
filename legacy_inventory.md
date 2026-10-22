@@ -5,7 +5,7 @@ Status: living document (ADR-010 §5). Last full scan: 2026-10-21.
 Legacy code is a **reference only**: a source of domain knowledge and golden
 data, never a dependency of new code. All legacy references live in `legacy/<dir>`,
 are named `<dir>-legacy` in the manifests, and are locked read-only on disk with
-commits and pushes disabled (`west refs sync` / `muon-ws refs sync`; ADR-009 §5, §15). During each domain iteration, the
+commits and pushes disabled (`west refs sync`; ADR-009 §5, §15). During each domain iteration, the
 "legacy archaeology" step turns the relevant entries below into an as-is spec.
 
 Runnability: the legacy chain (fx3 readout → preprocess → analysis) cannot
@@ -28,7 +28,7 @@ currently run end to end. Details to be added by the owner.
 
 ## Host-local references (this host only; not west projects)
 
-Not in any manifest, so `muon-ws` neither fetches nor locks them (no L1). The
+Not in any manifest, so `west refs sync` neither fetches nor locks them (no L1). The
 read-only rule in `AGENTS.md` (L2) still applies. Other workspaces do not have them.
 
 | Path | What it is | Reference for | Notes |

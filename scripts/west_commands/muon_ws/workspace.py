@@ -1,20 +1,16 @@
-"""Workspace model: reads west manifests as plain YAML (no west needed).
+"""Workspace model: reads the west manifest(s) of the current west workspace as plain YAML.
 
-Shapes:
-  west        a west topdir (.west/config) -- full hub workspace or repo-rooted
-  standalone  a single git clone with an optional repo-owned west.yml; the
-              parent directory plays the role of the workspace topdir
+Works in a full hub workspace (manifest repo = `platform`) and in a repo-rooted workspace
+(`west init -m <repo url>`, e.g. daq). Outside a west workspace it raises WorkspaceError.
 """
 
 import configparser
 import os
-import subprocess
 from dataclasses import dataclass, field
 
 import yaml
 
 HUB_NAME = "platform"
-DEFAULT_HUB_URL = "git@github.com:ufan/muon_platform.git"
 
 
 class WorkspaceError(Exception):
@@ -49,11 +45,6 @@ class Project:
     @property
     def cloned(self):
         return os.path.exists(os.path.join(self.abspath, ".git"))
-
-
-def _git(*args, cwd=None):
-    r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
-    return r.stdout.strip() if r.returncode == 0 else None
 
 
 def _find_west_topdir(start):
@@ -113,41 +104,23 @@ def _parse_projects(manifest, manifest_path):
 class Workspace:
     """Resolved view of the projects relevant from a starting directory."""
 
-    def __init__(self, start=None, refs_dir=None):
+    def __init__(self, start=None):
         start = os.path.abspath(start or os.getcwd())
         self.start = start
         topdir = _find_west_topdir(start)
-        if topdir:
-            self.shape = "west"
-            self.topdir = topdir
-            cfg = configparser.ConfigParser()
-            cfg.read(os.path.join(topdir, ".west", "config"))
-            mpath = cfg.get("manifest", "path")
-            mfile = cfg.get("manifest", "file", fallback="west.yml")
-            self.manifest_dir = os.path.join(topdir, mpath)
-            self.manifest_file = os.path.join(self.manifest_dir, mfile)
-            self.local_group_filter = [g for g in cfg.get("manifest", "group-filter", fallback="").split(",") if g]
-            self.repo_root = None
-        else:
-            self.shape = "standalone"
-            root = _git("rev-parse", "--show-toplevel", cwd=start)
-            if not root:
-                raise WorkspaceError("not inside a west workspace or a git repository")
-            self.repo_root = root
-            self.topdir = os.path.abspath(refs_dir or self._local_refs_dir(root) or os.path.dirname(root))
-            self.manifest_dir = root
-            self.manifest_file = os.path.join(root, "west.yml")
-            self.local_group_filter = []
+        if not topdir:
+            raise WorkspaceError("not inside a west workspace; create one with "
+                                 "`west init -m <hub or repo url> <dir>` and `west update`")
+        self.topdir = topdir
+        cfg = configparser.ConfigParser()
+        cfg.read(os.path.join(topdir, ".west", "config"))
+        mpath = cfg.get("manifest", "path")
+        mfile = cfg.get("manifest", "file", fallback="west.yml")
+        self.manifest_dir = os.path.join(topdir, mpath)
+        self.manifest_file = os.path.join(self.manifest_dir, mfile)
+        self.local_group_filter = [g for g in cfg.get("manifest", "group-filter", fallback="").split(",") if g]
         self.projects = []
         self._load()
-
-    @staticmethod
-    def _local_refs_dir(root):
-        p = os.path.join(root, ".muon", "local.yml")
-        if os.path.isfile(p):
-            with open(p, encoding="utf-8") as f:
-                return (yaml.safe_load(f) or {}).get("refs_dir")
-        return None
 
     def _load(self):
         seen = {}
@@ -156,10 +129,7 @@ class Workspace:
             m = _load_yaml(self.manifest_file)
             self_path, projects, imports, gf = _parse_projects(m, self.manifest_file)
             self.group_filter = gf
-            if self.shape == "west":
-                rel = os.path.relpath(self.manifest_dir, self.topdir)
-            else:
-                rel = os.path.relpath(self.repo_root, self.topdir)
+            rel = os.path.relpath(self.manifest_dir, self.topdir)
             manifest_self_name = os.path.basename(self_path or rel)
             selfp = Project(name=manifest_self_name, path=rel, is_manifest=True)
             seen[selfp.name] = selfp
@@ -177,10 +147,7 @@ class Workspace:
                     if p.name not in block:
                         seen.setdefault(p.name, p)
         else:
-            self.group_filter = []
-            if self.shape == "standalone":
-                name = os.path.basename(self.repo_root)
-                seen[name] = Project(name=name, path=os.path.relpath(self.repo_root, self.topdir), is_manifest=True)
+            raise WorkspaceError(f"manifest file not found: {self.manifest_file}")
         for p in seen.values():
             p.abspath = os.path.normpath(os.path.join(self.topdir, p.path))
         self.projects = list(seen.values())
@@ -223,8 +190,6 @@ class Workspace:
 
     def context_projects(self):
         """Non-legacy project(s) the user is working in, judged from the start directory."""
-        if self.shape == "standalone":
-            return [p for p in self.projects if p.is_manifest]
         best = None
         for p in self.projects:
             if (self.start + os.sep).startswith(p.abspath + os.sep) and (best is None or len(p.abspath) > len(best.abspath)):

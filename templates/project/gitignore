@@ -1,7 +1,6 @@
 /build/
 
-# muon-ws generated agent files (ADR-009 §14)
+# west agents-sync generated agent files (ADR-009 §14)
 /.agents/skills/muon-*
 /.claude/skills/muon-*
 /.claude/settings.local.json
-/.muon/

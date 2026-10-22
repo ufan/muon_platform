@@ -31,7 +31,7 @@ not by the platform hub.
   clutter the hub history.
 - The data is too large to push and must stay local. A versioned catalog keeps tests
   reproducible across data changes and lets each host hold a partial cache.
-- A self-contained repository is understandable and usable on its own (plain clone, no west).
+- A self-contained repository is understandable and usable on its own: its README explains everything, and its own `west.yml` makes `west init -m …/muon_testdata` a complete testdata-only workspace. As everywhere, west is the single interface (`west testdata …`; ADR-009 §12).
 
 ## Consequences
 

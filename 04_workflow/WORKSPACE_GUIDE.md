@@ -4,39 +4,30 @@ Status: normative procedures. The decisions behind them are in
 [ADR-009](../03_adr/ADR-009_workspace_repository_model.md) (workspace, repositories, agents, legacy)
 and [ADR-010](../03_adr/ADR-010_spec_driven_domain_iteration.md) (spec-driven iteration, prototype lane).
 
-Commands are given in two equivalent forms: `west <cmd>` inside a west workspace, and
-`muon-ws <cmd>` anywhere, including a standalone clone without west.
+West is the single interface for workspace features. The muon commands (`west catalog`,
+`west verify`, `west agents-sync`, `west xbranch`, `west refs`, `west testdata`) are west
+extensions provided by the hub and by `testdata`.
 
 ## 1. When west is required
 
-| Task | West needed? |
-|---|---|
-| Build, test, run or develop inside one repository | **No.** Plain `git clone` + the repo's own build |
-| Prototype inside one repository (prototype lane, ADR-010 §8) | No |
-| Fetch and lock legacy references, generate agent files | No (`muon-ws`); `west` wrappers also work |
-| Set up or update a multi-repository workspace, pin revisions, release snapshots | Yes |
-| Cross-repository topic branches, workspace-wide verify and catalog | Yes (or `muon-ws` inside a west workspace) |
+- **Workspace features need west:** legacy references, agent files and skills, the catalog, verify,
+  cross-repository branches, pinned revisions and release snapshots, test data.
+- **Building and testing one repository does not.** A plain `git clone` plus the repo's own build is
+  enough, and each repo's verify command never calls west. A plain clone simply has none of the
+  workspace features.
 
-Install the tools once per machine:
-
-```sh
-uv tool install west                                                              # workspace level
-uv tool install "git+https://github.com/ufan/muon_platform#subdirectory=tools/muon_ws"  # muon-ws
-```
+Install west once per machine: `uv tool install west` (or `pipx install west`).
 
 ## 2. Workspace shapes
 
 | Shape | Create | Use when |
 |---|---|---|
 | Full | `west init -m git@github.com:ufan/muon_platform.git --mr main ws && cd ws && west update` | Platform and integration work, several domains |
-| Repo-rooted | `west init -m git@github.com:ufan/muon_daq.git ws && cd ws && west update` | Focused work on one domain together with its declared dependencies (ADR-009 §13) |
-| Standalone clone | `git clone git@github.com:ufan/muon_daq.git daq && cd daq && muon-ws refs sync && muon-ws agents sync` | Quick prototyping, a lab or test machine, CI |
+| Repo-rooted | `west init -m git@github.com:ufan/muon_daq.git --mr prototype/fx3-gen1 ws && cd ws && west update` | Developing one domain on its own, with the dependencies, legacy references and hub tooling its own `west.yml` declares (ADR-009 §13) |
 
-All three produce the same relative layout (`<top>/daq`, `<top>/contracts`, `<top>/legacy/<dir>`), so
-paths in `AGENTS.md` files are valid everywhere. In a standalone clone, `<top>` is the clone's parent
-directory. Use `muon-ws refs sync --refs-dir <dir>` to choose another one (recorded in `.muon/local.yml`).
-
-After any setup, run `west agents-sync` (or `muon-ws agents sync`).
+Both produce the same relative layout (`<top>/daq`, `<top>/contracts`, `<top>/legacy/<dir>`), so
+paths in `AGENTS.md` files are valid in either. After setup, run `west refs sync` (legacy references)
+and `west agents-sync` (agent files).
 
 Partial workspaces: `west config manifest.group-filter -- -research,-tools`, then `west update`.
 
@@ -94,13 +85,13 @@ Skill: `muon-new-project`.
 
 ## 6. Using legacy references
 
-- `muon-ws refs sync`, run from inside a project, fetches and locks the legacy refs whose
+- `west refs sync`, run from inside a project, fetches and locks the legacy refs whose
   `reference_for` names that project. Other forms: `--all`, or explicit names.
   `refs sync --update` moves *clean* checkouts to the pinned revision and relocks them.
-- `muon-ws refs status` shows LOCKED or UNLOCKED, push disabled, hooks present, and pinned revision.
+- `west refs status` shows LOCKED or UNLOCKED, push disabled, hooks present, and pinned revision.
 - **Never** `west update` a legacy project, unlock it by hand, `chmod` it, edit it, commit or push in
   it, or build inside it.
-- Running legacy code (golden data): build out of tree in `$(muon-ws refs build-dir <name>)`.
+- Running legacy code (golden data): build out of tree in `$(west refs build-dir <name>)`.
 - The three guardrail layers (ADR-009 §15) apply in every shape:
   - **L1:** read-only on disk, push disabled, refusing hooks.
   - **L2:** `AGENTS.md` instructions.
@@ -115,22 +106,22 @@ Skill: `muon-new-project`.
   - skill links in `.agents/skills/` and `.claude/skills/` at the root and in every project;
   - tool adapters.
 
-  Check them with `muon-ws agents sync --check`. List the adapters with `muon-ws agents adapters`.
+  Check them with `west agents-sync --check`. The per-tool adapters are listed in ADR-009 §14.
   Per-project files are generated only for `incubating`/`active`/`stable` projects (and for the
   manifest repository of a repo-rooted workspace). `reference` and `legacy` projects are left untouched.
-  Outside a workspace, the hub's skills and rules are cached in `~/.cache/muon-ws/platform`
-  (override with `MUON_WS_CACHE`).
+  A repo-rooted workspace gets the skills and platform rules when its `west.yml` lists `platform`
+  as a plain project (as `daq` does).
 - **Start any tool anywhere:** at the workspace root (platform-level work) or inside a project (domain
   work). The tool sees the project rules, the platform rules (directly or via pointer), the playbook
   skills, and read-only legacy references.
-- **Adding a new tool:** add its shim or adapter in `muon_ws/agents.py` and its row to ADR-009 §14.
+- **Adding a new tool:** add its shim or adapter in `scripts/west_commands/muon_ws/agents.py` and its row to ADR-009 §14.
   Canonical files do not change.
 
 ## 8. Test data
 
 Test datasets are managed by the self-contained `testdata` project (ADR-011). All procedures are in
 `testdata/README.md`: referencing `id@version`, pinning in `tests/golden.yml`, add, modify, retire, prune.
-Use `west testdata ...` inside a workspace, or `python3 testdata/tools/testdata.py ...` anywhere.
+Use `west testdata ...`. A testdata-only workspace: `west init -m git@github.com:ufan/muon_testdata.git ws`.
 
 ## 9. Lifecycle
 

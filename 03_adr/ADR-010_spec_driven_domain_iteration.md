@@ -112,7 +112,7 @@ Early development is often bottom-up and exploratory inside one repository. Insi
 
 - needs **no** platform change proposal and no top-level process. The repository's own
   `AGENTS.md` governs (e.g. DAQ's prototype-first workflow);
-- may happen in a standalone clone or a repo-rooted workspace (ADR-009 §12–§13);
+- may happen in a repo-rooted workspace for that repository alone (ADR-009 §12–§13);
 - still respects the legacy guardrails (ADR-009 §15) and never copies cross-repo contracts locally.
 
 A change proposal (§3) becomes necessary when:
