@@ -60,7 +60,7 @@ Changes to `contracts/`, changes spanning several repositories, and promotions o
 |---|---|
 | 0. Scope | boundary of the domain in `LANDSCAPE.md`; "downstream needs" of its outputs |
 | 1. Legacy archaeology | **as-is spec**: inputs, outputs, file formats, calibration dependencies, failure modes, implicit physics/hardware knowledge |
-| 2. Golden data | recorded inputs and legacy (or hardware) outputs with tolerances; where legacy cannot run, recorded hardware captures plus hand-checked expectations |
+| 2. Golden data (ADR-011) | recorded inputs and legacy (or hardware) outputs with tolerances; where legacy cannot run, recorded hardware captures plus hand-checked expectations |
 | 3. To-be spec and contracts | spec deltas, provisional contracts, ADRs for significant choices, and the **port / refactor / rewrite** decision |
 | 4. Skeleton and failing tests | interfaces, contract tests, golden comparisons |
 | 5. Implement | port, refactor or rewrite |

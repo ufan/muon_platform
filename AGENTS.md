@@ -20,6 +20,7 @@ This guide applies to the whole muon platform workspace and is read by every AI 
 - Never run `west update` on projects with uncommitted or unpushed work. Never push, create remotes or delete branches without the user's confirmation.
 - Parallel agents work in separate git worktrees or branches, never in a shared working tree.
 - Playbook skills (Agent Skills format) live in `platform/.agents/skills/`: `muon-new-change`, `muon-new-project`, `muon-legacy-archaeology`, `muon-domain-iteration`, `muon-verify`, `muon-bump-manifest`. `agents sync` links them into the workspace root and into every project for all tools. Agents without skill support read the `SKILL.md` files directly.
+- Test data (ADR-011): versioned datasets live in the `testdata` project (`muon_testdata`; see `testdata/README.md`). Reference them as `<id>@<version>`, pin the versions you use in `tests/golden.yml`, and write outputs to `testdata/scratch/` or a build directory. Never write into the read-only data root (`testdata/golden/` or `$MUON_DATA_ROOT`). Change datasets only with `testdata/tools/testdata.py`.
 - Legacy code inventory: `platform/legacy_inventory.md`. Coarse platform map: `platform/02_architecture/LANDSCAPE.md`.
 
 ## Product Context

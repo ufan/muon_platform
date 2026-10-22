@@ -126,7 +126,13 @@ Skill: `muon-new-project`.
 - **Adding a new tool:** add its shim or adapter in `muon_ws/agents.py` and its row to ADR-009 §14.
   Canonical files do not change.
 
-## 8. Lifecycle
+## 8. Test data
+
+Test datasets are managed by the self-contained `testdata` project (ADR-011). All procedures are in
+`testdata/README.md`: referencing `id@version`, pinning in `tests/golden.yml`, add, modify, retire, prune.
+Use `west testdata ...` inside a workspace, or `python3 testdata/tools/testdata.py ...` anywhere.
+
+## 9. Lifecycle
 
 | Change | How |
 |---|---|

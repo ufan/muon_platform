@@ -36,6 +36,11 @@ read-only rule in `AGENTS.md` (L2) still applies. Other workspaces do not have t
 | `legacy/imaging/` | git repo without a remote: research imaging pipeline scripts (`legacy/0_geology…4_convertion`, `pipe_search`, rotation helpers); tracks a 185.6 MB CSV | imaging | uncommitted work left as is (2026-10-22); how the imaging package will be developed is undecided |
 | `legacy/frame/` | not git: C++/Eigen coordinate-frame library (inclinometer/detector/site/world frames, ray transforms, angle-map reprojection) | conditions (geometry/pose), imaging | |
 
+## Test data
+
+The datasets that used to sit untracked in `legacy/muon400_process/data/` now belong to
+the `testdata` project (`muon_testdata`, ADR-011) as placeholder versions.
+
 ## Reference projects (not legacy, used as data or tools)
 
 | Project | What it is | Future home |

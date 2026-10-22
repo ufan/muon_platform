@@ -7,6 +7,7 @@
 - Legacy references (read-only, locked on disk with commits and pushes disabled; never edit, build in place, or depend on them):
   - `../legacy/<dir>`: <what it is a reference for>.
   - Fetch and lock them with `muon-ws refs sync` (or `west refs sync`). Build legacy code only in `muon-ws refs build-dir <name>`.
+- Test data: reference datasets as `<id>@<version>` from the `testdata` project; pin them in `tests/golden.yml`; label golden tests `golden` and skip when data is missing. Never write into the data root.
 - Prototype lane (ADR-010 §8): prototyping inside this repo needs no platform change proposal. A proposal is needed only to change `contracts/`, or to promote prototype behaviour into the spec baseline.
 - If `../platform` does not exist, this repository is checked out on its own. Follow this file. Platform docs are at `ufan/muon_platform` on GitHub. Set up with `uv tool install "git+https://github.com/ufan/muon_platform#subdirectory=tools/muon_ws"`, then `muon-ws refs sync` and `muon-ws agents sync`.
 

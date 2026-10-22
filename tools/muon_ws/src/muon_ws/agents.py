@@ -58,6 +58,17 @@ def skill_names(hub):
                   if n.startswith(SKILL_PREFIX) and os.path.isfile(os.path.join(sd, n, "SKILL.md")))
 
 
+def test_data_root(ws):
+    """Test data bytes (ADR-011): MUON_DATA_ROOT, else <testdata project>/golden when present."""
+    root = os.environ.get("MUON_DATA_ROOT")
+    if root:
+        return os.path.abspath(root)
+    td = ws.get("testdata")
+    if td and os.path.isdir(os.path.join(td.abspath, "golden")):
+        return os.path.join(td.abspath, "golden")
+    return None
+
+
 # ---------------------------------------------------------------- actions
 class Plan:
     """Desired state, applied or checked as a whole."""
@@ -122,6 +133,7 @@ def build_plan(ws, hub):
 
     legacy_paths = [p.abspath for p in ws.legacy_projects()]
     contracts = ws.get("contracts")
+    data_root = test_data_root(ws)
     # Per-project files only in projects under active development; `reference` and `legacy`
     # projects are modified only on explicit request (ADR-009 §5).
     if ws.shape == "standalone":
@@ -136,7 +148,10 @@ def build_plan(ws, hub):
         if contracts and contracts.cloned and contracts.name != p.name:
             dirs.append(contracts.abspath)
         denied = [f"{tool}(/{r.abspath}/**)" for r in refs for tool in ("Edit", "Write")]
-        managed = legacy_paths + ([contracts.abspath] if contracts else [])
+        if data_root and p.name != "testdata":
+            dirs.append(data_root)
+            denied += [f"{tool}(/{data_root}/**)" for tool in ("Edit", "Write")]
+        managed = legacy_paths + ([contracts.abspath] if contracts else []) + ([data_root] if data_root else [])
         plan.claude_settings(os.path.join(p.abspath, ".claude", "settings.local.json"), dirs, denied, managed)
         plan.gitignore(os.path.join(p.abspath, ".gitignore"))
         for f in ("AGENTS.md",):

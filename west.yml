@@ -75,6 +75,18 @@ manifest:
         maturity: reference
         deploy: dev
 
+    - name: testdata
+      repo-path: muon_testdata             # private on GitHub; self-managed (README.md)
+      path: testdata
+      revision: main                       # tracks main: dataset changes need no hub commit
+      groups: [testdata]
+      west-commands: tools/west-commands.yml
+      userdata:
+        role: versioned test datasets (catalog + tool); bytes stay local, git-ignored (ADR-011)
+        maturity: reference
+        deploy: dev
+        spec: testdata/README.md
+
     - name: study
       repo-path: muon_study
       path: study
