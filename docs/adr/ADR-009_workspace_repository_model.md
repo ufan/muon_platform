@@ -46,8 +46,8 @@ doubles as its manifest repo.
 <workspace>/                 west topdir (.west/)
   AGENTS.md CLAUDE.md GEMINI.md  generated (§14)
   .agents/skills/muon-*  .claude/skills/muon-*   generated skill links (§14)
-  platform/                  hub: west.yml, AGENTS.md, docs (01_requirements, 02_architecture, 03_adr, 04_workflow, guide),
-                             changes/, templates/, scripts/ (west extensions), .agents/skills/
+  platform/                  hub: west.yml, AGENTS.md, changes/, templates/, scripts/ (west extensions), .agents/skills/,
+                             docs/ (requirements, architecture, adr, workflow, guide; reading order in docs/README.md)
   contracts/                 wire / pipeline / persistence / api / fsm schemas (versioned independently)
   daq/                       acquisition service (active); carries its own west.yml (§13)
   config/  study/  tools/...
@@ -173,7 +173,7 @@ extensions. Their implementation is the internal Python package
 `platform/scripts/west_commands/muon_ws`, which is not a user-facing tool. (Revised 2026-10-22: an earlier
 standalone `muon-ws` CLI was dropped to keep one entry point.)
 
-Procedures: [04_workflow/WORKSPACE_GUIDE.md](../04_workflow/WORKSPACE_GUIDE.md).
+Procedures: [docs/workflow/WORKSPACE_GUIDE.md](../workflow/WORKSPACE_GUIDE.md).
 
 ## 13. Repository-Owned Manifests
 

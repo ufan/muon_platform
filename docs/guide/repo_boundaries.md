@@ -2,8 +2,8 @@
 
 > Note (2026-10-21): `protocol/` is now the `contracts` repository. The
 > repository and workspace model is decided in
-> [ADR-009](../03_adr/ADR-009_workspace_repository_model.md); the current coarse map is
-> [LANDSCAPE.md](../02_architecture/LANDSCAPE.md). The boundary rules below still apply.
+> [ADR-009](../adr/ADR-009_workspace_repository_model.md); the current coarse map is
+> [LANDSCAPE.md](../architecture/LANDSCAPE.md). The boundary rules below still apply.
 > Legacy code now lives in `legacy/` (ADR-009 §5); the `preprocess/src/...` paths below
 > describe the internals of the legacy `muon400_process` repository (`legacy/muon400_process`).
 

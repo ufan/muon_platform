@@ -9,7 +9,7 @@ Revised: 2026-10-21 (§8 prototype lane; §4 step 8)
 ## 1. Decision Summary
 
 The platform is built **bottom-up, one domain at a time**, from a coarse
-global landscape (`02_architecture/LANDSCAPE.md`). Each domain goes through a
+global landscape (`docs/architecture/LANDSCAPE.md`). Each domain goes through a
 fixed **iteration playbook** that turns legacy code and domain knowledge
 into executable specifications before any implementation. The system is
 migrated with the **strangler-fig** pattern: new domains replace legacy
@@ -28,8 +28,8 @@ Each layer should end in something a program can check:
 
 | Layer | Location | Form |
 |---|---|---|
-| Requirement | `platform/01_requirements/` | prose with stable IDs (§7) |
-| Architecture / decision | `platform/02_architecture/`, `platform/03_adr/` | prose |
+| Requirement | `platform/docs/requirements/` | prose with stable IDs (§7) |
+| Architecture / decision | `platform/docs/architecture/`, `platform/docs/adr/` | prose |
 | Component spec | `<project>/SPEC.md` | behaviour and acceptance criteria referencing requirement IDs |
 | Contract | `contracts/` (cross-repo); `daq/ref/<target>/` (device ↔ host wire protocol) | machine-readable: schemas, OpenAPI/AsyncAPI or protobuf, state-machine tables; ASN.1 for the wire protocol |
 | Conformance | `<project>/tests/` | generated code, contract tests |
@@ -83,7 +83,7 @@ Port / refactor / rewrite:
   comments copied along with the code.
 - Copying legacy code into a new project must record its source (repo, path,
   commit).
-- Inventory: `platform/legacy_inventory.md`.
+- Inventory: `platform/docs/legacy_inventory.md`.
 
 ## 6. Multi-Agent Rules
 
@@ -101,7 +101,7 @@ Port / refactor / rewrite:
 
 - Projects own their requirement IDs (e.g. `FR-001` in `daq/doc/feature-requirements.md`).
   Outside the project, qualify them with the project name: `daq:FR-001`.
-- Platform-level requirements in `01_requirements/` use `<AREA>-<NNN>` (e.g. `SYS-001`, `HV-001`),
+- Platform-level requirements in `docs/requirements/` use `<AREA>-<NNN>` (e.g. `SYS-001`, `HV-001`),
   assigned as each domain enters its iteration.
 - IDs are never reused or renumbered. Retired IDs are marked as removed.
 

@@ -10,9 +10,9 @@ This guide applies to the whole muon platform workspace and is read by every AI 
 
 ## Workspace and Workflow
 
-- The workspace is a west multi-repository workspace ([ADR-009](platform/03_adr/ADR-009_workspace_repository_model.md)). `platform/west.yml` is the authoritative project list. Run `west catalog -a` to see every project with its maturity, role, groups, spec and `reference_for`. West is needed only at workspace level. Every repo builds, tests and runs without it (ADR-009 §12). Procedures: [WORKSPACE_GUIDE](platform/04_workflow/WORKSPACE_GUIDE.md).
-- Respect project maturity: `legacy` is read-only reference, never a dependency, and lives in `legacy/<dir>`, locked read-only on disk with commits and pushes disabled (`west refs sync`; ADR-009 §15). Host-local trees in `legacy/` listed in `platform/legacy_inventory.md` (not in any manifest, hence not locked) are equally read-only. Never unlock, `chmod`, edit or build inside any of it. Build legacy code out of tree (`west refs build-dir <name>`). `reference` is modified only on explicit request. `incubating`/`active` follow the spec-driven workflow. `stable` needs an ADR for breaking changes.
-- Development is spec-driven and bottom-up, one domain at a time ([ADR-010](platform/03_adr/ADR-010_spec_driven_domain_iteration.md)). Current iteration: **DAQ** (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
+- The workspace is a west multi-repository workspace ([ADR-009](platform/docs/adr/ADR-009_workspace_repository_model.md)). `platform/west.yml` is the authoritative project list. Run `west catalog -a` to see every project with its maturity, role, groups, spec and `reference_for`. West is needed only at workspace level. Every repo builds, tests and runs without it (ADR-009 §12). Procedures: [WORKSPACE_GUIDE](platform/docs/workflow/WORKSPACE_GUIDE.md).
+- Respect project maturity: `legacy` is read-only reference, never a dependency, and lives in `legacy/<dir>`, locked read-only on disk with commits and pushes disabled (`west refs sync`; ADR-009 §15). Host-local trees in `legacy/` listed in `platform/docs/legacy_inventory.md` (not in any manifest, hence not locked) are equally read-only. Never unlock, `chmod`, edit or build inside any of it. Build legacy code out of tree (`west refs build-dir <name>`). `reference` is modified only on explicit request. `incubating`/`active` follow the spec-driven workflow. `stable` needs an ADR for breaking changes.
+- Development is spec-driven and bottom-up, one domain at a time ([ADR-010](platform/docs/adr/ADR-010_spec_driven_domain_iteration.md)). Current iteration: **DAQ** (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
 - Changes to `contracts/`, and promoting a prototype into the spec baseline, start as a change proposal in `platform/changes/` (template in `platform/changes/_template/`). Intra-repo work, including prototyping, follows that project's own `AGENTS.md` and needs no proposal (prototype lane, ADR-010 §8). Agents may draft proposals, ADRs and contract changes, but a human approves them.
 - Shared contracts live in the `contracts` project and are consumed at the revision pinned in `platform/west.yml`. Never copy or vendor them.
 - A cross-repository change uses the same topic branch in every affected project (`west xbranch <branch> <projects>`) plus a manifest update in `platform/west.yml` (ADR-009 §8). Contract changes land first.
@@ -21,7 +21,7 @@ This guide applies to the whole muon platform workspace and is read by every AI 
 - Parallel agents work in separate git worktrees or branches, never in a shared working tree.
 - Playbook skills (Agent Skills format) live in `platform/.agents/skills/`: `muon-new-change`, `muon-new-project`, `muon-legacy-archaeology`, `muon-domain-iteration`, `muon-verify`, `muon-bump-manifest`. `agents sync` links them into the workspace root and into every project for all tools. Agents without skill support read the `SKILL.md` files directly.
 - Test data (ADR-011): versioned datasets live in the `testdata` project (`muon_testdata`; see `testdata/README.md`). Reference them as `<id>@<version>`, pin the versions you use in `tests/golden.yml`, and write outputs to `testdata/scratch/` or a build directory. Never write into the read-only data root (`testdata/golden/` or `$MUON_DATA_ROOT`). Change datasets only with `testdata/tools/testdata.py`.
-- Legacy code inventory: `platform/legacy_inventory.md`. Coarse platform map: `platform/02_architecture/LANDSCAPE.md`.
+- Legacy code inventory: `platform/docs/legacy_inventory.md`. Coarse platform map: `platform/docs/architecture/LANDSCAPE.md`.
 
 ## Product Context
 
@@ -41,11 +41,13 @@ The platform is not a generic IoT device and not only a detector. Its value come
 
 Use these documents as the canonical platform context:
 
-1. `platform/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
-2. `platform/01_requirements/` for system requirements.
-3. `platform/02_architecture/` for platform architecture and the coarse landscape map (`LANDSCAPE.md`).
-4. `platform/03_adr/` for architecture decisions that constrain implementation choices.
-5. `platform/guide/` for design notes that are not yet decisions.
+1. `platform/docs/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
+2. `platform/docs/requirements/` for system requirements.
+3. `platform/docs/architecture/` for platform architecture and the coarse landscape map (`LANDSCAPE.md`).
+4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
+5. `platform/docs/guide/` for design notes that are not yet decisions.
+
+Reading order and index: `platform/docs/README.md`.
 
 Iteration-driven design is adopted for this product development.
 The platform documents are supposed to be revised frequently.

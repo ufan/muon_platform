@@ -130,7 +130,7 @@ manifest:
         role: legacy MUON400 chain (fx3 readout, unpack/decode, hit, track)
         maturity: legacy
         deploy: dev
-        spec: platform/legacy_inventory.md
+        spec: platform/docs/legacy_inventory.md
         reference_for: [daq, preprocess, recon]
 
     - name: analysis-legacy
@@ -142,5 +142,5 @@ manifest:
         role: legacy ROOT macros, notebooks and baseline studies
         maturity: legacy
         deploy: dev
-        spec: platform/legacy_inventory.md
+        spec: platform/docs/legacy_inventory.md
         reference_for: [analysis, conditions]

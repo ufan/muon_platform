@@ -2,7 +2,7 @@
 
 Status: living document. Updated at step 0 of every domain iteration (ADR-010).
 Detailed boundary rationale: [guide/repo_boundaries.md](../guide/repo_boundaries.md).
-Workspace and repository model: [ADR-009](../03_adr/ADR-009_workspace_repository_model.md).
+Workspace and repository model: [ADR-009](../adr/ADR-009_workspace_repository_model.md).
 
 This map is intentionally coarse. Only the domain currently in its iteration
 gets detailed specs. Everything else is described just well enough to keep

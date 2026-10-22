@@ -1,8 +1,8 @@
 # Workspace Guide
 
 Status: normative procedures. The decisions behind them are in
-[ADR-009](../03_adr/ADR-009_workspace_repository_model.md) (workspace, repositories, agents, legacy)
-and [ADR-010](../03_adr/ADR-010_spec_driven_domain_iteration.md) (spec-driven iteration, prototype lane).
+[ADR-009](../adr/ADR-009_workspace_repository_model.md) (workspace, repositories, agents, legacy)
+and [ADR-010](../adr/ADR-010_spec_driven_domain_iteration.md) (spec-driven iteration, prototype lane).
 
 West is the single interface for workspace features. The muon commands (`west catalog`,
 `west verify`, `west agents-sync`, `west xbranch`, `west refs`, `west testdata`) are west
@@ -49,7 +49,7 @@ Skill: `muon-new-project`.
 1. **Split rule** (ADR-009 §4). There must be a different lifecycle, toolchain, deployment target or
    audience. Otherwise add a directory to an existing repository.
 2. **Create** `ufan/muon_<name>` on GitHub (a human, or `gh repo create` with approval).
-3. **Skeleton:** copy [`templates/project/`](../templates/project/) and fill in the placeholders.
+3. **Skeleton:** copy [`templates/project/`](../../templates/project/) and fill in the placeholders.
 4. **Verify command:** a plain shell command, run from the repo root, that never calls west.
 5. **Declare** the project in `platform/west.yml`:
    ```yaml
@@ -68,7 +68,7 @@ Skill: `muon-new-project`.
 ## 5. Adding a legacy repository
 
 1. **Naming:** path `legacy/<dir>`, name `<dir>-legacy` (underscores become dashes), `groups: [legacy]`,
-   `userdata: {maturity: legacy, reference_for: [...], role: ..., spec: platform/legacy_inventory.md}`.
+   `userdata: {maturity: legacy, reference_for: [...], role: ..., spec: platform/docs/legacy_inventory.md}`.
 2. **Remote and revision:** keep the original remote (non-GitHub remotes are allowed for legacy).
    Pin a fixed revision, preferably a tag `legacy-final`.
 3. **Where to declare:** in the single repository that uses it (its `west.yml`), or in
