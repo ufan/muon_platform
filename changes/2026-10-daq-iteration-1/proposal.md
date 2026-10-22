@@ -37,9 +37,11 @@ Out of scope: preprocess rewrite (iteration 2), online event building beyond wha
 
 ## Decisions needed (human)
 
-1. **Wire-protocol ownership.** `daq/ref/fx3/gen1/formal_protocol_spec.md` and
-   `contracts/wire/doc/formal_protocol_spec.md` have diverged. Proposal: `daq/ref/` owns
-   the device ↔ host protocol; `contracts/wire/` is retired or reduced to a pointer.
+1. ~~**Wire-protocol ownership.**~~ **Decided 2026-10-22:** `daq/ref/<target>/` owns the
+   device ↔ host protocol. `contracts/wire/` was a stale April snapshot (identical to
+   `daq/ref/fx3/gen1` apart from one broken link) and has been removed, including its Chinese
+   translation. The data-frame schemas `daq/ref/fx3/gen1/schema/protocol.{fbs,proto}` are
+   candidates for `contracts/pipeline/` (decide in the preprocess iteration).
    `contracts/` keeps the boundaries between repositories.
 2. Raw-capture container format, e.g. plain segmented binary + JSON sidecar vs. an existing container.
 3. Whether to clone `usb_app2` into the workspace (`west refs sync usb-app2-legacy`: cloned and locked read-only) or reference it on GitHub only.

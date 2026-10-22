@@ -31,7 +31,7 @@ Each layer should end in something a program can check:
 | Requirement | `platform/01_requirements/` | prose with stable IDs (§7) |
 | Architecture / decision | `platform/02_architecture/`, `platform/03_adr/` | prose |
 | Component spec | `<project>/SPEC.md` | behaviour and acceptance criteria referencing requirement IDs |
-| Contract | `contracts/` | machine-readable: ASN.1 wire, schemas, OpenAPI/AsyncAPI or protobuf, state-machine tables |
+| Contract | `contracts/` (cross-repo); `daq/ref/<target>/` (device ↔ host wire protocol) | machine-readable: schemas, OpenAPI/AsyncAPI or protobuf, state-machine tables; ASN.1 for the wire protocol |
 | Conformance | `<project>/tests/` | generated code, contract tests |
 | Behaviour | `<project>/tests/`, replay datasets | golden-data and replay tests (ADR-008) |
 

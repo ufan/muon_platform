@@ -20,7 +20,8 @@ its boundary and downstream needs visible.
  replay / simulation ──same raw stream contract──▶ preprocess …   (ADR-008)
 ```
 
-Every arrow is a contract owned by `contracts/`.
+Every arrow between repositories is a contract owned by `contracts/`. The detector ↔ daq link
+(device ↔ host wire protocol) is owned by the DAQ hardware references in `daq/ref/<target>/`.
 
 ## 2. Domains and current state
 

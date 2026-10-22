@@ -108,8 +108,10 @@ enable it with `west update --group-filter=+legacy`, or per workspace with
 ## 7. Contracts
 
 `contracts` is a separate repository and the single source of truth for
-the wire protocol, pipeline records, persistence formats, service APIs, and state
-machine tables. It is versioned with semver (`0.x` while provisional).
+contracts that cross repository boundaries: pipeline records, persistence formats,
+service APIs, and state machine tables. Device ↔ host wire protocols are **not**
+in `contracts`. Only DAQ talks to the hardware, so they are owned by the DAQ hardware
+references, one per target (`daq/ref/<type>/<generation>/`; decided 2026-10-22). It is versioned with semver (`0.x` while provisional).
 Producers and consumers depend on the revision pinned in `west.yml`, never
 on a copied or vendored version.
 
