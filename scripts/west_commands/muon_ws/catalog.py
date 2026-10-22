@@ -2,8 +2,8 @@
 
 import subprocess
 
-COLUMNS = ["name", "path", "maturity", "groups", "remote", "state", "deploy", "reference_for"]
-MD_COLUMNS = ["name", "path", "maturity", "groups", "state", "role", "spec", "reference_for"]
+COLUMNS = ["name", "path", "maturity", "groups", "remote", "state", "deploy", "informs"]
+MD_COLUMNS = ["name", "path", "maturity", "groups", "state", "role", "spec", "informs"]
 
 
 def catalog_rows(ws, projects):
@@ -20,7 +20,7 @@ def catalog_rows(ws, projects):
             "deploy": ud.get("deploy", ""),
             "role": ud.get("role", ""),
             "spec": ud.get("spec", ""),
-            "reference_for": ",".join(p.reference_for),
+            "informs": ",".join(p.informs),
         })
     return rows
 

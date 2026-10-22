@@ -6,10 +6,10 @@
 - Verify with `<verify command>` (plain shell, from the repository root). West is never required inside this repo.
 - Legacy references (read-only, locked on disk with commits and pushes disabled; never edit, build in place, or depend on them):
   - `../legacy/<dir>`: <what it is a reference for>.
-  - Fetch and lock them with `west refs sync`. Build legacy code only in `west refs build-dir <name>`.
+  - Fetch and lock them with `west legacy sync`. Build legacy code only in `west legacy build-dir <name>`.
 - Test data: reference datasets as `<id>@<version>` from the `testdata` project; pin them in `tests/golden.yml`; label golden tests `golden` and skip when data is missing. Never write into the data root.
 - Prototype lane (ADR-010 §8): prototyping inside this repo needs no platform change proposal. A proposal is needed only to change `contracts/`, or to promote prototype behaviour into the spec baseline.
-- Workspace features (legacy references, agent files, skills, test data) come from a west workspace: the platform one, or a repo-rooted one with `west init -m git@github.com:ufan/muon_<name>.git ws && cd ws && west update && west refs sync && west agents-sync`. A plain clone of this repo is enough to build and test (`<verify command>`).
+- Workspace features (legacy projects, agent files, skills, test data) come from a west workspace: the platform one, or a repo-rooted one with `west init -m git@github.com:ufan/muon_<name>.git ws && cd ws && west update && west legacy sync && west agents-sync`. A plain clone of this repo is enough to build and test (`<verify command>`).
 
 # Development workflow
 

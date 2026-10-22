@@ -31,10 +31,10 @@ Every arrow between repositories is a contract owned by `contracts/`. The detect
 | daq | How is hardware commanded, and how do bytes leave the detector? | `daq` | active | **1 (now)** |
 | preprocess | How are raw frames decoded into validated board-level records? | — (legacy in `legacy/muon400_process`) | legacy | 2 |
 | recon | How are records assembled into events, hits and tracks? | — (draft: [guide/recon_draft.md](../guide/recon_draft.md)) | planned | 3 |
-| imaging | How are tracks turned into opacity/density products? | — (host-local legacy reference `legacy/imaging`; development approach undecided) | planned | 4 |
+| imaging | How are tracks turned into opacity/density products? | — (host-local archive `archive/imaging`; development approach undecided) | planned | 4 |
 | analysis | How are outputs validated, calibrated and studied offline? | — (legacy in `legacy/analysis`) | legacy | 4 |
 | simulation | How are synthetic events and detector responses generated? | — | planned | as needed |
-| conditions | Geometry, mapping, alignment, calibration with validity intervals | `config` (reference) | reference | as needed |
+| conditions | Geometry, mapping, alignment, calibration with validity intervals | `config` (support) | support | as needed |
 | instrument services | HV, gas, environment, pose, central coordination (control plane) | — | planned | after DAQ |
 | firmware | FPGA / MCU | — | planned | — |
 | ux | CLI / TUI / GUI / web adapters | — | planned | — |

@@ -2,14 +2,14 @@
 #
 # userdata keys (read by `west catalog`, `west verify`, `west agents-sync`):
 #   role      one-line responsibility
-#   maturity  legacy | reference | incubating | active | stable  (ADR-009 §5)
+#   maturity  legacy | support | incubating | active | stable  (ADR-009 §5)
 #   deploy    edge | server | dev
 #   spec      entry point for the project's specification
 #   verify    plain shell command run from the project root (never calls west; ADR-009 §12)
-#   reference_for  (legacy only) projects this legacy repo is a reference for
+#   informs   (legacy only) projects this legacy project is a reference for
 #
-# Legacy projects live in legacy/<dir>, are named <dir>-legacy, and are fetched and
-# locked read-only with `west refs sync` -- never with a bare `west update` (ADR-009 §15).
+# Managed legacy projects live in legacy/<dir>, are named <dir>-legacy, and are fetched and
+# locked read-only with `west legacy sync` -- never with a bare `west update` (ADR-009 §15).
 # Do not run `west update` on a project until it is clean and pushed (ADR-009 §11).
 
 manifest:
@@ -18,7 +18,7 @@ manifest:
   remotes:
     - name: github
       url-base: git@github.com:ufan
-    # Additional remotes are allowed for legacy/reference projects only.
+    # Additional remotes are allowed for legacy and support projects only.
     - name: gitee
       url-base: git@gitee.com:chinamyworld
     - name: jw-1404
@@ -51,7 +51,7 @@ manifest:
       repo-path: muon_daq                  # private on GitHub
       path: daq
       revision: prototype/fx3-gen1
-      # Imports daq/west.yml: daq declares its own legacy reference (usb-app2-legacy).
+      # Imports daq/west.yml: daq declares its own legacy project (usb-app2-legacy).
       # The hub is blocklisted (daq lists it as a plain project); west forbids
       # `groups` together with `import`, so daq is selected by name (ADR-009 §13).
       import:
@@ -63,7 +63,7 @@ manifest:
         spec: daq/SPEC.md
         verify: cmake -S . -B build/verify -DCMAKE_BUILD_TYPE=Debug && cmake --build build/verify -j && ./build/verify/muon_daq_state_machine_smoke
 
-    # ---- reference ------------------------------------------------------
+    # ---- support --------------------------------------------------------
     - name: config
       remote: gitee                         # to migrate to GitHub
       repo-path: muon_config
@@ -72,7 +72,7 @@ manifest:
       groups: [config, online, offline]
       userdata:
         role: per-site detector configuration (mapping, alignment, z positions); future `conditions`
-        maturity: reference
+        maturity: support
         deploy: dev
 
     - name: testdata
@@ -83,7 +83,7 @@ manifest:
       west-commands: tools/west-commands.yml
       userdata:
         role: versioned test datasets (catalog + tool); bytes stay local, git-ignored (ADR-011)
-        maturity: reference
+        maturity: support
         deploy: dev
         spec: testdata/README.md
 
@@ -93,7 +93,7 @@ manifest:
       groups: [research]
       userdata:
         role: studies and timeline
-        maturity: reference
+        maturity: support
         deploy: dev
 
     - name: muon-tools
@@ -103,7 +103,7 @@ manifest:
       groups: [tools]
       userdata:
         role: small offline utilities (ADC level, rate estimate)
-        maturity: reference
+        maturity: support
         deploy: dev
 
     - name: rate-estimate
@@ -113,11 +113,11 @@ manifest:
       groups: [tools, sim]
       userdata:
         role: muon rate estimation
-        maturity: reference
+        maturity: support
         deploy: dev
 
-    # ---- legacy (reference only; disabled by default; ADR-009 §5, §15) ---
-    # Shared legacy references are declared here. A legacy repo used by a single
+    # ---- legacy (managed, read-only, disabled by default; ADR-009 §5, §15) ---
+    # Shared legacy projects are declared here. A legacy repo used by a single
     # project is declared in that project's own west.yml (ADR-009 §13).
     - name: muon400-process-legacy
       remote: gitee
@@ -131,7 +131,7 @@ manifest:
         maturity: legacy
         deploy: dev
         spec: platform/docs/legacy_inventory.md
-        reference_for: [daq, preprocess, recon]
+        informs: [daq, preprocess, recon]
 
     - name: analysis-legacy
       remote: gitee
@@ -143,4 +143,4 @@ manifest:
         maturity: legacy
         deploy: dev
         spec: platform/docs/legacy_inventory.md
-        reference_for: [analysis, conditions]
+        informs: [analysis, conditions]

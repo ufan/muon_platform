@@ -14,4 +14,4 @@ description: Use when a cross-repository change is ready to integrate, or a proj
    - `west agents-sync`, then commit the regenerated root files if this workspace tracks them.
 4. Commit in `platform` with the change proposal slug in the message.
 5. For a release snapshot: `west manifest --freeze -o platform/releases/<version>.yml`.
-6. Never run `west update` on projects with local work, and never push without the user's confirmation. Legacy projects are updated only with `west refs sync --update <name>`, which keeps them locked.
+6. Never run `west update` on projects with local work, and never push without the user's confirmation. Legacy projects are updated only with `west legacy sync --update <name>`, which keeps them locked.

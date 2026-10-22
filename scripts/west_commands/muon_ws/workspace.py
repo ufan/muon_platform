@@ -39,8 +39,9 @@ class Project:
         return "legacy" in self.groups or self.maturity == "legacy"
 
     @property
-    def reference_for(self):
-        return list(self.userdata.get("reference_for") or [])
+    def informs(self):
+        """Projects this legacy project is a reference for (userdata.informs)."""
+        return list(self.userdata.get("informs") or [])
 
     @property
     def cloned(self):
@@ -222,9 +223,9 @@ class Workspace:
         # At the workspace root (or in the hub): every cloned non-legacy project.
         return [p for p in self.members() if not p.is_legacy and p.cloned]
 
-    def legacy_refs_for(self, names):
+    def legacy_informing(self, names):
         names = set(names)
-        return [p for p in self.projects if p.is_legacy and names & set(p.reference_for)]
+        return [p for p in self.projects if p.is_legacy and names & set(p.informs)]
 
     def legacy_projects(self):
         return [p for p in self.projects if p.is_legacy]

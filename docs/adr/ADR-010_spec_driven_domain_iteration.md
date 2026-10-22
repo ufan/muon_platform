@@ -66,7 +66,7 @@ Changes to `contracts/`, changes spanning several repositories, and promotions o
 | 5. Implement | port, refactor or rewrite |
 | 6. Differential verification | output matches legacy/golden data except for **documented, intentional deviations** |
 | 7. Strangler switch | the new domain replaces legacy in the chain; its contracts are promoted |
-| 8. Retire | the old repository is frozen (tag `legacy-final`), moved to `legacy/<dir>`, set to maturity `legacy` with `reference_for`, and locked (`west refs sync`; ADR-009 §5, §15) |
+| 8. Retire | the old repository is frozen (tag `legacy-final`), moved to `legacy/<dir>`, set to maturity `legacy` with `informs`, and locked (`west legacy sync`; ADR-009 §5, §15) |
 
 Port / refactor / rewrite:
 - **refactor in place**: code is sound, in the right language and runtime; the problem is structure.

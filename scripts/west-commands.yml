@@ -3,7 +3,7 @@ west-commands:
     commands:
       - name: catalog
         class: Catalog
-        help: list projects with maturity, role, groups and reference_for
+        help: list projects with maturity, role, groups and informs
       - name: verify
         class: Verify
         help: run each project's userdata.verify command
@@ -13,6 +13,6 @@ west-commands:
       - name: xbranch
         class: XBranch
         help: create or switch to the same topic branch across projects
-      - name: refs
-        class: Refs
-        help: "legacy references: sync (clone + read-only lock), status, build-dir"
+      - name: legacy
+        class: Legacy
+        help: "managed legacy projects: list, sync (clone + read-only lock), status, build-dir"

@@ -11,7 +11,7 @@ or architecture document wins and the conflict is flagged (see `../AGENTS.md`).
 | 4 | [adr/](adr/) | Decisions that constrain implementation, numbered `ADR-NNN` |
 | 5 | [workflow/](workflow/) | How to work in the workspace: [WORKSPACE_GUIDE.md](workflow/WORKSPACE_GUIDE.md) |
 | 6 | [guide/](guide/) | Design notes that are not (yet) decisions |
-| — | [legacy_inventory.md](legacy_inventory.md) | Legacy code and host-local references, and what each one informs |
+| — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |
 
 Outside `docs/`, the hub root holds workspace machinery: `west.yml` (projects), `AGENTS.md`
 (rules for all AI tools), `changes/` (change proposals), `templates/` (new-project skeleton),

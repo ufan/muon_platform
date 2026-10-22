@@ -4,7 +4,7 @@ Version: 1.0
 Status: Accepted (2026-10-21)
 Supersedes: ADR-006 §2 "Repository Organization"
 Related: ADR-004 (version model), ADR-006 (AI workflow), ADR-010 (spec-driven domain iteration)
-Revised: 2026-10-21 (§3, §5 legacy location; §12–§15 added)
+Revised: 2026-10-21 (§3, §5 legacy location; §12–§15 added); 2026-10-22 (`west legacy`, `archive/`, `informs`, maturity `support`)
 
 ## 1. Decision Summary
 
@@ -51,9 +51,10 @@ doubles as its manifest repo.
   contracts/                 wire / pipeline / persistence / api / fsm schemas (versioned independently)
   daq/                       acquisition service (active); carries its own west.yml (§13)
   config/  study/  tools/...
-  legacy/                    all legacy references, locked read-only (§5, §15)
+  legacy/                    managed legacy projects: in a manifest, locked read-only (§5, §15)
     muon400_process/  analysis/  usb_app2/     west projects (L1-locked)
-    imaging/  frame/                          host-local, not in any manifest (L2 only)
+  archive/                   host-local trees: not in any manifest, this host only (§5; L2 only)
+    imaging/  frame/
 ```
 
 `west.yml` in the hub is the authoritative list of projects. Directory
@@ -79,18 +80,23 @@ Every project declares `userdata.maturity`:
 | Level | Meaning | Agent rules |
 |---|---|---|
 | `legacy` | old implementation, reference only | read-only; never a dependency |
-| `reference` | useful data/tools, not on the production path | modify only on explicit request |
+| `support` | useful data/tools, not on the production path (config, studies, tools, test data) | modify only on explicit request |
 | `incubating` | new, contracts provisional | spec-driven, breaking changes allowed with a change proposal |
 | `active` | domain currently in its iteration | spec-driven, full verification |
 | `stable` | contracts frozen, semver-managed | breaking changes require an ADR |
 
 **Legacy location.** Legacy repositories live centrally in `legacy/<dir>`, with west
 name `<dir>-legacy` (underscores become dashes), group `legacy`, maturity `legacy`, and an
-explicit `userdata.reference_for` listing the projects they inform. They are never nested
-inside an active repository. Legacy references are many-to-many, a nested clone would
+explicit `userdata.informs` listing the projects they inform. They are never nested
+inside an active repository. Legacy projects inform many projects, a nested clone would
 pollute the active repo's working tree, and agents and code search would treat legacy code
 as part of the active project. Hardware and vendor *source-of-truth* material (e.g.
 `daq/ref/`) is not legacy and stays inside its repository.
+
+**Archive location.** Old trees that have no remote (or are not git at all) and are kept on one
+host only go to `archive/<dir>`, never into `legacy/`. They are not in any manifest, are recorded
+in `docs/legacy_inventory.md`, and are protected by the rules (L2) only. Directory alone tells the
+two kinds apart: `legacy/` = managed and reproducible, `archive/` = host-local.
 
 Groups select partial workspaces: `online`, `offline`, `config`, `contracts`,
 `research`, `tools`, `legacy`. The default `group-filter` disables `legacy`;
@@ -100,7 +106,7 @@ enable it with `west update --group-filter=+legacy`, or per workspace with
 ## 6. Remote Policy
 
 - **GitHub is the default remote** for all active and new work.
-- Legacy and reference projects may keep other remotes (e.g. gitee) declared
+- Legacy and support projects may keep other remotes (e.g. gitee) declared
   per project in `west.yml`.
 - Migrating a project means changing its `remote:` line in `west.yml` and
   merging that through a manifest PR.
@@ -179,9 +185,9 @@ Procedures: [docs/workflow/WORKSPACE_GUIDE.md](../workflow/WORKSPACE_GUIDE.md).
 
 A repository may carry its own `west.yml` that declares what *it* needs: its dependencies
 (e.g. `contracts`), the hub as a plain project (for docs, skills and extensions), and the
-legacy references only it uses.
+legacy projects only it uses.
 
-- **Ownership rule.** A legacy reference used by exactly one repository is declared in that
+- **Ownership rule.** A legacy project used by exactly one repository is declared in that
   repository's manifest. One used by several repositories is declared in the hub.
 - **Import.** The hub imports repository manifests (`import: true`). West keeps the first
   definition of a project name, and the hub's own entries come first, so the hub can
@@ -236,10 +242,10 @@ shape (full or repo-rooted).
 | L2 instruction | each repository's `AGENTS.md` lists its legacy paths as read-only references | every tool that reads rules files |
 | L3 ergonomics | generated tool-native settings that grant read access to `../legacy/*` and deny writes (Claude: `.claude/settings.local.json`; Codex: not needed, its sandbox keeps paths outside the repo read-only; others: adapter slots) | individual tools |
 
-Host-local trees in `legacy/` that are not in any manifest (see `legacy_inventory.md`) are
+Archive trees in `archive/` (host-local, not in any manifest; see `legacy_inventory.md`) are
 covered by L2 only. West has no local-only project type, and the commands work from manifests.
 
-Legacy references are fetched and updated **only** with `west refs sync`,
+Legacy references are fetched and updated **only** with `west legacy sync`,
 which clones or updates them and then re-applies L1. A bare `west update` of a legacy project is
 not used. Legacy code that must run (golden-data generation) is built out of tree in
-`<topdir>/.legacy-build/<dir>` (`west refs build-dir <name>`).
+`<topdir>/.legacy-build/<dir>` (`west legacy build-dir <name>`).

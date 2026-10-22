@@ -44,7 +44,7 @@ Out of scope: preprocess rewrite (iteration 2), online event building beyond wha
    candidates for `contracts/pipeline/` (decide in the preprocess iteration).
    `contracts/` keeps the boundaries between repositories.
 2. Raw-capture container format, e.g. plain segmented binary + JSON sidecar vs. an existing container.
-3. Whether to clone `usb_app2` into the workspace (`west refs sync usb-app2-legacy`: cloned and locked read-only) or reference it on GitHub only.
+3. Whether to clone `usb_app2` into the workspace (`west legacy sync usb-app2-legacy`: cloned and locked read-only) or reference it on GitHub only.
 
 ## Risks and verification impact
 

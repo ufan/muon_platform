@@ -1,4 +1,4 @@
-"""Legacy reference checkouts and the L1 read-only lock (ADR-009 §15).
+"""Managed legacy projects (`west legacy`): checkouts and the L1 read-only lock (ADR-009 §15).
 
 L1 is tool-neutral: it works for every AI coding tool and for humans.
   (a) working tree made read-only (`.git` excluded, so status/fetch still work)
@@ -15,8 +15,8 @@ PUSH_DISABLED = "DISABLED-legacy-read-only"
 HOOK_MARKER = "# muon-ws legacy lock"
 HOOK_BODY = f"""#!/bin/sh
 {HOOK_MARKER}
-echo "This is a muon legacy reference checkout: read-only, no commits or pushes." >&2
-echo "See platform/docs/workflow/WORKSPACE_GUIDE.md (Using legacy references)." >&2
+echo "This is a managed muon legacy project: read-only, no commits or pushes." >&2
+echo "See platform/docs/workflow/WORKSPACE_GUIDE.md (Using legacy projects)." >&2
 exit 1
 """
 HOOKS = ("pre-commit", "pre-push")
@@ -110,7 +110,7 @@ def _unlock_git(path):
 
 
 def unlock(path):
-    """Remove L1 (used internally by `refs sync --update`)."""
+    """Remove L1 (used internally by `west legacy sync --update`)."""
     _set_writable(path, True)
     for p in [path, *_submodule_paths(path)]:
         _unlock_git(p)

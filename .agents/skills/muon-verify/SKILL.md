@@ -12,5 +12,5 @@ description: Use before claiming any task in the muon workspace is done. Runs we
    - the project `SPEC.md` or docs reflect the behaviour;
    - contract changes are in `contracts/`, not copied into consumers;
    - `west agents-sync --check` passes if rules, skills or a manifest changed;
-   - `west refs status` shows every legacy reference LOCKED.
+   - `west legacy status` shows every managed legacy project LOCKED.
 4. Report results faithfully, including skipped checks and any hardware validation not performed.

@@ -38,7 +38,7 @@ class Catalog(_Wrapper):
     PREFIX = ("catalog",)
 
     def __init__(self):
-        super().__init__("catalog", "list projects with maturity, role, groups and reference_for")
+        super().__init__("catalog", "list projects with maturity, role, groups and informs")
 
 
 class Verify(_Wrapper):
@@ -62,8 +62,8 @@ class XBranch(_Wrapper):
         super().__init__("xbranch", "create or switch to the same topic branch across projects")
 
 
-class Refs(_Wrapper):
-    PREFIX = ("refs",)
+class Legacy(_Wrapper):
+    PREFIX = ("legacy",)
 
     def __init__(self):
-        super().__init__("refs", "legacy references: sync (clone + read-only lock), status, build-dir")
+        super().__init__("legacy", "managed legacy projects: list, sync (clone + read-only lock), status, build-dir")

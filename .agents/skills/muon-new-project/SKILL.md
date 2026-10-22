@@ -1,6 +1,6 @@
 ---
 name: muon-new-project
-description: Use when adding a new repository (component or legacy reference) to the muon platform workspace. Walks the checklists in platform/docs/workflow/WORKSPACE_GUIDE.md §4–§5 using platform/templates/project/.
+description: Use when adding a new repository (component or legacy project) to the muon platform workspace. Walks the checklists in platform/docs/workflow/WORKSPACE_GUIDE.md §4–§5 using platform/templates/project/.
 ---
 
 # New project
@@ -19,9 +19,9 @@ Read `platform/docs/workflow/WORKSPACE_GUIDE.md` §4 (new repository) or §5 (le
 
 ## Legacy repository
 
-1. Path `legacy/<dir>`, west name `<dir>-legacy` (underscores become dashes), `groups: [legacy]`, `maturity: legacy`, and an explicit `reference_for: [...]`.
+1. Path `legacy/<dir>`, west name `<dir>-legacy` (underscores become dashes), `groups: [legacy]`, `maturity: legacy`, and an explicit `informs: [...]`.
 2. Keep its original remote and pin a fixed revision (preferably a tag `legacy-final`).
 3. Declare it in the one repo that uses it (its `west.yml`). If several repos use it, declare it in `platform/west.yml` (ADR-009 §13).
 4. A repo with no remote cannot be reproduced elsewhere. Propose pushing it to `ufan/muon_legacy_<dir>`, or record it as local-only.
-5. Run `west refs sync <name>` (clone + lock), then `west refs status`, then `west agents-sync`.
+5. Run `west legacy sync <name>` (clone + lock), then `west legacy status`, then `west agents-sync`.
 6. Add a row to `platform/docs/legacy_inventory.md`.

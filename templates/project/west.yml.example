@@ -20,10 +20,10 @@ manifest:
       repo-path: muon_platform
       path: platform
       west-commands: scripts/west-commands.yml
-    # - name: <dir>-legacy                 # single-owner legacy reference
+    # - name: <dir>-legacy                 # single-owner legacy project
     #   remote: <remote>
     #   repo-path: <repo>
     #   path: legacy/<dir>
     #   revision: legacy-final
     #   groups: [legacy]
-    #   userdata: {maturity: legacy, reference_for: [<name>], role: ...}
+    #   userdata: {maturity: legacy, informs: [<name>], role: ...}

@@ -4,7 +4,7 @@ import argparse
 import sys
 
 
-from . import agents, catalog, refs
+from . import agents, catalog, legacy
 from .workspace import Workspace, WorkspaceError
 
 
@@ -17,16 +17,17 @@ def build_parser():
     ap = argparse.ArgumentParser(prog="west", description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
 
-    r = sub.add_parser("refs", help="legacy reference checkouts (read-only lock, ADR-009 §15)")
-    rs = r.add_subparsers(dest="refs_cmd", required=True)
-    s = rs.add_parser("sync", help="clone and lock the legacy refs of the current project(s)")
-    s.add_argument("names", nargs="*", help="legacy projects (default: refs of the current project)")
+    r = sub.add_parser("legacy", help="managed legacy projects: clone, read-only lock, status (ADR-009 §15)")
+    rs = r.add_subparsers(dest="legacy_cmd", required=True)
+    rs.add_parser("list", help="list managed legacy projects, what they inform, and their state")
+    s = rs.add_parser("sync", help="clone and lock the legacy projects that inform the current project(s)")
+    s.add_argument("names", nargs="*", help="legacy projects (default: those that inform the current project)")
     s.add_argument("--all", action="store_true", help="all legacy projects in the manifest")
     s.add_argument("--update", action="store_true", help="move clean checkouts to the pinned revision")
-    st = rs.add_parser("status", help="show lock state of legacy refs")
+    st = rs.add_parser("status", help="show the lock state of legacy projects")
     st.add_argument("names", nargs="*")
     st.add_argument("--all", action="store_true")
-    b = rs.add_parser("build-dir", help="print the out-of-tree build directory for a legacy ref")
+    b = rs.add_parser("build-dir", help="print the out-of-tree build directory for a legacy project")
     b.add_argument("name")
 
     a = sub.add_parser("agents", help="generated agent files for all AI tools (ADR-009 §14)")
@@ -51,7 +52,7 @@ def build_parser():
     return ap
 
 
-def _refs_targets(ws, args):
+def _legacy_targets(ws, args):
     if args.all:
         return ws.legacy_projects()
     if args.names:
@@ -63,35 +64,42 @@ def _refs_targets(ws, args):
             out.append(p)
         return out
     ctx = ws.context_projects()
-    return ws.legacy_refs_for([p.name for p in ctx])
+    return ws.legacy_informing([p.name for p in ctx])
 
 
-def cmd_refs(ws, args):
-    if args.refs_cmd == "build-dir":
+def cmd_legacy(ws, args):
+    if args.legacy_cmd == "build-dir":
         p = ws.get(args.name)
         if p is None or not p.is_legacy:
             raise ValueError(f"{args.name}: not a legacy project")
         print(ws.legacy_build_dir(p))
         return 0
-    targets = _refs_targets(ws, args)
-    if not targets:
-        print("no legacy references declared for this context (see `reference_for` in the manifest)")
+    if args.legacy_cmd == "list":
+        for p in ws.legacy_projects():
+            st = legacy.status(p.abspath)
+            state = "missing" if not st["cloned"] else ("LOCKED" if st["locked"] else "UNLOCKED")
+            print(f"  {p.name:24} {state:9} {p.path:26} informs: {', '.join(p.informs) or '-'}")
+        print("  (host-local archive trees are not managed: see platform/docs/legacy_inventory.md)")
         return 0
-    if args.refs_cmd == "status":
+    targets = _legacy_targets(ws, args)
+    if not targets:
+        print("no legacy projects inform this context (see `informs` in the manifest)")
+        return 0
+    if args.legacy_cmd == "status":
         for p in targets:
-            s = refs.status(p.abspath)
+            s = legacy.status(p.abspath)
             if not s["cloned"]:
                 print(f"  {p.name:24} missing    {p.path}")
                 continue
             state = "LOCKED" if s["locked"] else "UNLOCKED"
             print(f"  {p.name:24} {state:9} {p.path}  push_disabled={s['push_disabled']} hooks={s['hooks']} "
                   f"read_only={s['first_writable'] is None} {s['branch'] or s['head']} (pinned {p.revision}) dirty={s['dirty']}")
-        return 0 if all(refs.status(p.abspath).get("locked", True) or not refs.status(p.abspath)["cloned"]
+        return 0 if all(legacy.status(p.abspath).get("locked", True) or not legacy.status(p.abspath)["cloned"]
                         for p in targets) else 1
     rc = 0
     for p in targets:
         try:
-            print(f"  {p.name}: {refs.sync(p, update=args.update)}  ({p.path})")
+            print(f"  {p.name}: {legacy.sync(p, update=args.update)}  ({p.path})")
         except RuntimeError as e:
             print(f"  {p.name}: ERROR {e}")
             rc = 1
@@ -120,8 +128,8 @@ def main(argv=None, start=None):
     args = build_parser().parse_args(argv)
     try:
         ws = Workspace(start)
-        if args.cmd == "refs":
-            return cmd_refs(ws, args)
+        if args.cmd == "legacy":
+            return cmd_legacy(ws, args)
         if args.cmd == "agents":
             return cmd_agents(ws, args)
         if args.cmd == "catalog":
