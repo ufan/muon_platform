@@ -1,6 +1,6 @@
 # Legacy Inventory
 
-Status: living document (ADR-010 §5). Last full scan: 2026-10-22.
+Status: living document (ADR-010 §5). Last full scan: 2026-10-22; DAQ archaeology 2026-10-23.
 
 Old code and data are kept **only to inform** new work: a source of domain knowledge and
 golden data, never a dependency of new code. During each domain iteration, the
@@ -22,9 +22,9 @@ List and state: `muon legacy status`. Fetch and lock: `muon ws sync --legacy`. A
 
 | Project / path | Remote | What it is | Informs | Runnable |
 |---|---|---|---|---|
-| `legacy/usb_app2` (`jw-1404/usb_app2`, branches `daemon-dev` = lab hardware, `deploy` = field) | github jw-1404 | prototype DAQ software tested on the current hardware | **DAQ iteration 1**: command sequencing, configuration, acquisition lifecycle, recovery (see `core/daq/doc/guides/prototype-reference.md`) | on `jw-muon-150test` |
+| `legacy/usb_app2` (`jw-1404/usb_app2`; `daemon-dev` = lab hardware `3a00ac2`, `deploy` = field `f9ba4e0`, also `deploy-device-2/3`, `v3-dev`) | github jw-1404 | PyQt5 operator GUI: FX3/DCM control, raw capture to `<prefix>-<n>.dat`, threshold tooling; `deploy` runs the legacy chain after every file | **DAQ iteration 1**: as-is spec in `changes/2026-10-daq-iteration-1/as-is.md` | needs hardware; Windows-oriented (libusb dll); not headless |
 | `legacy/muon400_process/` (branch `deploy`) | gitee | C++ offline chain for MUON400 | DAQ (fx3), preprocess, recon | unknown |
-| ├ `src/fx3` (submodule `chinamyworld/fx3`, branch `hotfix`) | gitee | FX3 USB readout host program | **DAQ iteration 1**: transport, framing, device commands | unknown |
+| ├ `src/fx3` (submodule `chinamyworld/fx3`, branch `hotfix` `153382e`) | gitee | **offline converter**: raw FX3 capture → "USTC format" 4096-byte packages for the chain (not a USB reader) | preprocess (decode); DAQ as-is §4/D20 | builds (C++20, Boost), not run |
 | ├ `src/usb_data_separate` | | split the USB stream by board/link | preprocess | unknown |
 | ├ `src/adas_data_unpack`, `src/adas_data_decode` | | ADAS chip frame unpack and decode | preprocess | unknown |
 | ├ `src/adas_muxbrd_fit` | | multiplexed-board signal fit | preprocess / recon boundary | unknown |
