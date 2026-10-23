@@ -15,8 +15,8 @@ Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are i
 
 ## Next
 
-- Workspace reorganization (`changes/2026-10-workspace-reorg/`) is done locally and awaits push and cutover.
-  After that, continue with task 2 (archaeology) or task 8 (prototype), whichever the owner prefers.
+- Workspace reorganization is complete (`changes/2026-10-workspace-reorg/`). Continue with task 2
+  (archaeology) or task 8 (prototype), whichever the owner prefers.
 - Open questions for the owner: proposal decisions 2–5 (raw-capture format; clone `usb_app2`; provenance and
   time fields; device-timestamp width and reset).
 - Hardware tests: none run since the reorganization (no DAQ behaviour changed).

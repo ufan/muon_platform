@@ -3,6 +3,7 @@
 Small decisions, one dated line each, newest first. Larger ones become ADRs. This file is the shared
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
+- 2026-10-23: Cutover done: workspace rebuilt with `muon ws init`; `ufan/muon_daq` archived; Codex hybrid-core branches and `.migration/` deleted.
 - 2026-10-23: West is no longer the workspace interface. vcs2l `.repos` files (`platform/repos/`) plus the `muon` CLI replace it; repositories may use west internally (ADR-012).
 - 2026-10-23: Repository baseline: one repository per domain; `muon_core` is the scientific domain; `muon_instrument` coordinates (future); `muon_contracts` holds system contracts after the extraction trigger (ADR-012 §3, §6).
 - 2026-10-23: `muon_daq` and `muon_contracts` histories live in `muon_core` (`daq/`, `contracts/`). `muon_daq` is retired after cutover; `muon_contracts` becomes a placeholder.
