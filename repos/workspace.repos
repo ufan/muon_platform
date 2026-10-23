@@ -18,11 +18,6 @@ repositories:
     url: git@github.com:ufan/muon_contracts.git
     version: main
     muon: {maturity: incubating, role: "future system contracts (domain-service pattern, telemetry, time); placeholder until a second consumer exists"}
-  config:
-    type: git
-    url: git@gitee.com:chinamyworld/muon_config.git
-    version: dev
-    muon: {maturity: support, role: "detector/site parameter payloads (mapping, topology, geometry, alignment)"}
   testdata:
     type: git
     url: git@github.com:ufan/muon_testdata.git

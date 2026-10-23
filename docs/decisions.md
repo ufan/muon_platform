@@ -3,6 +3,7 @@
 Small decisions, one dated line each, newest first. Larger ones become ADRs. This file is the shared
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
+- 2026-10-23: `muon_config` is a legacy repository (read by `legacy/muon400_process`): moved to `legacy/config`, read-only, `informs: [core]`. A new conditions payload repository will be created at the start of preprocess, seeded from it.
 - 2026-10-23: The launcher is published on PyPI as `muon-workspace` (`tools/muon-workspace`, tag `muon-workspace-v*`, trusted publishing); the implementation is never published.
 - 2026-10-23: `muon` split into a global launcher (`tools/muon-workspace`, no dependencies) and the workspace-pinned implementation (`tools/muon`); per-workspace settings in `.muon/workspace.yml` (ADR-012 §5).
 - 2026-10-23: AI tools verified from `core/`: Claude Code, Codex, OpenCode (generated `opencode.json`) and Antigravity (`agy`; host setting `read_file(<workspace>)` + `command(muon status)` in `~/.gemini/antigravity-cli/settings.json`). Each repo's `AGENTS.md` carries a read-first block, because Codex and agy do not load `platform/AGENTS.md` from outside the git root.
@@ -13,7 +14,7 @@ memory of every session, AI tool and host (ADR-012 §8): if a decision matters n
 - 2026-10-23: Staged rigor: prototype lane by default, change proposals optional, hardening triggers in ADR-012 §6.
 - 2026-10-23: Telemetry reaches reconstruction only as conditions. The edge appliance clock is the single time authority, with a budget of about 1 s; sensor controllers share no clock with the DAQ.
 - 2026-10-23: Reconstruction uses gas pressure/temperature (gain), HV (good-time intervals, gain) and pose (direction/world frame).
-- 2026-10-23: `config` content will be split into tiers at the start of preprocess: detector model (core), instrument assembly + deployment geometry/alignment (config, append-only versions), app settings (apps).
+- 2026-10-23: The legacy `config` content will be split into tiers at the start of preprocess: detector model (core), instrument assembly + deployment geometry/alignment (new conditions payload repository, append-only versions), app settings (apps).
 - 2026-10-22: The device ↔ host wire protocol is owned by `core/daq/ref/<target>/`; the old `contracts/wire/` was retired.
 - 2026-10-22: `archive/` holds host-local trees (imaging, frame), recorded only in `legacy_inventory.md`; the imaging development approach is undecided.
 - 2026-10-22: Maturity `reference` was renamed `support`.

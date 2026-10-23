@@ -18,7 +18,7 @@ currently run end to end. Details to be added by the owner.
 
 ## Legacy (managed, `platform/repos/legacy.repos`)
 
-List and state: `muon legacy status`. Fetch and lock: `muon ws sync --legacy`. All three inform `core`.
+List and state: `muon legacy status`. Fetch and lock: `muon ws sync --legacy`. All of them inform `core`.
 
 | Project / path | Remote | What it is | Informs | Runnable |
 |---|---|---|---|---|
@@ -32,6 +32,7 @@ List and state: `muon legacy status`. Fetch and lock: `muon ws sync --legacy`. A
 | ├ `src/track_seek` | | track finding and fit, JSON output | recon | unknown |
 | └ `src/scripts/data_process.sh` | | chain driver script | chain wiring, file conventions | unknown |
 | `legacy/analysis/` | gitee | ROOT macros, notebooks, baseline studies, plots; untracked `data/` (2.2 GB gain/baseline runs) | analysis, calibration (baselines), mapping | partial |
+| `legacy/config/` (`chinamyworld/muon_config`, branch `dev`) | gitee | detector/site parameter files per setup (`150test`, `400test`, `liaoda`, `nankeda`, `shentie`, `150demo`): channel/link mapping, layer geometry, z positions, rotation, alignment, hit ranges, `system.json` | conditions (core): the tier split at the start of preprocess; read by `legacy/muon400_process` via `CONFIG_PATH` | data only |
 
 ## Archive (host-local, this host only)
 

@@ -49,7 +49,7 @@ workarounds. Its native job, fetching and pinning repositories, is done equally 
 | `muon_instrument` (future; per product later) | Instrument coordination: orchestration and the instrument state machine, sequencing, interlock policy, aggregation/API gateway, CLI, product profiles, operational config, integration validation. Its release `.repos` file is the product bill of materials. Starts as one repository with `products/<name>/`. |
 | `muon_contracts` (`contracts/`) | System contracts: the domain-service pattern, telemetry signal catalog, time base, conditions interchange, product-profile schema. A **placeholder** until the extraction trigger (§6). Until then the drafts live in `core/contracts/system/`. |
 | `muon_platform` (`platform/`) | System requirements, architecture, decisions, guides, change records, the workspace definition (`repos/`), the `muon` tool and agent skills. No product code. |
-| `muon_config` (`config/`) | Static detector/site parameter payloads (channel mapping, topology, geometry, alignment). Versions are append-only; schemas and interpretation live in core. Telemetry-derived conditions and operational config do not belong here. |
+| Conditions payload repository (future; created at the start of preprocess) | Static detector/site parameter payloads (channel mapping, topology, geometry, alignment), seeded from the legacy `muon_config` (`legacy/config`, read-only; amended 2026-10-23). Versions are append-only; schemas and interpretation live in core. Telemetry-derived conditions and operational config do not belong here. |
 | `muon_testdata` (`testdata/`) | Versioned validation datasets and their tool (ADR-011). |
 | Support repositories | `study`, `tools/*`: modified only on explicit request. |
 | Legacy references | `legacy/<dir>`: read-only and locked (ADR-009 §5, §15). Host-local trees live in `archive/<dir>`. |
@@ -192,7 +192,7 @@ session or another tool goes into the repository.
     archive: gas state and gain factors, HV good-time intervals, pose segments.
   - Algorithms never query telemetry directly.
 - **Conditions have two kinds of sources:**
-  - static tiers: detector model in core; instrument assembly and deployment geometry/alignment in `config`;
+  - static tiers: detector model in core; instrument assembly and deployment geometry/alignment in the future conditions payload repository;
   - dynamic, telemetry-derived intervals.
 
   Both resolve into an immutable snapshot with an ID and content hash.

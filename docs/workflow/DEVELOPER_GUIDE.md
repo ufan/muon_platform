@@ -47,7 +47,7 @@ Codex needs nothing extra. Start it at the workspace root when a task spans seve
 ```text
 muon_wkspc/            plain directory, no tool state
   AGENTS.md CLAUDE.md GEMINI.md   generated (muon agents sync)
-  platform/  core/  contracts/  config/  testdata/  study/  tools/…
+  platform/  core/  contracts/  testdata/  study/  tools/…
   legacy/<dir>/        read-only legacy references (locked)
   archive/<dir>/       host-local old trees (not managed)
   local.repos          optional per-host overrides (never committed)

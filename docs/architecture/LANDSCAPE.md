@@ -36,7 +36,7 @@ through conditions (ADR-012 §9).
 | imaging | How are tracks turned into opacity/density products? | — (host-local archive `archive/imaging`; development approach undecided) | planned | 4 |
 | analysis | How are outputs validated, calibrated and studied offline? | — (legacy in `legacy/analysis`) | legacy | 4 |
 | simulation | How are synthetic events and detector responses generated? | — | planned | as needed |
-| conditions | Geometry, mapping, alignment, calibration, telemetry-derived intervals | interpretation in `core`; payloads in `config` (support) | support | with preprocess |
+| conditions | Geometry, mapping, alignment, calibration, telemetry-derived intervals | interpretation in `core`; payloads: future conditions repository, seeded from `legacy/config` | legacy | with preprocess |
 | sensor domains | HV, gas, environment, pose, LV: one repository each (firmware + service) | — | planned | after DAQ |
 | instrument | coordination, operating modes, product profiles, BOM | `muon_instrument` (future) | planned | after the first sensor domain |
 | firmware | FPGA / MCU | — | planned | — |

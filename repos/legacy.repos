@@ -17,3 +17,8 @@ repositories:
     url: git@github.com:jw-1404/usb_app2.git
     version: daemon-dev
     muon: {maturity: legacy, informs: [core], role: "prototype DAQ software tested on the current hardware (deploy = field branch)", spec: core/daq/doc/guides/prototype-reference.md}
+  legacy/config:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_config.git
+    version: dev
+    muon: {maturity: legacy, informs: [core], role: "legacy detector/site parameter files (channel/link mapping, topology, geometry, alignment) read by legacy/muon400_process; source for the future conditions payloads", spec: platform/docs/legacy_inventory.md}

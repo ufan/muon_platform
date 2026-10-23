@@ -10,7 +10,7 @@ A repository's own `AGENTS.md` adds local rules; if the two conflict, say so ins
 - Repositories: `platform/repos/*.repos` (`muon list`). Baseline and dependency rules:
   `platform/docs/adr/ADR-012_repository_baseline_and_workflow.md`.
 - `core/` is the scientific domain (DAQ, scientific contracts, preprocess, recon). `platform/` holds specs,
-  decisions and tooling (no product code). `config/` and `testdata/` are data. `legacy/` and `archive/` are read-only.
+  decisions and tooling (no product code). `testdata/` is data. `legacy/` (including the old detector parameters in `legacy/config`) and `archive/` are read-only.
 - Product, architecture and engineering rules: `platform/docs/engineering_context.md`. Read it before
   design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
 - Current iteration: DAQ (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
