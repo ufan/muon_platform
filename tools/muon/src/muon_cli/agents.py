@@ -23,7 +23,8 @@ SKILL_PREFIX = "muon-"
 SKILL_DIRS = (".agents/skills", ".claude/skills")
 GITIGNORE_HEADER = "# muon agents sync: generated agent files (ADR-012)"
 OLD_GITIGNORE_HEADER = "# west agents-sync generated agent files (ADR-009 §14)"
-GITIGNORE_LINES = ["/.agents/skills/muon-*", "/.claude/skills/muon-*", "/.claude/settings.local.json"]
+GITIGNORE_LINES = ["/.agents/skills/muon-*", "/.claude/skills/muon-*", "/.claude/settings.local.json",
+                   "/.claude/.muon-adapter.json"]
 MAP_COLUMNS = ["path", "maturity", "role", "spec", "informs"]
 
 
@@ -122,10 +123,11 @@ def build_plan(ws):
             skill_links(r.abspath)
         refs = [x for x in ws.legacy_informing([r.name]) if x.cloned]
         dirs = [x.abspath for x in refs] + [s.abspath for s in siblings if s is not r]
-        denied = [f"{tool}(/{x.abspath}/**)" for x in refs for tool in ("Edit", "Write")]
+        # Claude Code: an Edit(path) rule covers every file-writing tool; Write(path) never matches.
+        denied = [f"Edit(/{x.abspath}/**)" for x in refs]
         if data_root and r.name != "testdata":
             dirs.append(data_root)
-            denied += [f"{tool}(/{data_root}/**)" for tool in ("Edit", "Write")]
+            denied.append(f"Edit(/{data_root}/**)")
         managed = legacy_paths + [s.abspath for s in siblings] + ([data_root] if data_root else [])
         plan.claude_settings(os.path.join(r.abspath, ".claude", "settings.local.json"), dirs, denied, managed)
         plan.gitignore(os.path.join(r.abspath, ".gitignore"))
@@ -144,6 +146,13 @@ def build_plan(ws):
 
 
 # ---------------------------------------------------------------- apply / check
+CLAUDE_RECORD = ".muon-adapter.json"     # entries muon wrote last time, next to settings.local.json
+
+
+def _claude_record_path(path):
+    return os.path.join(os.path.dirname(path), CLAUDE_RECORD)
+
+
 def _claude_merge(path, dirs, denied, managed):
     data = {}
     if os.path.isfile(path):
@@ -152,9 +161,15 @@ def _claude_merge(path, dirs, denied, managed):
     if not dirs and not denied and not os.path.isfile(path):
         return None
     perms = data.setdefault("permissions", {})
+    previous = set()
+    rec = _claude_record_path(path)
+    if os.path.isfile(rec):
+        with open(rec, encoding="utf-8") as f:
+            previous = set(json.load(f).get("entries", []))
 
     def is_managed(entry):
-        return any(m and m in entry for m in managed)
+        # Entries muon wrote before (even for a workspace that has since moved) or for current paths.
+        return entry in previous or any(m and m in entry for m in managed)
 
     perms["additionalDirectories"] = [d for d in perms.get("additionalDirectories", []) if not is_managed(d)] + dirs
     perms["deny"] = [d for d in perms.get("deny", []) if not is_managed(d)] + denied
@@ -235,6 +250,8 @@ def run(plan, check=False, force=False, log=print):
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w", encoding="utf-8") as f:
                 f.write(new)
+            with open(_claude_record_path(path), "w", encoding="utf-8") as f:
+                json.dump({"entries": value[0] + value[1]}, f, indent=2)
             log(f"  wrote {path} (claude adapter: sibling repos readable, legacy/golden writes denied)")
         elif kind == "gitignore":
             new = _gitignore_content(path)
@@ -255,7 +272,7 @@ def run(plan, check=False, force=False, log=print):
 
 # Per-tool adapters. Rules (AGENTS.md) and the legacy L1 lock apply to every tool regardless.
 ADAPTERS = {
-    "claude": "implemented: .claude/settings.local.json (sibling repos readable; Edit/Write denied on legacy and golden data)",
+    "claude": "implemented: .claude/settings.local.json (sibling repos readable; Edit denied on legacy and golden data)",
     "codex": "rules + skills only: its workspace-write sandbox keeps paths outside the repo read-only; "
              "start Codex at the workspace root for cross-repo work",
     "opencode": "slot: rules + L1 only until its local permission format is verified",

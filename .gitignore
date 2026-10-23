@@ -12,3 +12,5 @@ __pycache__/
 /.agents/skills/muon-*
 /.claude/skills/muon-*
 /.claude/settings.local.json
+
+/.claude/.muon-adapter.json

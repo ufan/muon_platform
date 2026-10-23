@@ -133,3 +133,22 @@ def test_doctor_checks_each_rules_file_once(remotes, monkeypatch):
     (top / "core" / "mod" / "AGENTS.md").write_text("x" * 3000)
     files = [os.path.relpath(p, top) for p, _ in ops.rules_files(Workspace(topdir=str(top)))]
     assert files == ["platform/AGENTS.md", "core/AGENTS.md", "core/mod/AGENTS.md"]
+
+
+def test_claude_adapter_uses_edit_rules_and_drops_entries_after_a_move(remotes, monkeypatch):
+    import json
+    import shutil
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform, "--legacy")
+    settings = top / "core" / ".claude" / "settings.local.json"
+    deny = json.loads(settings.read_text())["permissions"]["deny"]
+    assert deny and all(d.startswith("Edit(") for d in deny)
+    for p in (top / "legacy").rglob("*"):          # moving a locked tree needs it writable
+        if not p.is_symlink():
+            p.chmod(p.stat().st_mode | 0o200)
+    moved = tmp_path / "moved"
+    shutil.move(str(top), str(moved))
+    monkeypatch.chdir(moved)
+    assert cli.main(["agents", "sync"]) == 0
+    text = (moved / "core" / ".claude" / "settings.local.json").read_text()
+    assert str(top) + "/" not in text and str(moved) in text
