@@ -159,3 +159,20 @@ def test_platform_skills_are_never_gitignored(remotes):
     top = init(tmp_path, platform)
     gi = (top / "platform" / ".gitignore").read_text()
     assert "/.claude/settings.local.json" in gi and "/skills/" not in gi
+
+
+def test_opencode_adapter_loads_platform_rules_and_respects_handwritten(remotes, monkeypatch):
+    import json
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform)
+    cfg = json.loads((top / "core" / "opencode.json").read_text())
+    assert cfg["instructions"] == [str(top / "platform" / "AGENTS.md")]
+    assert cfg["permission"]["external_directory"] == {f"{top}/**": "allow"}
+    assert f"{top}/legacy/old/**" in cfg["permission"]["edit"]
+    own = top / "platform" / "opencode.json"          # platform: no self-instructions
+    assert json.loads(own.read_text())["instructions"] == []
+    (top / "core" / ".muon" / "opencode.generated").unlink()
+    (top / "core" / "opencode.json").write_text("{}")
+    monkeypatch.chdir(top)
+    assert cli.main(["agents", "sync"]) == 0
+    assert (top / "core" / "opencode.json").read_text() == "{}"

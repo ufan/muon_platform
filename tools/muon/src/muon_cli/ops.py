@@ -99,13 +99,15 @@ def repo_status(r):
 
 
 def format_status(rows):
-    out = [f"{'REPO':26} {'BRANCH':28} {'DIRTY':>5} {'AHEAD':>5} {'BEHIND':>6}  NOTE"]
+    """One line per repo; counts are spelled out so that people and agents cannot misread empty columns."""
+    out = []
     for s in rows:
         if s["state"] == "missing":
-            out.append(f"{s['path']:26} {'(not cloned)':28}")
+            out.append(f"{s['path']:26} not cloned")
             continue
-        out.append(f"{s['path']:26} {s['branch'][:28]:28} {s['dirty'] or '':>5} {s['ahead'] or '':>5} "
-                   f"{s['behind'] or '':>6}  {s['note']}")
+        facts = [f"{n} {k}" for k, n in (("dirty", s["dirty"]), ("ahead", s["ahead"]), ("behind", s["behind"])) if n]
+        facts += [s["note"]] if s["note"] else []
+        out.append(f"{s['path']:26} {s['branch']:24} {', '.join(facts) or 'clean'}")
     return "\n".join(out)
 
 

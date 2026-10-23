@@ -11,3 +11,6 @@ __pycache__/
 # muon agents sync: generated agent files (ADR-012)
 /.claude/settings.local.json
 /.claude/.muon-adapter.json
+
+/opencode.json
+/.muon/opencode.generated

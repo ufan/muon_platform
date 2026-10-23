@@ -18,6 +18,11 @@ muon ws sync --legacy                    # optional: legacy references, cloned a
 muon doctor
 ```
 
+**AI tool setup per host.** `muon agents sync` generates the Claude and OpenCode adapters. Antigravity
+(`agy`) needs a one-time entry in `~/.gemini/antigravity-cli/settings.json` under `permissions.allow`:
+`read_file(<workspace path>)` (and the same path via any symlink you use), plus `command(muon status)`.
+Codex needs nothing extra. Start it at the workspace root when a task spans several repositories.
+
 **Golden test data** is local to each host and is not in git (ADR-011). Copy or move
 `testdata/golden/` from another host (rsync), or point `MUON_DATA_ROOT` at a shared copy.
 `muon doctor` reports where it looks.

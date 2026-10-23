@@ -24,7 +24,8 @@ SKILL_DIRS = (".agents/skills", ".claude/skills")
 GITIGNORE_HEADER = "# muon agents sync: generated agent files (ADR-012)"
 OLD_GITIGNORE_HEADER = "# west agents-sync generated agent files (ADR-009 §14)"
 GITIGNORE_LINES = ["/.agents/skills/muon-*", "/.claude/skills/muon-*", "/.claude/settings.local.json",
-                   "/.claude/.muon-adapter.json"]
+                   "/.claude/.muon-adapter.json", "/opencode.json", "/.muon/opencode.generated"]
+OPENCODE_MARKER = os.path.join(".muon", "opencode.generated")   # present when muon owns opencode.json
 MAP_COLUMNS = ["path", "maturity", "role", "spec", "informs"]
 
 
@@ -75,6 +76,9 @@ class Plan:
 
     def claude_settings(self, path, dirs, denied, managed):
         self.items.append(("claude", path, (dirs, denied, managed)))
+
+    def opencode(self, path, instructions, external, deny_edit):
+        self.items.append(("opencode", path, (instructions, external, deny_edit)))
 
     def gitignore(self, path, lines):
         self.items.append(("gitignore", path, lines))
@@ -130,6 +134,11 @@ def build_plan(ws):
             denied.append(f"Edit(/{data_root}/**)")
         managed = legacy_paths + [s.abspath for s in siblings] + ([data_root] if data_root else [])
         plan.claude_settings(os.path.join(r.abspath, ".claude", "settings.local.json"), dirs, denied, managed)
+        # OpenCode: load the platform rules, allow the workspace as external directory, deny edits to
+        # legacy references and golden data (its project config stops at the git root).
+        hub_rules = [os.path.join(hub, "AGENTS.md")] if hub and r.path != "platform" else []
+        plan.opencode(os.path.join(r.abspath, "opencode.json"), hub_rules, [ws.topdir],
+                      [x.abspath for x in ws.legacy_repos()] + ([data_root] if data_root else []))
         # platform holds the canonical skills in .agents/skills: never ignore them there.
         lines = GITIGNORE_LINES if r.path != "platform" else [l for l in GITIGNORE_LINES if "/skills/" not in l]
         plan.gitignore(os.path.join(r.abspath, ".gitignore"), lines)
@@ -255,6 +264,31 @@ def run(plan, check=False, force=False, log=print):
             with open(_claude_record_path(path), "w", encoding="utf-8") as f:
                 json.dump({"entries": value[0] + value[1]}, f, indent=2)
             log(f"  wrote {path} (claude adapter: sibling repos readable, legacy/golden writes denied)")
+        elif kind == "opencode":
+            instructions, external, deny_edit = value
+            marker = os.path.join(os.path.dirname(path), OPENCODE_MARKER)
+            if os.path.isfile(path) and not os.path.isfile(marker):
+                log(f"  note: {path} is hand-written; OpenCode adapter not applied")
+                continue
+            new = json.dumps({
+                "$schema": "https://opencode.ai/config.json",
+                "instructions": instructions,
+                "permission": {
+                    "external_directory": {f"{d}/**": "allow" for d in external},
+                    "edit": {f"{d}/**": "deny" for d in deny_edit},
+                },
+            }, indent=2) + "\n"
+            old = open(path, encoding="utf-8").read() if os.path.isfile(path) else None
+            if old == new:
+                continue
+            stale.append(path)
+            if check:
+                continue
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(new)
+            os.makedirs(os.path.dirname(marker), exist_ok=True)
+            open(marker, "w").close()
+            log(f"  wrote {path} (opencode adapter: platform rules, workspace readable, legacy/golden edits denied)")
         elif kind == "gitignore":
             new = _gitignore_content(path, value)
             old = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
@@ -277,7 +311,11 @@ ADAPTERS = {
     "claude": "implemented: .claude/settings.local.json (sibling repos readable; Edit denied on legacy and golden data)",
     "codex": "rules + skills only: its workspace-write sandbox keeps paths outside the repo read-only; "
              "start Codex at the workspace root for cross-repo work",
-    "opencode": "slot: rules + L1 only until its local permission format is verified",
-    "antigravity": "slot: rules + L1 only until its local permission format is verified",
+    "opencode": "implemented: opencode.json (platform AGENTS.md as instructions; workspace external_directory "
+                "allowed; edits denied on legacy and golden data). Skills found in .claude/ and .agents/skills "
+                "(duplicate-name warnings in its log are harmless)",
+    "antigravity": "rules + skills (.agents/skills); reads ../platform via the read-first block. Per host, add to "
+                   "~/.gemini/antigravity-cli/settings.json permissions.allow: read_file(<workspace>) and "
+                   "command(muon status) (DEVELOPER_GUIDE §1)",
     "gemini": "slot: rules + L1 only until its local permission format is verified",
 }
