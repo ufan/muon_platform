@@ -1,6 +1,14 @@
 """Tests for the muon launcher (ADR-012 §5): it finds the workspace and runs that workspace's muon."""
 
+import pytest
+
 from muon_launcher import launcher
+
+
+@pytest.fixture(autouse=True)
+def isolated_env(monkeypatch):
+    for var in ("MUON_WORKSPACE", "MUON_IMPL", "MUON_LAUNCHER"):
+        monkeypatch.delenv(var, raising=False)
 
 
 def make_ws(path, version="0.2.0", min_launcher=None):

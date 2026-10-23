@@ -32,6 +32,13 @@ def make_remote(base, name, files, branch="main"):
     return str(bare)
 
 
+@pytest.fixture(autouse=True)
+def isolated_env(monkeypatch):
+    """Tests must not see the workspace they are run from (muon verify sets these)."""
+    for var in ("MUON_WORKSPACE", "MUON_IMPL", "MUON_LAUNCHER", "MUON_DATA_ROOT"):
+        monkeypatch.delenv(var, raising=False)
+
+
 @pytest.fixture
 def remotes(tmp_path):
     core = make_remote(tmp_path, "core", {
