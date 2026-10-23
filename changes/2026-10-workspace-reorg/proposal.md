@@ -1,6 +1,6 @@
 # Workspace reorganization: domain repositories, vcs2l + muon CLI, staged rigor
 
-Status: verified (cut over 2026-10-23); WS-008 fresh-session check pending
+Status: verified (cut over and tool checks done 2026-10-23)
 Owner: project owner
 Decision record: [ADR-012](../../docs/adr/ADR-012_repository_baseline_and_workflow.md) (approved in discussion, 2026-10-23)
 Affected repositories: platform, core (new `ufan/muon_core`), contracts, testdata; retired: `ufan/muon_daq`

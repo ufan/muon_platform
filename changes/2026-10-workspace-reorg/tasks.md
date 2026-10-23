@@ -14,6 +14,7 @@
 
 ## Next
 
-- Run a fresh-session check in `core/` with Claude Code and Codex (WS-008).
+- WS-008 checked 2026-10-23 from `core/`: Codex, OpenCode and agy (headless runs) follow the session protocol and
+  see all six muon skills; Claude Code checked interactively by the owner.
 - Delete `../muon_wkspc.old` once the new workspace is confirmed (it holds only the old `daq/` clone, `.west/`
   and copies of repos that are pushed).
