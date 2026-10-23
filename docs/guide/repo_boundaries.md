@@ -1,5 +1,9 @@
 # Sharper Repo Boundary Proposal
 
+> **Note (2026-10-23):** The repository baseline is now [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md).
+> daq, preprocess and recon are modules of `core`, so the dependency rules below now apply between
+> modules inside `core` (`core/contracts/science`). Repository boundaries follow domains (ADR-012 §3).
+>
 > Note (2026-10-21): `protocol/` is now the `contracts` repository. The
 > repository and workspace model is decided in
 > [ADR-009](../adr/ADR-009_workspace_repository_model.md); the current coarse map is

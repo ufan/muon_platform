@@ -1,4 +1,5 @@
-"""Managed legacy projects (`west legacy`): checkouts and the L1 read-only lock (ADR-009 §15).
+"""Managed legacy repositories (`muon legacy`, `muon ws sync`): checkouts and the L1 read-only lock
+(ADR-009 §15, ADR-012).
 
 L1 is tool-neutral: it works for every AI coding tool and for humans.
   (a) working tree made read-only (`.git` excluded, so status/fetch still work)
@@ -12,11 +13,11 @@ import subprocess
 
 LOCK_KEY = "muon.legacyLocked"
 PUSH_DISABLED = "DISABLED-legacy-read-only"
-HOOK_MARKER = "# muon-ws legacy lock"
+HOOK_MARKER = "# muon-ws legacy lock"   # unchanged so existing locks stay recognised
 HOOK_BODY = f"""#!/bin/sh
 {HOOK_MARKER}
-echo "This is a managed muon legacy project: read-only, no commits or pushes." >&2
-echo "See platform/docs/workflow/WORKSPACE_GUIDE.md (Using legacy projects)." >&2
+echo "This is a managed muon legacy repository: read-only, no commits or pushes." >&2
+echo "See platform/docs/workflow/DEVELOPER_GUIDE.md (Legacy references)." >&2
 exit 1
 """
 HOOKS = ("pre-commit", "pre-push")
@@ -110,7 +111,7 @@ def _unlock_git(path):
 
 
 def unlock(path):
-    """Remove L1 (used internally by `west legacy sync --update`)."""
+    """Remove L1 (used internally by `muon ws sync --update`)."""
     _set_writable(path, True)
     for p in [path, *_submodule_paths(path)]:
         _unlock_git(p)
@@ -155,13 +156,13 @@ def clone(project):
 
 def _checkout(project):
     path = project.abspath
-    rev = project.revision
+    rev = project.version
     _git(path, "fetch", "--quiet", "origin")
     if _git(path, "rev-parse", "--verify", "--quiet", f"origin/{rev}", check=False):
         _git(path, "checkout", "--quiet", "-B", rev, f"origin/{rev}")
     else:
         _git(path, "checkout", "--quiet", rev)
-    if project.submodules:
+    if project.meta.get("submodules"):
         _git(path, "submodule", "update", "--init", "--recursive")
 
 

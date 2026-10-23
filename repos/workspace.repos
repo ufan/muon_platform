@@ -1,0 +1,45 @@
+# Muon platform workspace (ADR-012). vcs2l format: `vcs import --input workspace.repos <topdir>`,
+# normally through `muon ws init|sync`. The `muon:` blocks are muon metadata (vcs2l ignores them);
+# a repository's own `.muon/repo.yml` overrides its block here.
+# Pins: branches while a repository is incubating; tags once it has a second consumer (ADR-012 §6).
+repositories:
+  platform:
+    type: git
+    url: git@github.com:ufan/muon_platform.git
+    version: main
+    muon: {maturity: active, role: "system specs, decisions, workspace definition and the muon tool"}
+  core:
+    type: git
+    url: git@github.com:ufan/muon_core.git
+    version: main
+    muon: {maturity: active, role: "scientific domain: DAQ, scientific contracts, conditions interpretation, preprocess, recon, runners"}
+  contracts:
+    type: git
+    url: git@github.com:ufan/muon_contracts.git
+    version: main
+    muon: {maturity: incubating, role: "future system contracts (domain-service pattern, telemetry, time); placeholder until a second consumer exists"}
+  config:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_config.git
+    version: dev
+    muon: {maturity: support, role: "detector/site parameter payloads (mapping, topology, geometry, alignment)"}
+  testdata:
+    type: git
+    url: git@github.com:ufan/muon_testdata.git
+    version: main
+    muon: {maturity: support, role: "versioned test datasets (catalog + tool); bytes stay local", spec: testdata/README.md}
+  study:
+    type: git
+    url: git@github.com:ufan/muon_study.git
+    version: main
+    muon: {maturity: support, role: "studies and timeline"}
+  tools/muon_tools:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_tools.git
+    version: main
+    muon: {maturity: support, role: "small offline utilities (ADC level, rate estimate)"}
+  tools/rate_estimate:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_rate_estimate.git
+    version: main
+    muon: {maturity: support, role: "muon rate estimation"}

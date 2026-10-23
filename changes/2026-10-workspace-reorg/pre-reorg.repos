@@ -1,0 +1,53 @@
+# Workspace state before the 2026-10-23 reorganization (vcs2l format; from the pre-reorg tags and checkouts).
+repositories:
+  platform:
+    type: git
+    url: git@github.com:ufan/muon_platform.git
+    version: 0bce076dec289c43a9db55f7ca7342564bafdabc
+  contracts:
+    type: git
+    url: git@github.com:ufan/muon_contracts.git
+    version: c6c05817461d77bb156d27bb543d0244ea06f285
+  daq:
+    type: git
+    url: git@github.com:ufan/muon_daq.git
+    version: 0619c6b845cc0c0d62e4b3e72792153980ad4f40
+  testdata:
+    type: git
+    url: git@github.com:ufan/muon_testdata.git
+    version: 72577663cb15b81787a8c632bf2842a172274c05
+  config:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_config.git
+    version: pre-reorg^{commit}
+4267f8a7f8429f60de7aa2187f060f4899e01774
+  study:
+    type: git
+    url: git@github.com:ufan/muon_study.git
+    version: pre-reorg^{commit}
+0bb911bc0f5851779eeeaf13d68113a15b8268c7
+  tools/muon_tools:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_tools.git
+    version: pre-reorg^{commit}
+8f38ed920723d06f120f893f7bb7739c34499895
+  tools/rate_estimate:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_rate_estimate.git
+    version: pre-reorg^{commit}
+a9a6c6a75ee2eaf46dece16922d5a12f38c04e0f
+  legacy/muon400_process:
+    type: git
+    url: git@gitee.com:chinamyworld/muon400_process.git
+    version: pre-reorg^{commit}
+d409a5cbcbf9b4170a8f88a492fe52dc17eb0aa7
+  legacy/analysis:
+    type: git
+    url: git@gitee.com:chinamyworld/muon_analysis.git
+    version: pre-reorg^{commit}
+ec8543034903e112f5cad8710bbcbdb4fcec6094
+  legacy/usb_app2:
+    type: git
+    url: git@github.com:jw-1404/usb_app2
+    version: pre-reorg^{commit}
+3a00ac2b1aecfc41619af59e15972ffc0791340c

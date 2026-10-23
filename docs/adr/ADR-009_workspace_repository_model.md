@@ -1,10 +1,17 @@
 # ADR-009 Workspace and Repository Model
 
 Version: 1.0
-Status: Accepted (2026-10-21)
+Status: Partly superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23)
 Supersedes: ADR-006 §2 "Repository Organization"
 Related: ADR-004 (version model), ADR-006 (AI workflow), ADR-010 (spec-driven domain iteration)
 Revised: 2026-10-21 (§3, §5 legacy location; §12–§15 added); 2026-10-22 (`west legacy`, `archive/`, `informs`, maturity `support`)
+
+> **2026-10-23: West is no longer the workspace interface.** ADR-012 supersedes §1–§4, §6–§10, §12 and §13:
+> one repository per domain (`muon_core` is the scientific domain), vcs2l `.repos` files plus the `muon`
+> CLI, and staged rigor. The following remain in force, with `muon` replacing the west commands
+> (`west legacy …` → `muon ws sync --legacy` / `muon legacy …`, `west agents-sync` → `muon agents sync`):
+> §5 maturity levels and legacy/archive locations, §11 consequences of a multi-repository model,
+> §14 tool-neutral agent setup, §15 legacy guardrails. The text below is kept for history.
 
 ## 1. Decision Summary
 

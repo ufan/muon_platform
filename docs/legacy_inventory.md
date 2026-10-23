@@ -6,24 +6,24 @@ Old code and data are kept **only to inform** new work: a source of domain knowl
 golden data, never a dependency of new code. During each domain iteration, the
 "legacy archaeology" step turns the relevant entries below into an as-is spec.
 
-There are two kinds, kept in two directories (ADR-009 §5):
+There are two kinds, kept in two directories (ADR-009 §5, ADR-012):
 
 | Kind | Directory | Declared in a manifest | Reproducible elsewhere | Read-only protection |
 |---|---|---|---|---|
-| **Legacy** (managed) | `legacy/<dir>`, west name `<dir>-legacy` | yes, with `informs: [...]` | yes (`west legacy sync`) | L1 on disk + L2 rules |
+| **Legacy** (managed) | `legacy/<dir>` | yes: `platform/repos/legacy.repos`, with `informs: [...]` | yes (`muon ws sync --legacy`) | L1 on disk + L2 rules |
 | **Archive** (host-local) | `archive/<dir>` | no | no: this host only | L2 rules only |
 
 Runnability: the legacy chain (fx3 readout → preprocess → analysis) cannot
 currently run end to end. Details to be added by the owner.
 
-## Legacy (managed, group `legacy`)
+## Legacy (managed, `platform/repos/legacy.repos`)
 
-List and state: `west legacy list`. Fetch and lock: `west legacy sync`.
+List and state: `muon legacy status`. Fetch and lock: `muon ws sync --legacy`. All three inform `core`.
 
 | Project / path | Remote | What it is | Informs | Runnable |
 |---|---|---|---|---|
-| `legacy/usb_app2` (`usb-app2-legacy`; `jw-1404/usb_app2`, branches `daemon-dev` = lab hardware, `deploy` = field; declared by daq) | github jw-1404 | prototype DAQ software tested on the current hardware | **DAQ iteration 1**: command sequencing, configuration, acquisition lifecycle, recovery (see `daq/doc/guides/prototype-reference.md`) | on `jw-muon-150test` |
-| `legacy/muon400_process/` (`muon400-process-legacy`, branch `deploy`) | gitee | C++ offline chain for MUON400 | DAQ (fx3), preprocess, recon | unknown |
+| `legacy/usb_app2` (`jw-1404/usb_app2`, branches `daemon-dev` = lab hardware, `deploy` = field) | github jw-1404 | prototype DAQ software tested on the current hardware | **DAQ iteration 1**: command sequencing, configuration, acquisition lifecycle, recovery (see `core/daq/doc/guides/prototype-reference.md`) | on `jw-muon-150test` |
+| `legacy/muon400_process/` (branch `deploy`) | gitee | C++ offline chain for MUON400 | DAQ (fx3), preprocess, recon | unknown |
 | ├ `src/fx3` (submodule `chinamyworld/fx3`, branch `hotfix`) | gitee | FX3 USB readout host program | **DAQ iteration 1**: transport, framing, device commands | unknown |
 | ├ `src/usb_data_separate` | | split the USB stream by board/link | preprocess | unknown |
 | ├ `src/adas_data_unpack`, `src/adas_data_decode` | | ADAS chip frame unpack and decode | preprocess | unknown |
@@ -31,11 +31,11 @@ List and state: `west legacy list`. Fetch and lock: `west legacy sync`.
 | ├ `src/hit_position_reconstruct` | | hit positions from strips | recon | unknown |
 | ├ `src/track_seek` | | track finding and fit, JSON output | recon | unknown |
 | └ `src/scripts/data_process.sh` | | chain driver script | chain wiring, file conventions | unknown |
-| `legacy/analysis/` (`analysis-legacy`) | gitee | ROOT macros, notebooks, baseline studies, plots; untracked `data/` (2.2 GB gain/baseline runs) | analysis, calibration (baselines), mapping | partial |
+| `legacy/analysis/` | gitee | ROOT macros, notebooks, baseline studies, plots; untracked `data/` (2.2 GB gain/baseline runs) | analysis, calibration (baselines), mapping | partial |
 
 ## Archive (host-local, this host only)
 
-Not in any manifest, so west neither fetches nor locks them. The read-only rule in
+Not in any `.repos` file, so `muon` neither fetches nor locks them. The read-only rule in
 `AGENTS.md` (L2) still applies. Other workspaces do not have them.
 
 | Path | What it is | Informs | Notes |

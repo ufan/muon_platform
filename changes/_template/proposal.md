@@ -2,7 +2,7 @@
 
 Status: draft
 Owner: <name>
-Affected projects: <project list from `west catalog`>
+Affected projects: <repositories, from `muon list`>
 Requirements: <requirement IDs, e.g. DAQ-012>
 
 ## Why

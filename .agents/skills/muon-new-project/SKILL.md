@@ -1,27 +1,29 @@
 ---
 name: muon-new-project
-description: Use when adding a new repository (component or legacy project) to the muon platform workspace. Walks the checklists in platform/docs/workflow/WORKSPACE_GUIDE.md §4–§5 using platform/templates/project/.
+description: Use when adding a repository (domain, instrument, support or legacy) to the muon workspace. Applies the ADR-012 split test and uses platform/templates/project/.
 ---
 
-# New project
+# New repository
 
-Read `platform/docs/workflow/WORKSPACE_GUIDE.md` §4 (new repository) or §5 (legacy repository) first.
+## Domain, instrument or support repository
 
-## New component repository
+1. Split test (ADR-012 §3). Is there a different toolchain, lifecycle or audience/ownership? If not,
+   add a directory to an existing repository and stop. A different deployment target alone is not a reason.
+2. Ask the user to create `ufan/muon_<name>` on GitHub, or get approval for `gh repo create`.
+3. Copy `platform/templates/project/` and fill in the placeholders. Write `.muon/repo.yml` with `maturity`
+   (normally `incubating`), `role`, `spec` and `verify`. The verify command is a plain shell command run
+   from the repo root, with no workspace tool. Internal tooling (west, Conan, pixi, …) is the repository's own choice.
+4. Respect the dependency rules (ADR-012 §4): domains depend only on system contracts, and never on core
+   or on each other.
+5. Add an entry to `platform/repos/workspace.repos`, then run `muon ws sync`, `muon verify <name>` and
+   `muon agents sync`.
+6. Commit in `platform` with the reason, and add a line to `docs/decisions.md`. Do not push without confirmation.
 
-1. Check the split rule (ADR-009 §4): is there a different lifecycle, toolchain, deployment target or audience? If not, add a directory to an existing repo instead, and stop.
-2. Ask the user to create `ufan/muon_<name>` on GitHub, or get approval to run `gh repo create`.
-3. Copy `platform/templates/project/` into the new repo and fill in the placeholders (`<name>`, role, verify command).
-4. Make sure the verify command is a plain shell command that runs from the repo root **without west**.
-5. Add the project to `platform/west.yml`, or let it carry its own `west.yml` (ADR-009 §13): `name`, `path`, `repo-path`, `revision`, `groups`, and `userdata: {role, maturity: incubating, deploy, spec, verify}`.
-6. Run `west catalog -a`, then `west verify <name>`, then `west agents-sync`.
-7. Commit the manifest change in `platform` with the reason. Do not push without confirmation.
+## Legacy reference
 
-## Legacy repository
-
-1. Path `legacy/<dir>`, west name `<dir>-legacy` (underscores become dashes), `groups: [legacy]`, `maturity: legacy`, and an explicit `informs: [...]`.
-2. Keep its original remote and pin a fixed revision (preferably a tag `legacy-final`).
-3. Declare it in the one repo that uses it (its `west.yml`). If several repos use it, declare it in `platform/west.yml` (ADR-009 §13).
-4. A repo with no remote cannot be reproduced elsewhere. Propose pushing it to `ufan/muon_legacy_<dir>`, or record it as local-only.
-5. Run `west legacy sync <name>` (clone + lock), then `west legacy status`, then `west agents-sync`.
-6. Add a row to `platform/docs/legacy_inventory.md`.
+1. Add an entry to `platform/repos/legacy.repos`: path `legacy/<dir>`, the original remote, a fixed
+   version (preferably the tag `legacy-final`), and `muon: {maturity: legacy, informs: [...], role: ...}`.
+2. A tree with no remote cannot be reproduced. Propose pushing it to `ufan/muon_legacy_<dir>`, or put it in
+   `archive/<dir>` (host-local, not managed).
+3. Run `muon ws sync --legacy`, then `muon legacy status` (it must show LOCKED), then `muon agents sync`.
+4. Add a row to `platform/docs/legacy_inventory.md`.

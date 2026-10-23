@@ -4,7 +4,13 @@ Version: 1.0
 Status: Accepted (2026-10-21)
 Extends: ADR-006 §4 "Specification Driven Development"
 Related: ADR-008 (replay), ADR-009 (workspace model)
-Revised: 2026-10-21 (§8 prototype lane; §4 step 8)
+Revised: 2026-10-21 (§8 prototype lane; §4 step 8); 2026-10-23 (ADR-012: prototype lane is the default, proposals optional, `muon verify`)
+
+> **2026-10-23 (ADR-012 §6).** While the platform is in early prototyping with one developer, the
+> prototype lane (§8) is the default for all work. A change proposal (§3) is written only to record a
+> decision or to promote prototype behaviour into the spec baseline. Contracts used only by `core`
+> change in the same commit as their consumer. `west verify` reads `muon verify`, and `west legacy sync`
+> reads `muon ws sync --legacy`. Mandatory proposals return with the hardening triggers in ADR-012 §6.
 
 ## 1. Decision Summary
 
@@ -50,7 +56,7 @@ Changes to `contracts/`, changes spanning several repositories, and promotions o
    After that, producers and consumers can be implemented in parallel.
 4. **Implement**: tasks reference proposal and spec IDs. Cross-repo work follows
    ADR-009 §8.
-5. **Verify**: `west verify` for the affected groups; contract, unit and golden tests.
+5. **Verify**: `muon verify` for the affected repositories; contract, unit and golden tests.
 6. **Archive**: deltas are merged into the living specs. The proposal moves to
    `changes/archive/`.
 
@@ -66,7 +72,7 @@ Changes to `contracts/`, changes spanning several repositories, and promotions o
 | 5. Implement | port, refactor or rewrite |
 | 6. Differential verification | output matches legacy/golden data except for **documented, intentional deviations** |
 | 7. Strangler switch | the new domain replaces legacy in the chain; its contracts are promoted |
-| 8. Retire | the old repository is frozen (tag `legacy-final`), moved to `legacy/<dir>`, set to maturity `legacy` with `informs`, and locked (`west legacy sync`; ADR-009 §5, §15) |
+| 8. Retire | the old repository is frozen (tag `legacy-final`), moved to `legacy/<dir>`, set to maturity `legacy` with `informs`, and locked (`muon ws sync --legacy`; ADR-009 §5, §15) |
 
 Port / refactor / rewrite:
 - **refactor in place**: code is sound, in the right language and runtime; the problem is structure.
@@ -94,7 +100,7 @@ Port / refactor / rewrite:
   working tree.
 - Contracts are frozen before parallel producer and consumer work starts.
 - Humans own merges to `platform` docs, ADRs and `contracts`.
-- Definition of done: tests and `west verify` pass, specs and docs are
+- Definition of done: tests and `muon verify` pass, specs and docs are
   updated, tests reference spec IDs.
 
 ## 7. Requirement IDs
@@ -112,7 +118,7 @@ Early development is often bottom-up and exploratory inside one repository. Insi
 
 - needs **no** platform change proposal and no top-level process. The repository's own
   `AGENTS.md` governs (e.g. DAQ's prototype-first workflow);
-- may happen in a repo-rooted workspace for that repository alone (ADR-009 §12–§13);
+- may happen in the shared workspace, or in a plain clone of that repository (ADR-012 §5);
 - still respects the legacy guardrails (ADR-009 §15) and never copies cross-repo contracts locally.
 
 A change proposal (§3) becomes necessary when:

@@ -1,16 +1,18 @@
 ---
 name: muon-verify
-description: Use before claiming any task in the muon workspace is done. Runs west verify for the affected projects and checks the definition of done.
+description: Use before claiming any task in the muon workspace is done. Runs muon verify for the affected repositories and checks the definition of done.
 ---
 
 # Verify
 
-1. In a west workspace, run `west verify <projects>` (or `-g <group>`). Without a workspace (plain clone), run the project's plain verify command from its `AGENTS.md`. Read the full output.
-2. If a project has no `verify` command in `platform/west.yml`, say so explicitly. Do not claim it was verified.
+1. Run `muon verify <repo…>` for every repository you changed and read the full output. In a plain clone
+   without the tool, run the `verify` command from the repository's `.muon/repo.yml`.
+2. If a repository has no `verify` command, say so. Do not claim it was verified.
 3. Check the definition of done:
-   - the tests that cover the change reference spec or requirement IDs;
-   - the project `SPEC.md` or docs reflect the behaviour;
-   - contract changes are in `contracts/`, not copied into consumers;
-   - `west agents-sync --check` passes if rules, skills or a manifest changed;
-   - `west legacy status` shows every managed legacy project LOCKED.
-4. Report results faithfully, including skipped checks and any hardware validation not performed.
+   - tests that cover the change name the requirement IDs (CTest labels, test names);
+   - `SPEC.md` or the docs describe the behaviour;
+   - contract changes are in `core/contracts/` (or `contracts/` after extraction), not copied;
+   - `muon agents sync --check` passes if rules, skills or repos files changed;
+   - `muon legacy status` shows every legacy reference as LOCKED;
+   - `muon status` shows no unexpected dirty repository or branch.
+4. Report faithfully: what passed, what was skipped, and which hardware validation was not performed.

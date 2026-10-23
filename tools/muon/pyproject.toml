@@ -1,0 +1,19 @@
+[project]
+name = "muon-cli"
+version = "0.1.0"
+description = "Muon platform workspace tool: vcs2l workspaces, legacy locks, verify, agent files (ADR-012)"
+requires-python = ">=3.9"
+dependencies = ["pyyaml>=5.4", "vcs2l>=1.1"]
+
+[project.scripts]
+muon = "muon_cli.cli:main"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

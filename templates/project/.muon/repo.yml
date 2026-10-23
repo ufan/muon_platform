@@ -1,0 +1,5 @@
+# muon metadata (platform ADR-012)
+maturity: incubating
+role: "<one line>"
+spec: <name>/SPEC.md
+verify: <plain shell command run from the repository root>

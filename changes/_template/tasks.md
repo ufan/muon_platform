@@ -2,4 +2,4 @@
 
 | # | Project | Task | Spec IDs | Verification | Status |
 |---|---|---|---|---|---|
-| 1 | | | | `west verify <project>` | todo |
+| 1 | | | | `muon verify <repo>` | todo |

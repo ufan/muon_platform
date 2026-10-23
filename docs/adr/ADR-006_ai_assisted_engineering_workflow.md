@@ -19,9 +19,9 @@ The goal:
 
 # 2. Repository Organization
 
-> **Superseded by [ADR-009](ADR-009_workspace_repository_model.md)** (2026-10-21).
-> The monorepo layout below is kept for history only. The platform uses a
-> west multi-repository workspace with a `platform` hub repository.
+> **Superseded by [ADR-009](ADR-009_workspace_repository_model.md)** (2026-10-21) and
+> [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23). The monorepo layout below is kept
+> for history only. The platform uses one repository per domain, composed with vcs2l and the `muon` tool.
 
 Recommended structure:
 
