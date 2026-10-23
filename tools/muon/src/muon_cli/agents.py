@@ -76,8 +76,8 @@ class Plan:
     def claude_settings(self, path, dirs, denied, managed):
         self.items.append(("claude", path, (dirs, denied, managed)))
 
-    def gitignore(self, path):
-        self.items.append(("gitignore", path, None))
+    def gitignore(self, path, lines):
+        self.items.append(("gitignore", path, lines))
 
 
 def _link_target(src, link_path, topdir):
@@ -130,7 +130,9 @@ def build_plan(ws):
             denied.append(f"Edit(/{data_root}/**)")
         managed = legacy_paths + [s.abspath for s in siblings] + ([data_root] if data_root else [])
         plan.claude_settings(os.path.join(r.abspath, ".claude", "settings.local.json"), dirs, denied, managed)
-        plan.gitignore(os.path.join(r.abspath, ".gitignore"))
+        # platform holds the canonical skills in .agents/skills: never ignore them there.
+        lines = GITIGNORE_LINES if r.path != "platform" else [l for l in GITIGNORE_LINES if "/skills/" not in l]
+        plan.gitignore(os.path.join(r.abspath, ".gitignore"), lines)
         if not os.path.isfile(os.path.join(r.abspath, "AGENTS.md")):
             plan.notes.append(f"{r.path}: no AGENTS.md; see platform/templates/project/")
         for shim in ("CLAUDE.md", "GEMINI.md"):
@@ -179,10 +181,10 @@ def _claude_merge(path, dirs, denied, managed):
     return json.dumps(data, indent=2) + "\n"
 
 
-def _gitignore_content(path):
+def _gitignore_content(path, wanted):
     old = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
     lines = [GITIGNORE_HEADER if l == OLD_GITIGNORE_HEADER else l for l in old.splitlines()]
-    missing = [l for l in GITIGNORE_LINES if l not in lines]
+    missing = [l for l in wanted if l not in lines]
     if not missing and lines == old.splitlines():
         return old
     block = ([GITIGNORE_HEADER] if GITIGNORE_HEADER not in lines else []) + missing
@@ -254,7 +256,7 @@ def run(plan, check=False, force=False, log=print):
                 json.dump({"entries": value[0] + value[1]}, f, indent=2)
             log(f"  wrote {path} (claude adapter: sibling repos readable, legacy/golden writes denied)")
         elif kind == "gitignore":
-            new = _gitignore_content(path)
+            new = _gitignore_content(path, value)
             old = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
             if new == old:
                 continue

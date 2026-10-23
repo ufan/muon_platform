@@ -152,3 +152,10 @@ def test_claude_adapter_uses_edit_rules_and_drops_entries_after_a_move(remotes, 
     assert cli.main(["agents", "sync"]) == 0
     text = (moved / "core" / ".claude" / "settings.local.json").read_text()
     assert str(top) + "/" not in text and str(moved) in text
+
+
+def test_platform_skills_are_never_gitignored(remotes):
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform)
+    gi = (top / "platform" / ".gitignore").read_text()
+    assert "/.claude/settings.local.json" in gi and "/skills/" not in gi

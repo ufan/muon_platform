@@ -9,8 +9,5 @@ __pycache__/
 .pytest_cache/
 
 # muon agents sync: generated agent files (ADR-012)
-/.agents/skills/muon-*
-/.claude/skills/muon-*
 /.claude/settings.local.json
-
 /.claude/.muon-adapter.json
