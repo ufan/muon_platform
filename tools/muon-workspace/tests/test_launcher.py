@@ -2,7 +2,7 @@
 
 import pytest
 
-from muon_launcher import launcher
+from muon_workspace import launcher
 
 
 @pytest.fixture(autouse=True)

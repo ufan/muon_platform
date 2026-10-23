@@ -219,14 +219,14 @@ def doctor(ws, log=print):
     impl = os.path.dirname(os.path.abspath(__file__))
     own = os.path.join(ws.topdir, "platform", "tools", "muon")
     check(os.path.commonpath([impl, own]) == own, f"implementation is this workspace's ({impl})",
-          "run muon through the launcher (muon-launcher), not an installed copy")
+          "run muon through the launcher (muon-workspace), not an installed copy")
     lv, _ = launcher_info()
     need = min_launcher(ws)
     if lv:
         check(not need or _version_tuple(lv) >= _version_tuple(need), f"launcher {lv} (workspace needs >= {need or '-'})",
-              "uv tool upgrade muon-launcher")
+              "uv tool upgrade muon-workspace")
     else:
-        advise(False, "started without the launcher", "install muon-launcher (DEVELOPER_GUIDE §1)")
+        advise(False, "started without the launcher", "install muon-workspace (DEVELOPER_GUIDE §1)")
     for tool in ("git", "vcs", "cmake"):
         check(shutil.which(tool) is not None, f"{tool} on PATH", "see DEVELOPER_GUIDE §1")
     check(sys.version_info >= (3, 9), f"python {sys.version.split()[0]}")

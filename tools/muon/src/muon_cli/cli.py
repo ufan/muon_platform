@@ -1,7 +1,7 @@
 """muon: workspace tool of the muon platform (ADR-012).
 
 This is the implementation pinned by each workspace (platform/tools/muon). Run it through the global
-`muon` launcher (package muon-launcher), which picks the implementation of the workspace you are in.
+`muon` launcher (package muon-workspace), which picks the implementation of the workspace you are in.
 The workspace is defined by vcs2l `.repos` files in platform/repos/. This tool clones them, keeps
 legacy references locked read-only, runs verification, and generates agent files. Nothing here is
 needed to build or test a single repository.

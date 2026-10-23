@@ -23,7 +23,7 @@ LAUNCHER_ENV = "MUON_LAUNCHER"            # "<version> <path>", for `muon which`
 MARKER = os.path.join("platform", "repos", "workspace.repos")
 IMPL_DIR = os.path.join("platform", "tools", "muon")
 DEFAULT_PLATFORM_URL = "git@github.com:ufan/muon_platform.git"
-UPGRADE_HINT = "uv tool upgrade muon-launcher"
+UPGRADE_HINT = "uv tool upgrade muon-workspace"
 
 USAGE = f"""muon {__version__} (launcher)
 

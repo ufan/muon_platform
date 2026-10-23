@@ -1,0 +1,25 @@
+# Publishes the launcher (tools/muon-workspace) to PyPI when a tag `muon-workspace-v<version>` is
+# pushed. Uses PyPI trusted publishing (no token): register this repository, this workflow file and
+# the environment `pypi` as a trusted publisher of the project `muon-workspace` on pypi.org (ADR-012 §5).
+name: publish muon-workspace
+on:
+  push:
+    tags: ["muon-workspace-v*"]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Check that the tag matches the package version
+        run: |
+          v=$(grep -m1 '^version' tools/muon-workspace/pyproject.toml | cut -d'"' -f2)
+          test "${GITHUB_REF_NAME}" = "muon-workspace-v${v}" || { echo "tag ${GITHUB_REF_NAME} != version ${v}"; exit 1; }
+      - run: uv run --quiet --project tools/muon-workspace --extra test pytest -q tools/muon-workspace/tests
+      - run: uv build --project tools/muon-workspace --out-dir dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

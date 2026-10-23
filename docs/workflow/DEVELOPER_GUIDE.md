@@ -9,14 +9,14 @@ Procedures exist once, as skills in [`.agents/skills/`](../../.agents/skills/). 
 Toolchain: git, Python ≥ 3.9, [uv](https://docs.astral.sh/uv/), CMake ≥ 3.20, a C++17 compiler.
 
 `muon` has two parts (ADR-012 §5):
-- **launcher** (`muon-launcher`, installed once per host): finds the workspace you are in and runs
+- **launcher** (`muon-workspace`, installed once per host): finds the workspace you are in and runs
   *that workspace's* implementation;
 - **implementation** (`platform/tools/muon`, pinned by each workspace's platform checkout): the real tool,
   run in its own uv environment. Never install it globally.
 
 ```sh
 uv tool install vcs2l                       # provides `vcs`
-uv tool install muon-launcher               # see "Installing the launcher" below
+uv tool install muon-workspace              # the launcher, from PyPI
 muon ws init ~/src/muon_wkspc               # clones platform, then everything in platform/repos
 cd ~/src/muon_wkspc && muon which           # launcher, workspace, implementation, data root
 muon ws sync --legacy                       # optional: legacy references, cloned and locked
@@ -28,9 +28,10 @@ settings in `<workspace>/.muon/workspace.yml` (not committed). To share the gold
 it, run `muon ws init <dir> --data-root <existing>/testdata/golden`. `muon which` always tells you which
 launcher, implementation and data root are in use. Outside any workspace, use `muon -C <dir> …`.
 
-**Installing the launcher.** It has no dependencies. It installs from a package index or from the platform
-repository: `uv tool install 'git+ssh://git@github.com/ufan/muon_platform.git#subdirectory=tools/muon-launcher'`.
-Upgrade it only when `muon doctor` says the workspace needs a newer one.
+**Installing the launcher.** It is published on PyPI as `muon-workspace` and has no dependencies.
+Upgrade it with `uv tool upgrade muon-workspace` when `muon doctor` says the workspace needs a newer one.
+To release a new version: bump `version` in `tools/muon-workspace/pyproject.toml` and `__init__.py`, commit,
+then push the tag `muon-workspace-v<version>`. The workflow `publish-muon-workspace.yml` tests the package and publishes it.
 
 **AI tool setup per host.** `muon agents sync` generates the Claude and OpenCode adapters. Antigravity
 (`agy`) needs a one-time entry in `~/.gemini/antigravity-cli/settings.json` under `permissions.allow`:
