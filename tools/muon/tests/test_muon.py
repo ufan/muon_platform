@@ -176,3 +176,33 @@ def test_opencode_adapter_loads_platform_rules_and_respects_handwritten(remotes,
     monkeypatch.chdir(top)
     assert cli.main(["agents", "sync"]) == 0
     assert (top / "core" / "opencode.json").read_text() == "{}"
+
+
+def test_workspace_config_sets_data_root_for_testdata(remotes, monkeypatch, capsys):
+    from muon_cli import cli as climod
+    tmp_path, platform = remotes
+    shared = tmp_path / "shared_golden"
+    shared.mkdir()
+    top = tmp_path / "ws"
+    assert cli.main(["ws", "init", str(top), "--platform-url", platform, "--data-root", str(shared)]) == 0
+    ws = Workspace(topdir=str(top))
+    assert ws.data_root == (str(shared), ".muon/workspace.yml")
+    seen, real_run = {}, subprocess.run
+
+    def fake_run(cmd, *a, **kw):                     # record only the testdata tool call
+        if cmd[1:2] and cmd[1].endswith("testdata.py"):
+            seen.update(env=kw.get("env"))
+            return subprocess.CompletedProcess(cmd, 0)
+        return real_run(cmd, *a, **kw)
+    monkeypatch.setattr(climod.subprocess, "run", fake_run)
+    monkeypatch.chdir(top)
+    (top / "testdata" / "tools").mkdir(parents=True)
+    (top / "testdata" / ".git").mkdir()
+    with open(top / "platform" / "repos" / "workspace.repos", "a") as f:
+        f.write("  testdata: {type: git, url: '', version: main, muon: {maturity: support}}\n")
+    assert cli.main(["testdata", "list"]) == 0
+    assert seen["env"]["MUON_DATA_ROOT"] == str(shared)
+    capsys.readouterr()
+    assert cli.main(["which"]) == 0
+    out = capsys.readouterr().out
+    assert "launcher        none" in out and str(shared) in out

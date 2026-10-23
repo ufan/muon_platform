@@ -2,4 +2,4 @@
 maturity: active
 role: system specs, decisions, workspace definition and the muon tool
 spec: platform/docs/README.md
-verify: uv run --quiet --project tools/muon --extra test pytest -q tools/muon/tests
+verify: uv run --quiet --project tools/muon --extra test pytest -q tools/muon/tests && uv run --quiet --project tools/muon-launcher --extra test pytest -q tools/muon-launcher/tests

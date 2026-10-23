@@ -1,0 +1,19 @@
+[project]
+name = "muon-launcher"
+version = "0.1.0"
+description = "Launcher for the muon platform workspace tool: finds the workspace and runs its pinned muon (ADR-012)"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+muon = "muon_launcher.launcher:main"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

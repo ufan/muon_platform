@@ -3,6 +3,7 @@
 Small decisions, one dated line each, newest first. Larger ones become ADRs. This file is the shared
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
+- 2026-10-23: `muon` split into a global launcher (`tools/muon-launcher`, no dependencies) and the workspace-pinned implementation (`tools/muon`); per-workspace settings in `.muon/workspace.yml` (ADR-012 §5).
 - 2026-10-23: AI tools verified from `core/`: Claude Code, Codex, OpenCode (generated `opencode.json`) and Antigravity (`agy`; host setting `read_file(<workspace>)` + `command(muon status)` in `~/.gemini/antigravity-cli/settings.json`). Each repo's `AGENTS.md` carries a read-first block, because Codex and agy do not load `platform/AGENTS.md` from outside the git root.
 - 2026-10-23: Cutover done: workspace rebuilt with `muon ws init`; `ufan/muon_daq` archived; Codex hybrid-core branches and `.migration/` deleted.
 - 2026-10-23: West is no longer the workspace interface. vcs2l `.repos` files (`platform/repos/`) plus the `muon` CLI replace it; repositories may use west internally (ADR-012).

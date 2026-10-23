@@ -37,14 +37,9 @@ def skill_names(hub):
 
 
 def test_data_root(ws):
-    """Test data bytes (ADR-011): MUON_DATA_ROOT, else <testdata>/golden when present."""
-    root = os.environ.get("MUON_DATA_ROOT")
-    if root:
-        return os.path.abspath(root)
-    td = ws.get("testdata")
-    if td and os.path.isdir(os.path.join(td.abspath, "golden")):
-        return os.path.join(td.abspath, "golden")
-    return None
+    """Test data bytes (ADR-011), as resolved by the workspace, when present on this host."""
+    root, _ = ws.data_root
+    return root if root and os.path.isdir(root) else None
 
 
 def repo_map(ws):

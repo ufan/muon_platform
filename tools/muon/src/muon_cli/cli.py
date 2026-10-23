@@ -1,17 +1,24 @@
 """muon: workspace tool of the muon platform (ADR-012).
 
-The workspace is defined by vcs2l `.repos` files in platform/repos/. This tool clones them,
-keeps legacy references locked read-only, runs verification, and generates agent files.
-Nothing here is needed to build or test a single repository.
+This is the implementation pinned by each workspace (platform/tools/muon). Run it through the global
+`muon` launcher (package muon-launcher), which picks the implementation of the workspace you are in.
+The workspace is defined by vcs2l `.repos` files in platform/repos/. This tool clones them, keeps
+legacy references locked read-only, runs verification, and generates agent files. Nothing here is
+needed to build or test a single repository.
 """
 
 import argparse
+import datetime
 import os
 import subprocess
 import sys
 
+import yaml
+
 from . import __version__, agents, legacy, ops
-from .workspace import Workspace, WorkspaceError
+from .workspace import CONFIG_FILE, Workspace, WorkspaceError
+
+IMPL_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEFAULT_PLATFORM_URL = "git@github.com:ufan/muon_platform.git"
 
@@ -19,7 +26,7 @@ DEFAULT_PLATFORM_URL = "git@github.com:ufan/muon_platform.git"
 def build_parser():
     ap = argparse.ArgumentParser(prog="muon", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--version", action="version", version=f"muon {__version__}")
+    ap.add_argument("--version", action="version", version=f"implementation  muon {__version__:8} {IMPL_DIR}")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     w = sub.add_parser("ws", help="create or update the workspace")
@@ -29,6 +36,7 @@ def build_parser():
     i.add_argument("--platform-url", default=DEFAULT_PLATFORM_URL)
     i.add_argument("--platform-version", default="main")
     i.add_argument("--legacy", action="store_true", help="also clone the legacy references")
+    i.add_argument("--data-root", help="golden test data of this workspace (e.g. a copy shared on this host)")
     s = ws.add_parser("sync", help="clone missing repos, re-apply legacy locks")
     s.add_argument("--update", action="store_true", help="fast-forward clean repos that are on their pinned branch")
     s.add_argument("--legacy", action="store_true", help="also clone legacy references that are missing")
@@ -48,6 +56,7 @@ def build_parser():
     f.add_argument("--legacy", action="store_true", help="include legacy references")
 
     sub.add_parser("doctor", help="check tools, workspace, locks, agent files and test data")
+    sub.add_parser("which", help="show the launcher, workspace, implementation and data root in use")
     sub.add_parser("list", help="list repositories with maturity, role and informs")
 
     a = sub.add_parser("agents", help="generated agent files for all AI tools")
@@ -76,6 +85,15 @@ def cmd_init(args):
     if not os.path.isdir(os.path.join(plat, ".git")):
         if subprocess.run(["git", "clone", "-b", args.platform_version, args.platform_url, plat]).returncode:
             raise RuntimeError("cloning platform failed")
+    cf = os.path.join(top, CONFIG_FILE)
+    if not os.path.isfile(cf):
+        os.makedirs(os.path.dirname(cf), exist_ok=True)
+        cfg = {"name": os.path.basename(top), "created": datetime.date.today().isoformat()}
+        if args.data_root:
+            cfg["data_root"] = os.path.abspath(os.path.expanduser(args.data_root))
+        with open(cf, "w", encoding="utf-8") as fh:
+            fh.write("# This workspace's settings (ADR-012 §5); not committed anywhere.\n")
+            yaml.safe_dump(cfg, fh, sort_keys=False)
     ws = Workspace(topdir=top)
     ok = ops.sync(ws, with_legacy=args.legacy)
     ws = Workspace(topdir=top)
@@ -130,6 +148,9 @@ def main(argv=None):
             else:
                 print(text, end="")
             return 0
+        if args.cmd == "which":
+            print(ops.which(ws, IMPL_DIR))
+            return 0
         if args.cmd == "doctor":
             return 0 if ops.doctor(ws) else 1
         if args.cmd == "list":
@@ -156,7 +177,11 @@ def main(argv=None):
             if td is None or not td.cloned:
                 raise ValueError("testdata is not cloned (muon ws sync)")
             tool = os.path.join(td.abspath, "tools", "testdata.py")
-            return subprocess.run([sys.executable, tool, *args.args]).returncode
+            env = dict(os.environ)
+            root, _ = ws.data_root
+            if root:
+                env["MUON_DATA_ROOT"] = root
+            return subprocess.run([sys.executable, tool, *args.args], env=env).returncode
     except (WorkspaceError, ValueError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2

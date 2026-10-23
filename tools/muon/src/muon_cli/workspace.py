@@ -19,6 +19,7 @@ import yaml
 HUB = "platform"
 REPOS_FILES = ("platform/repos/workspace.repos", "platform/repos/legacy.repos", "local.repos")
 META_FILE = os.path.join(".muon", "repo.yml")
+CONFIG_FILE = os.path.join(".muon", "workspace.yml")   # per workspace, never committed (topdir is not a repo)
 DEV_MATURITIES = ("incubating", "active", "stable")
 
 
@@ -91,6 +92,11 @@ class Workspace:
             raise WorkspaceError("not inside a muon workspace (no platform/repos/workspace.repos above "
                                  "this directory); create one with `muon ws init <dir>`")
         self.repos = []
+        self.config = {}
+        cf = os.path.join(self.topdir, CONFIG_FILE)
+        if os.path.isfile(cf):
+            with open(cf, encoding="utf-8") as fh:
+                self.config = yaml.safe_load(fh) or {}
         self._load()
 
     def _load(self):
@@ -114,6 +120,19 @@ class Workspace:
                 with open(mf, encoding="utf-8") as fh:
                     r.meta = {**r.meta, **(yaml.safe_load(fh) or {})}
         self.repos = list(by_path.values())
+
+    @property
+    def data_root(self):
+        """(path, source) of the golden test data (ADR-011): $MUON_DATA_ROOT, then
+        .muon/workspace.yml `data_root`, then <testdata>/golden; path is None if none applies."""
+        if os.environ.get("MUON_DATA_ROOT"):
+            return os.path.abspath(os.environ["MUON_DATA_ROOT"]), "MUON_DATA_ROOT"
+        if self.config.get("data_root"):
+            return os.path.abspath(os.path.expanduser(str(self.config["data_root"]))), CONFIG_FILE
+        td = self.get("testdata")
+        if td:
+            return os.path.join(td.abspath, "golden"), "testdata/golden (default)"
+        return None, "none"
 
     # ---- queries -------------------------------------------------------
     def get(self, key):

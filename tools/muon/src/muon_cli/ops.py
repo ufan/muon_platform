@@ -4,7 +4,9 @@ vcs2l does the cloning; everything else is plain git so that a checkout is never
 behind the developer's back: existing repositories are only fast-forwarded when clean.
 """
 
+import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -12,7 +14,7 @@ import tempfile
 
 import yaml
 
-from . import agents, legacy
+from . import __version__, agents, legacy
 from .workspace import REPOS_FILES
 
 RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; ADR-012 lean rules
@@ -161,6 +163,46 @@ def freeze(ws, repos):
     return yaml.safe_dump({"repositories": out}, sort_keys=False)
 
 
+# ---------------------------------------------------------------- which / launcher
+def _version_tuple(v):
+    return tuple(int(x) for x in re.findall(r"\d+", v)[:3])
+
+
+def launcher_info():
+    """(version, path) of the launcher that started us, or (None, None) when run directly."""
+    raw = os.environ.get("MUON_LAUNCHER", "")
+    return tuple(raw.split(" ", 1)) if " " in raw else (None, None)
+
+
+def min_launcher(ws):
+    try:
+        text = open(os.path.join(ws.topdir, "platform", "tools", "muon", "pyproject.toml"), encoding="utf-8").read()
+    except OSError:
+        return None
+    m = re.search(r'^min-launcher\s*=\s*"([^"]+)"', text, re.M)
+    return m.group(1) if m else None
+
+
+def which(ws, impl_dir):
+    lv, lp = launcher_info()
+    plat = os.path.join(ws.topdir, "platform")
+    rev = git(plat, "rev-parse", "--short", "HEAD") or "?"
+    dirty = "dirty" if git(plat, "status", "--porcelain") else "clean"
+    root, source = ws.data_root
+    lines = []
+    if not lv:
+        lines.append("launcher        none (implementation run directly)")
+    lines += [
+        f"workspace       {ws.topdir}",
+        f"implementation  muon {__version__:8} {impl_dir}  (platform {rev}, {dirty})",
+        f"data root       {root or '-'}  ({source}{'' if root and os.path.isdir(root) else ', missing'})",
+    ]
+    return "\n".join(lines)
+
+
+AGY_SETTINGS = os.path.expanduser("~/.gemini/antigravity-cli/settings.json")
+
+
 # ---------------------------------------------------------------- doctor
 def doctor(ws, log=print):
     problems = 0
@@ -170,7 +212,21 @@ def doctor(ws, log=print):
         log(f"  [{'ok' if ok else '!!'}] {msg}" + (f"  -> {hint}" if not ok and hint else ""))
         problems += 0 if ok else 1
 
+    def advise(ok, msg, hint):
+        log(f"  [{'ok' if ok else '--'}] {msg}" + ("" if ok else f"  -> {hint}"))
+
     log(f"workspace: {ws.topdir}")
+    impl = os.path.dirname(os.path.abspath(__file__))
+    own = os.path.join(ws.topdir, "platform", "tools", "muon")
+    check(os.path.commonpath([impl, own]) == own, f"implementation is this workspace's ({impl})",
+          "run muon through the launcher (muon-launcher), not an installed copy")
+    lv, _ = launcher_info()
+    need = min_launcher(ws)
+    if lv:
+        check(not need or _version_tuple(lv) >= _version_tuple(need), f"launcher {lv} (workspace needs >= {need or '-'})",
+              "uv tool upgrade muon-launcher")
+    else:
+        advise(False, "started without the launcher", "install muon-launcher (DEVELOPER_GUIDE §1)")
     for tool in ("git", "vcs", "cmake"):
         check(shutil.which(tool) is not None, f"{tool} on PATH", "see DEVELOPER_GUIDE §1")
     check(sys.version_info >= (3, 9), f"python {sys.version.split()[0]}")
@@ -184,9 +240,17 @@ def doctor(ws, log=print):
         check(r.cloned, f"{r.path} cloned", "muon ws sync")
     stale = agents.run(agents.build_plan(ws), check=True, log=lambda *_: None)
     check(not stale, "agent files up to date", "muon agents sync")
-    root = agents.test_data_root(ws)
-    check(bool(root) and os.path.isdir(root), f"golden test data root: {root or '-'}",
-          "copy golden bytes or set MUON_DATA_ROOT (testdata/README.md)")
+    root, source = ws.data_root
+    check(bool(root) and os.path.isdir(root), f"golden test data root: {root or '-'} ({source})",
+          "copy golden bytes, or set data_root in .muon/workspace.yml (DEVELOPER_GUIDE §1)")
+    if os.path.isfile(AGY_SETTINGS):
+        try:
+            allow = json.load(open(AGY_SETTINGS, encoding="utf-8")).get("permissions", {}).get("allow", [])
+        except ValueError:
+            allow = []
+        rule = f"read_file({ws.topdir})"
+        advise(rule in allow, "Antigravity (agy) may read this workspace",
+               f'add "{rule}" to permissions.allow in {AGY_SETTINGS}')
     for path, limit in rules_files(ws):
         size = os.path.getsize(path)
         check(size <= limit, f"{os.path.relpath(path, ws.topdir)} {size} B (limit {limit})", "keep AGENTS.md lean (ADR-012)")

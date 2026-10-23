@@ -100,6 +100,13 @@ another domain. Core may consume other domains' data, but only as conditions (§
   | `agents sync [--check]` | agent files (§8) |
   | `testdata …` | passes through to `testdata/tools/testdata.py` |
 
+- **Launcher and implementation (revised 2026-10-23):** the global `muon` command is a dependency-free
+  launcher (`platform/tools/muon-launcher`). It finds the workspace (`-C`, `$MUON_WORKSPACE`, or upward from the cwd)
+  and runs that workspace's implementation (`platform/tools/muon`) with
+  `uv run --frozen --project <ws>/platform/tools/muon python -m muon_cli`. Each workspace therefore runs the version
+  its platform checkout pins, as with Android's `repo` launcher or Bazelisk. The implementation declares
+  `[tool.muon] min-launcher`. Per-workspace settings (name, `data_root`) live in the uncommitted
+  `<ws>/.muon/workspace.yml`.
 - **Independence:** no repository needs `muon`, vcs2l or west to build or test. Each verify
   command is a plain shell command run from the repository root.
 - **Internal tooling is the domain's choice.** A domain may use west internally (e.g. Zephyr

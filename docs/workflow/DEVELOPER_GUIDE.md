@@ -8,15 +8,29 @@ Procedures exist once, as skills in [`.agents/skills/`](../../.agents/skills/). 
 
 Toolchain: git, Python ≥ 3.9, [uv](https://docs.astral.sh/uv/), CMake ≥ 3.20, a C++17 compiler.
 
+`muon` has two parts (ADR-012 §5):
+- **launcher** (`muon-launcher`, installed once per host): finds the workspace you are in and runs
+  *that workspace's* implementation;
+- **implementation** (`platform/tools/muon`, pinned by each workspace's platform checkout): the real tool,
+  run in its own uv environment. Never install it globally.
+
 ```sh
-uv tool install vcs2l                                                  # provides `vcs`
-uv tool install "git+ssh://git@github.com/ufan/muon_platform.git#subdirectory=tools/muon"
-muon ws init ~/src/muon_wkspc            # clones platform, then platform/repos/workspace.repos
-cd ~/src/muon_wkspc
-uv tool install --force --editable platform/tools/muon                 # the tool now follows this checkout
-muon ws sync --legacy                    # optional: legacy references, cloned and locked
+uv tool install vcs2l                       # provides `vcs`
+uv tool install muon-launcher               # see "Installing the launcher" below
+muon ws init ~/src/muon_wkspc               # clones platform, then everything in platform/repos
+cd ~/src/muon_wkspc && muon which           # launcher, workspace, implementation, data root
+muon ws sync --legacy                       # optional: legacy references, cloned and locked
 muon doctor
 ```
+
+**Several workspaces on one host** are independent: each runs its own implementation, and has its own
+settings in `<workspace>/.muon/workspace.yml` (not committed). To share the golden data instead of copying
+it, run `muon ws init <dir> --data-root <existing>/testdata/golden`. `muon which` always tells you which
+launcher, implementation and data root are in use. Outside any workspace, use `muon -C <dir> …`.
+
+**Installing the launcher.** It has no dependencies. It installs from a package index or from the platform
+repository: `uv tool install 'git+ssh://git@github.com/ufan/muon_platform.git#subdirectory=tools/muon-launcher'`.
+Upgrade it only when `muon doctor` says the workspace needs a newer one.
 
 **AI tool setup per host.** `muon agents sync` generates the Claude and OpenCode adapters. Antigravity
 (`agy`) needs a one-time entry in `~/.gemini/antigravity-cli/settings.json` under `permissions.allow`:
@@ -24,8 +38,8 @@ muon doctor
 Codex needs nothing extra. Start it at the workspace root when a task spans several repositories.
 
 **Golden test data** is local to each host and is not in git (ADR-011). Copy or move
-`testdata/golden/` from another host (rsync), or point `MUON_DATA_ROOT` at a shared copy.
-`muon doctor` reports where it looks.
+`testdata/golden/` from another host (rsync), or set `data_root` in `.muon/workspace.yml`
+(`MUON_DATA_ROOT` overrides it). `muon doctor` and `muon which` report where it looks.
 
 ## 2. Workspace layout
 

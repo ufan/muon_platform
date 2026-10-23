@@ -8,3 +8,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - run: uv run --quiet --project tools/muon --extra test pytest -q tools/muon/tests
+      - run: uv run --quiet --project tools/muon-launcher --extra test pytest -q tools/muon-launcher/tests
