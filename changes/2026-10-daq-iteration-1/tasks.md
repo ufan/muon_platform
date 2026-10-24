@@ -15,6 +15,8 @@ Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are i
 
 ## Next
 
+- Agent guidance: added the task-specific architecture/spec → linked ADR reading path and synced
+  generated instructions. DAQ owner review remains next; no hardware tests run.
 - Documentation maintenance: added the ADR topic/status index and lifecycle guidance, linked the
   docs overview, and clarified ADR-010/ADR-012 relationships. DAQ review remains next; no hardware tests run.
 

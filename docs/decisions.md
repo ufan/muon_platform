@@ -4,6 +4,7 @@ Small decisions, one dated line each, newest first. Larger ones become ADRs. Thi
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
 - 2026-10-24: Keep stable chronological ADR IDs and paths; navigate by a topic/status index, record explicit reciprocal supersession links, and maintain current guidance alongside decision history.
+- 2026-10-24: Agent reading path is explicit in `AGENTS.md`: relevant current architecture and component spec, then linked ADRs; respect explicit supersession and flag unresolved conflicts.
 
 - 2026-10-23: `muon_config` is a legacy repository (read by `legacy/muon400_process`): moved to `legacy/config`, read-only, `informs: [core]`. A new conditions payload repository will be created at the start of preprocess, seeded from it.
 - 2026-10-23: The launcher is published on PyPI as `muon-workspace` (`tools/muon-workspace`, tag `muon-workspace-v*`, trusted publishing); the implementation is never published.

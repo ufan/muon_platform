@@ -15,6 +15,14 @@ A repository's own `AGENTS.md` adds local rules; if the two conflict, say so ins
   design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
 - Current iteration: DAQ (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
 
+## Reading path
+
+Before design or implementation changes, read the relevant current architecture documentation and
+component specification, then consult linked ADRs for rationale and constraints. Use
+`platform/docs/README.md` and `platform/docs/adr/README.md` to find them. Follow explicit supersession
+relationships; a later ADR number alone does not establish precedence. For small edits, read only
+the documents relevant to the change. Flag unresolved conflicts instead of silently choosing a rule.
+
 ## Session protocol (skill `muon-session`)
 
 - **Start:** read `## Next` in the current iteration's `tasks.md`, then run `muon status`.
