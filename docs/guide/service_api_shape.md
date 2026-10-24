@@ -1,5 +1,7 @@
 # Service API Shape
 
+Status: proposed. Scope: the **external** operator/web-facing API of the instrument (HTTP/JSON, WebSocket) and its mapping to the operator CLI. Internal domain-service contracts remain protobuf/gRPC ([system architecture §3](../architecture/system_architecture.md#3-services-and-communication)); an HTTP surface would be an adapter over them. `muonctl` is the planned instrument operator CLI, not the workspace `muon` tool.
+
 ## Purpose
 
 This document defines the service API shape for the detector instrument so that:

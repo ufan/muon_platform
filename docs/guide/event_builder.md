@@ -1,5 +1,7 @@
 # Online Event Builder
 
+Status: proposed; partly superseded. Event identity, completion, host timestamps and acceptance evidence now live in core: [event builder requirements](../../../core/daq/doc/specs/event-builder.md) and the [FX3 profile](../../../core/daq/doc/specs/event-builder-fx3.md) (`daq:FR-012`, `daq:ADR-006`). The contract field lists, status vocabulary, publication, observability and failure-surfacing rules below are not yet migrated; migration is pending an event-builder placement decision. `protocol/pipeline` references are obsolete: scientific contracts belong in `core/contracts/science/` ([repository model](../architecture/repository_model.md)).
+
 ## Purpose
 
 For online data acquisition, the event builder is the boundary component between:

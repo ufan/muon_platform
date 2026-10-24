@@ -201,10 +201,10 @@ These are preserved questions, not decisions introduced by consolidation:
 
 | Topic | Evidence / required resolution |
 |---|---|
-| Slow-control transport evolution | The management bus specification defines RS-485 with COBS/protobuf; engineering context describes eventual CAN-FD. Define the migration scope and compatibility before implementing the change. |
+| Slow-control bus topology | Four sources differ: the [instrument architecture guide](../guide/instrument_architecture.md) describes three RS-485/Modbus buses (apparently current hardware); the management bus specification proposes one RS-485 bus with COBS/protobuf; ADR-005 §5–§6 evaluates Modbus for gas/auxiliary sensors and CAN-FD for distributed control; engineering context describes eventual CAN-FD, and SRD §10 lists all options. Record current hardware, baseline target and future evolution separately, with migration scope and compatibility, before implementing. |
 | DAQ management on the shared bus | The bus diagram includes a DAQ node, while engineering context emphasizes a separate high-rate DAQ link. Separate management participation from raw transport and confirm the intended topology. |
-| Motion-control boundary | Engineering context mentions both pose/motion and an additional unfinished Motion Control entry. Pose measurement is established; decide ownership and safety/interfaces for future active actuation. |
-| HV numerical targets | Earlier architecture text proposed 0–2000 V and sub-nanoamp current measurement. Confirm these against identified HV requirements and hardware evidence before using them as acceptance limits. |
+| Motion-control boundary | Engineering context and SRD §6.4 combine pose sensing with future motion control. Pose measurement is established; decide ownership and safety/interfaces for future active actuation. |
+| HV numerical targets | [SRD §6.2](../requirements/SRD.md) gives 0–2000 V and sub-nanoamp current measurement as an “Example target”, not an acceptance requirement. Confirm them against HV hardware evidence and assign HV requirement IDs before using them as acceptance limits. |
 | C++ standard | Earlier system text named C++20; general guidance says C++, and the developer guide lists a C++17 toolchain. Component specifications/builds govern today; record an explicit requirement before imposing a workspace-wide standard. |
 | DAQ formats and timestamps | Raw-capture container/provenance and device timestamp questions remain in the [DAQ proposal](../../changes/2026-10-daq-iteration-1/proposal.md). Do not infer answers from schematic “event” diagrams in older ADRs. |
 

@@ -1,5 +1,7 @@
 # Instrument-Level System Architecture
 
+Status: proposed (design input for the planned `muon_instrument` coordinator; not a decision). Repository ownership follows the [repository model](../architecture/repository_model.md); the ownership section below is historical. The bus description is an unconfirmed observation of current hardware, not the approved topology; see [system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies).
+
 ## Purpose
 
 This note widens the system design from DAQ-only control to full detector-instrument control.
@@ -106,7 +108,7 @@ Primary protocol:
 
 ## Bus topology implication
 
-Most non-DAQ subsystems use Modbus and are grouped into three RS485 buses.
+When this note was written, most non-DAQ subsystems used Modbus and were grouped into three RS485 buses. This is an unconfirmed description of current hardware; the [management bus specification](../requirements/instrument_management_bus_requirement.md) proposes a single RS-485 bus with COBS/protobuf, and engineering context names CAN-FD as a later evolution. The approved topology is open ([system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies)).
 
 That means the architecture should not model every device as an unrelated standalone service. It should explicitly represent:
 
@@ -345,6 +347,8 @@ Possible actions:
 - enter `interlocked` or `safe_shutdown`
 
 ## Service ownership recommendation
+
+> Historical. Current ownership: [repository model](../architecture/repository_model.md). DAQ is a module of `core`; the instrument orchestrator belongs to the planned `muon_instrument`; shared system schemas are staged in `core/contracts/system/` before extraction to `muon_contracts`; detector/site payloads go to the planned conditions payload repository; operational configuration belongs to the instrument. The list below is kept for rationale.
 
 Do not fold all of this into `daq/`.
 

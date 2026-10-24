@@ -120,6 +120,8 @@ enable it with `west update --group-filter=+legacy`, or per workspace with
 
 ## 7. Contracts
 
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: [repository model](../architecture/repository_model.md#contract-ownership).
+
 `contracts` is a separate repository and the single source of truth for
 contracts that cross repository boundaries: pipeline records, persistence formats,
 service APIs, and state machine tables. Device ↔ host wire protocols are **not**
@@ -129,6 +131,8 @@ Producers and consumers depend on the revision pinned in `west.yml`, never
 on a copied or vendored version.
 
 ## 8. Cross-Repository Change Protocol
+
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: [developer guide §4](../workflow/DEVELOPER_GUIDE.md#4-cross-repository-changes).
 
 A change touching several projects:
 
@@ -173,6 +177,8 @@ Negative / mitigations:
 
 ## 12. West Usage Policy
 
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: `muon` CLI and vcs2l `.repos` files ([developer guide](../workflow/DEVELOPER_GUIDE.md)).
+
 West is required only at the **workspace** level: setting up or updating a multi-repository
 workspace, the catalog, pinning revisions and releases, cross-repository branches, and
 generating agent files. It is **never** required to build, test, run or develop inside a
@@ -186,9 +192,11 @@ extensions. Their implementation is the internal Python package
 `platform/scripts/west_commands/muon_ws`, which is not a user-facing tool. (Revised 2026-10-22: an earlier
 standalone `muon-ws` CLI was dropped to keep one entry point.)
 
-Procedures: [docs/workflow/WORKSPACE_GUIDE.md](../workflow/WORKSPACE_GUIDE.md).
+Procedures: `docs/workflow/WORKSPACE_GUIDE.md` (retired; current procedures are in the [developer guide](../workflow/DEVELOPER_GUIDE.md)).
 
 ## 13. Repository-Owned Manifests
+
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: `platform/repos/*.repos` and each repository's `.muon/repo.yml` ([repository model](../architecture/repository_model.md)).
 
 A repository may carry its own `west.yml` that declares what *it* needs: its dependencies
 (e.g. `contracts`), the hub as a plain project (for docs, skills and extensions), and the

@@ -1,4 +1,7 @@
 # overview
+
+Status: historical (original project brief and brainstorming, 2026-10). Superseded by the [product landscape](../product_landscape.md), [repository model](../architecture/repository_model.md) and [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md); West adoption and the repository list below are not current.
+
 I am building a new hardware and software system used for muography. We have already MVP of the hardware system, and some PoC level software code and algorithms. I wanna redesign the new system top-down: refactor our existing codebases, add missing components, and integrate them into one consistent platform with robustness, modularity and extensiblity in mind. Right now in my mind, the platform/system needs to have the following modules:
 - daq: retrieval raw data from our detector system and a robust device state machine
 - protocol: wire-line protocol schema, pipeline and persistence object schema, and optionally database schema

@@ -2,6 +2,8 @@
 
 # System Requirements Document (SRD)
 
+Status: draft. Imported baseline without requirement IDs; IDs (`SYS-NNN`, `HV-NNN`, …) are assigned as each domain enters its iteration ([ADR-010 §7](../adr/ADR-010_spec_driven_domain_iteration.md#7-requirement-ids)). “Example target” values are illustrative, not acceptance limits. Technology and process sections defer to [system architecture](../architecture/system_architecture.md) and `AGENTS.md`.
+
 Version: 1.0
 
 ------------------------------------------------------------------------
@@ -197,7 +199,7 @@ The system shall:
 -   measure detector current
 -   provide protection mechanisms
 
-Example target:
+Example target (illustrative, not an acceptance limit; see system architecture §10):
 
 -   voltage range: 0-2000V
 -   current measurement: sub-nanoamp capability
@@ -426,6 +428,9 @@ Every scientific result shall record:
 
 # 10. Communication Requirements
 
+These are technology preferences and candidates, not acceptance requirements. Current direction
+and open topology questions: system architecture §3, §8 and §10.
+
 The system shall support:
 
 ## Internal services
@@ -543,14 +548,9 @@ The system shall support:
 
 # 16. AI-Assisted Engineering Requirements
 
-AI coding agents shall:
-
--   respect architecture boundaries
--   use defined interfaces
--   preserve data contracts
--   support ARM64 compatibility
--   add tests with new features
--   update documentation when architecture changes
+Engineering-process rules for AI agents are not product requirements. They are maintained in
+`platform/AGENTS.md` and `platform/docs/engineering_context.md`; this section intentionally holds
+no separate rule list.
 
 ------------------------------------------------------------------------
 
@@ -558,14 +558,14 @@ AI coding agents shall:
 
   Requirement Area         ADR
   ------------------------ --------
-  Reconstruction runtime   ADR-01
-  EDM and serialization    ADR-02
-  Service architecture     ADR-03
-  Deployment               ADR-04
-  Hardware abstraction     ADR-05
-  AI workflow              ADR-06
-  Digital twin             ADR-07
-  Simulation and replay    ADR-08
+  Reconstruction runtime   ADR-001
+  EDM and serialization    ADR-002
+  Service architecture     ADR-003
+  Deployment               ADR-004
+  Hardware abstraction     ADR-005
+  AI workflow              ADR-006
+  Digital twin             ADR-007
+  Simulation and replay    ADR-008
 
 ------------------------------------------------------------------------
 

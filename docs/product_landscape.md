@@ -1,5 +1,7 @@
 # Muography Instrument Product Landscape
 
+Status: reference (product vision, use cases and deployment modes; not requirements or architecture).
+
 # 1. Purpose
 
 This document provides the top-level landscape view of the planned

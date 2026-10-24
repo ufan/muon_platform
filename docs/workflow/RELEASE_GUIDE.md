@@ -1,5 +1,7 @@
 # Release Guide
 
+Status: current.
+
 How to release the parts of the muon platform that are versioned and distributed. Decisions behind
 this: [ADR-012 §5](../adr/ADR-012_repository_baseline_and_workflow.md). Day-to-day work:
 [DEVELOPER_GUIDE](DEVELOPER_GUIDE.md).

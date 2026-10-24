@@ -1,5 +1,7 @@
 # Developer Guide
 
+Status: current.
+
 How to work in the muon platform workspace, for the human developer and for AI agents.
 The decisions behind it are in [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md).
 Procedures exist once, as skills in [`.agents/skills/`](../../.agents/skills/). This guide links to them.

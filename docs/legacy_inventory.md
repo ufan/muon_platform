@@ -1,6 +1,6 @@
 # Legacy Inventory
 
-Status: living document (ADR-010 §5). Last full scan: 2026-10-22; DAQ archaeology 2026-10-23.
+Status: current; living document (ADR-010 §5). Last full scan: 2026-10-22; DAQ archaeology 2026-10-23.
 
 Old code and data are kept **only to inform** new work: a source of domain knowledge and
 golden data, never a dependency of new code. During each domain iteration, the

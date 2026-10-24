@@ -1,6 +1,6 @@
 # System Architecture Overview
 
-Status: living document. Updated at step 0 of every domain iteration (ADR-010).
+Status: current; living document, updated at step 0 of every domain iteration (ADR-010).
 Detailed whole-system design: [system architecture](system_architecture.md).
 Repository boundaries/dependencies: [repository model](repository_model.md).
 Document scopes and rationale links: [architecture index](readme.md).

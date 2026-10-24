@@ -235,6 +235,8 @@ Example:
 
 # 9. AI Coding Rules
 
+> Historical rule list. Current agent rules: `platform/AGENTS.md` and [engineering context](../engineering_context.md).
+
 Agents must:
 
 1.  Respect ADR documents.

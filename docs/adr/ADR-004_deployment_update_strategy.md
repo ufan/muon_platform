@@ -452,6 +452,8 @@ Recommended:
 
 # 12. AI Coding Agent Rules
 
+> Historical rule list. Current agent rules: `platform/AGENTS.md` and [engineering context](../engineering_context.md). Rule 3 is not in force as a per-change gate: the current gate is `muon verify` per repository (ADR-012 §6), while ARM64 support remains a design constraint.
+
 AI agents must follow:
 
 1.  Never modify hardware-specific code outside service boundaries.

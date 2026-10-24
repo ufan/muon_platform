@@ -1,5 +1,7 @@
 # Architecture decision index
 
+Status: current (ADR index).
+
 ADR numbers follow decision-record order and remain stable. They are identifiers, not topic
 categories or precedence rules. Keep existing IDs and paths when decisions evolve.
 
@@ -54,6 +56,9 @@ Topic groups are navigation aids, and a decision may concern several topics.
   meaningful clarifications in a revision note.
 - For a material change to an accepted decision, add a new ADR. Identify the exact decisions or
   sections it supersedes, and add reciprocal links to the affected ADRs. Preserve their rationale.
+- Platform ADR numbers are unqualified (`ADR-006`). A repository's own decision records keep their
+  numbering and are qualified outside that repository, like requirement IDs (ADR-010 §7):
+  `daq:ADR-006` is the DAQ decision on online event building, not platform ADR-006.
 - Distinguish related or extending decisions from replacement. For partial supersession, state
   what remains in force; a later number alone does not override earlier text.
 - Update this index and the relevant current architecture or workflow guidance in the same change.

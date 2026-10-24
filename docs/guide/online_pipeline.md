@@ -1,5 +1,7 @@
 # Online Data Pipeline
 
+Status: proposed (design input for live/replay pipeline parity; not a decision). `daq/`, `preprocess/` and `recon/` are modules of `core`; contract placement follows the [repository model](../architecture/repository_model.md) (earlier drafts used `protocol/`). Live/replay equivalence is described in [ADR-008](../adr/ADR-008_simulation_verification_replay.md) and [system architecture §7](../architecture/system_architecture.md#7-replay-simulation-and-digital-twin).
+
 ## Purpose
 
 This guide defines one shared online data pipeline for two operating modes:
@@ -402,15 +404,15 @@ The shared pipeline suggests this ownership:
 - `tools/` or `daq/`: replay source adapter
 - `preprocess/`: shared decode path
 - `recon/event_builder/`: shared event assembly and event publication
-- `protocol/pipeline/`: contract definitions for `decoded_board_frame` and `event_frame`
+- `core/contracts/science/`: contract definitions for `decoded_board_frame` and `event_frame` (originally proposed as `protocol/pipeline/`; see the repository model)
 
 ## Recommended next interfaces
 
 To make this guide actionable, define these next:
 
-1. `protocol/pipeline/raw_stream_chunk`
-2. `protocol/pipeline/decoded_board_frame`
-3. `protocol/pipeline/event_frame`
+1. raw stream chunk contract (`core/contracts/science/`)
+2. `decoded_board_frame` contract (`core/contracts/science/`)
+3. `event_frame` contract (`core/contracts/science/`)
 4. source adapter interface for live and replay
 5. event publisher interface
 

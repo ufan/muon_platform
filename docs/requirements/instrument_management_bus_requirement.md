@@ -1,8 +1,10 @@
 # Instrument Management Bus Requirement & Architecture Specification
 
-**Document ID:** 
+Status: draft (proposed slow-control bus baseline). The topology (single RS-485 bus vs current hardware vs CAN-FD evolution, and whether DAQ has a management node) is an open decision: [system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies). Requirement IDs follow ADR-010 §7: functional `IMB-001…` (formerly `FR-01…`), non-functional `IMB-101…` (formerly `NFR-01…`).
 
-**Version:** 
+**Document ID:** IMB-SPEC
+
+**Version:** 0.1 (draft)
 
 **Target Platform:** Embedded Linux (System Controller) & Zephyr RTOS (Domain Controllers)
 
@@ -59,18 +61,18 @@ The architecture natively supports multi-tenant operation, handling **multiple d
 
 ### 2.1 Functional Requirements
 
-* **[FR-01] Bus Ownership Isolation:** The Linux Serial Gateway Daemon shall be the sole process with read/write access to the host physical serial interface (`/dev/ttyS1` or equivalent).
-* **[FR-02] Domain API Abstraction:** Domain controllers shall expose strong-typed RPC methods (e.g., `SetVoltage`, `StartAcquisition`). Raw register offsets and memory-mapped address layouts shall **not** be exposed to upper-layer Linux host software.
-* **[FR-03] Multi-Client Concurrent Access:** The Gateway Daemon shall accept concurrent IPC requests from multiple host-side service clients, multiplexing their requests transparently onto the half-duplex bus.
-* **[FR-04] Dynamic Node Discovery & Addressing:** The Gateway Daemon shall maintain a dynamic board registry mapping abstract logical endpoints (`domain_type` + `instance_id`) to physical wire addresses (`node_id`). Host applications shall invoke services using logical identity rather than physical node addresses.
-* **[FR-05] Multi-Instance Support:** The architecture shall support multiple physical boards sharing the exact same domain type and firmware on the same bus without address collisions or service ambiguity.
+* **[IMB-001] Bus Ownership Isolation:** The Linux Serial Gateway Daemon shall be the sole process with read/write access to the host physical serial interface (`/dev/ttyS1` or equivalent).
+* **[IMB-002] Domain API Abstraction:** Domain controllers shall expose strong-typed RPC methods (e.g., `SetVoltage`, `StartAcquisition`). Raw register offsets and memory-mapped address layouts shall **not** be exposed to upper-layer Linux host software.
+* **[IMB-003] Multi-Client Concurrent Access:** The Gateway Daemon shall accept concurrent IPC requests from multiple host-side service clients, multiplexing their requests transparently onto the half-duplex bus.
+* **[IMB-004] Dynamic Node Discovery & Addressing:** The Gateway Daemon shall maintain a dynamic board registry mapping abstract logical endpoints (`domain_type` + `instance_id`) to physical wire addresses (`node_id`). Host applications shall invoke services using logical identity rather than physical node addresses.
+* **[IMB-005] Multi-Instance Support:** The architecture shall support multiple physical boards sharing the exact same domain type and firmware on the same bus without address collisions or service ambiguity.
 
 ### 2.2 Non-Functional Requirements
 
-* **[NFR-01] Physical Cable Length:** The physical bus wire length shall not exceed $2.0\,\text{m}$ (enclosed strictly within the $1\,\text{m}^3$ cabinet).
-* **[NFR-02] Baud Rate & Throughput:** The serial bus shall operate at a configurable baud rate between **921,600 bps** and **1,500,000 bps (1.5 Mbps)**.
-* **[NFR-03] Message Overhead & Latency:** Total frame processing overhead on the gateway daemon shall be less than $1.0\,\text{ms}$. Round-trip execution for standard control commands shall not exceed $10.0\,\text{ms}$.
-* **[NFR-04] Frame Framing & Integrity:** Every packet transmitted across the wire shall be framed with COBS using `0x00` delimiters and protected by a **CRC-16-CCITT** checksum.
+* **[IMB-101] Physical Cable Length:** The physical bus wire length shall not exceed $2.0\,\text{m}$ (enclosed strictly within the $1\,\text{m}^3$ cabinet).
+* **[IMB-102] Baud Rate & Throughput:** The serial bus shall operate at a configurable baud rate between **921,600 bps** and **1,500,000 bps (1.5 Mbps)**.
+* **[IMB-103] Message Overhead & Latency:** Total frame processing overhead on the gateway daemon shall be less than $1.0\,\text{ms}$. Round-trip execution for standard control commands shall not exceed $10.0\,\text{ms}$.
+* **[IMB-104] Frame Framing & Integrity:** Every packet transmitted across the wire shall be framed with COBS using `0x00` delimiters and protected by a **CRC-16-CCITT** checksum.
 
 ---
 

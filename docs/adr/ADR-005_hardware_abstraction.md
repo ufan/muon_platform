@@ -279,6 +279,8 @@ Firmware should expose capabilities, not registers.
 
 # 10. AI Coding Agent Rules
 
+> Historical rule list. Current agent rules: `platform/AGENTS.md` and [engineering context](../engineering_context.md).
+
 -   Never access hardware registers from application layer.
 -   Keep hardware drivers isolated.
 -   Define APIs before implementation.

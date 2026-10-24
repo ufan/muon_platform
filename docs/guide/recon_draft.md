@@ -1,5 +1,7 @@
 # Recon Draft
 
+Status: proposed (input to the future recon iteration; not a decision). `recon/` is a planned module of `core`; contracts belong in `core/contracts/science/` per the [repository model](../architecture/repository_model.md) (earlier drafts used `protocol/pipeline`). Event-builder requirements already extracted to core are listed in [event_builder.md](event_builder.md).
+
 ## Purpose
 
 `recon/` owns the event-domain pipeline after transport decode:
@@ -93,7 +95,7 @@ Owns only the reconstruction-facing view of a validated board contribution:
 - validation and warning flags
 - host receive timestamp
 
-This type should be defined against `protocol/pipeline` contracts, with a local adapter only if needed.
+This type should be defined against the scientific contracts in `core/contracts/science/`, with a local adapter only if needed.
 
 ### `event_builder/event_frame`
 
@@ -263,8 +265,8 @@ Important boundary rule:
 
 If implementation starts now, define these first:
 
-1. `protocol/pipeline/decoded_board_frame`
-2. `protocol/pipeline/event_frame`
+1. `decoded_board_frame` contract (`core/contracts/science/`)
+2. `event_frame` contract (`core/contracts/science/`)
 3. `recon/event_builder/event_builder.hh`
 4. `recon/event_builder/completion_policy.hh`
 5. `recon/event_builder/publisher.hh`

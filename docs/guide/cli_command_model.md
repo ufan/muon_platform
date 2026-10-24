@@ -1,5 +1,7 @@
 # Centralized CLI Command Model
 
+Status: proposed. Scope: `muonctl`, the planned instrument operator CLI (future `muon_instrument`). It is unrelated to the workspace tool `muon` ([developer guide](../workflow/DEVELOPER_GUIDE.md)).
+
 ## Purpose
 
 This document defines the command model and naming conventions for the centralized detector CLI.

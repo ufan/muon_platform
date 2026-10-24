@@ -1,5 +1,7 @@
 # Existing options for agent coordination
 
+Status: reference (dated research, not an adoption decision).
+
 Research date: 2026-10-24. Documentation review only; no tools were installed or exercised.
 These are open-source candidates with visible GitHub communities, not a benchmark or an adoption
 commitment. Features below are documented project capabilities; Muon fit is our assessment.

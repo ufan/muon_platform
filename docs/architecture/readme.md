@@ -1,5 +1,7 @@
 # Architecture documentation
 
+Status: current (architecture index).
+
 Start with product context and requirements, then choose the architecture view needed for the task.
 Architecture documents describe the current design; component specs define implementation acceptance,
 and linked ADRs explain decisions. An architectural target is not evidence of implementation.

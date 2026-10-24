@@ -1,5 +1,7 @@
 # Engineering Context for Agents
 
+Status: current (always-read agent context; a summary that points to the owning documents).
+
 Product, architecture and engineering rules that apply to every repository. They moved here from
 `platform/AGENTS.md` to keep the always-loaded rules short (ADR-012 §7). Read this before design
 or architecture work, and when a task touches boundaries, contracts, data or deployment.
@@ -10,7 +12,7 @@ The product is a portable, non-invasive scientific sensing platform that measure
 
 Primary application domains:
 
-- TBM (Tunnel Bearing Machine) advance geological prediction 
+- TBM (tunnel boring machine) advance geological prediction
 - dam and civil infrastructure structure health monitoring
 - industrial inspection of inaccessible large structures such as blast furnace
 - geological exploration
@@ -28,17 +30,18 @@ Use these documents as the canonical platform context:
    for the coarse map, `system_architecture.md` for detailed system design, and `repository_model.md`
    for repository boundaries/dependencies.
 4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
-5. `platform/docs/guide/` for design notes that are not yet decisions.
+5. `platform/docs/guide/` for design notes that are not yet decisions; each states its status.
 
 Reading order and index: `platform/docs/README.md`.
 
-Iteration-driven design is adopted for this product development.
-The platform documents are supposed to be revised frequently.
-When documents disagree, prefer the more specific ADR or architecture document, then update or flag the conflicting text instead of silently choosing one.
+Iteration-driven design is adopted for this product development, and the platform documents are
+revised frequently. When documents disagree, authority comes from declared scope and status and from
+explicit supersession (`platform/docs/README.md`), not from specificity or ADR number. Flag the
+conflict instead of silently choosing one.
 
 ## Documentation Rules
 
-- The hub holds platform-level documents, the manifest and workspace tooling only. Implementation code belongs in component projects.
+- `platform/` holds platform-level documents, repository definitions and workspace tooling only. Implementation code belongs in component projects.
 - Keep architecture language precise enough for downstream implementation projects to follow.
 - Maintain traceability between requirements, architecture, ADRs, and subsystem guidance.
 - Update relevant documents when architecture boundaries, data contracts, deployment assumptions, or validation strategy change.
@@ -51,13 +54,12 @@ The platform is a modular scientific instrument composed of independent technica
 
 - Low voltage power supply: essential for the whole system
 - Detector and DAQ: central component of the instrument
-- High voltage supply:  essential life-support for the detector
+- High voltage supply: essential life-support for the detector
 - Gas control: another essential life-support for the detector
 - Pose/Position Sensing and motion control: deployed condition data essential for data products; in the future, an active actuator may be integrated
-- Environmental Sensing: environmantal condition data essential both for instrument health and data products, such as atomosphere pressure, temperature, humidity etc.
+- Environmental Sensing: environmental condition data essential both for instrument health and data products, such as atmospheric pressure, temperature and humidity
 - Central computing: brain of the instrument, coordinates all the subsystems
-- Motion Control: 
-- Reconstruction: directly affect the data product quality and data pipeline diagonosis
+- Reconstruction: directly affects data product quality and data pipeline diagnosis
 - Data platform: high value data products generation, persistence and distribution to end user
 - Digital twin and applications: application/field specific ui/ux products
 
@@ -83,7 +85,7 @@ Hardware
 Domain controllers are peer subsystems with deterministic local control and stable interfaces. Hardware details must remain isolated behind services.
 
 DAQ domain controller should be treated separately from others. All other domain controllers will be attached to the central controller through shared internal bus system. DAQ domain has independent high-rate tolerant bus such as USB or Ethernet. 
-For other domain controllers, dedicated bus may be assigned initially, but ultimately one single shared bus for all. RS485 is the baseline support, but ultimately the bus protocol migrated to CAN-FD.
+For other domain controllers, dedicated buses may be assigned initially, but ultimately one shared bus serves all. RS485 is the baseline; CAN-FD is the intended later evolution. The approved topology and migration are open: see system architecture §10.
 
 Preferred service technologies are protobuf and gRPC. Zenoh/ZeroMQ may be used where distributed communication is required.
 
@@ -112,15 +114,15 @@ Rules:
 - keep serialization outside algorithm logic
 - record provenance for scientific results
 - avoid private side channels, hidden global state, and ad hoc data exchange between algorithms
-- centralized event and condition store preferred, so that minimum dependecny between alogrithms
+- prefer a centralized event and condition store, to minimize dependencies between algorithms
 - keep reconstruction pipelines configurable and suitable for DAG execution
 
 Every scientific result should be traceable to instrument version, firmware version, detector configuration, geometry version, calibration version, algorithm version, software version, and timestamp.
 
 ## Replay And Simulation
 
-Replay is a first-class engineering capability to parrallel the development stages so that quick
-iteration and full-scale tests possbile.
+Replay is a first-class engineering capability that lets development stages proceed in parallel,
+making both quick iteration and full-scale tests possible.
 
 Acquisition-dependent behavior must support these sources through a unified raw stream:
 
@@ -132,62 +134,22 @@ The reconstruction chain should operate identically on live, replay, and simulat
 
 Simulation outputs should remain compatible with real acquisition formats.
 
-## Deployment And Compatibility
+## Deployment, Technology, Reliability And Verification
 
-Development target:
+Details and qualifications live in `architecture/system_architecture.md` §8–§9; do not duplicate them here.
+In short:
 
-- x86_64 Linux
-
-Deployment target:
-
-- Linux x86/x64 desktops
-- Linux ARM64 edge appliance
-- systemd services
-- Debian packages initially
-- RAUC or Mender OTA on the production roadmap
-
-Maintain ARM64 compatibility in technology choices, assumptions, configuration, data formats, and deployment guidance.
-
-## Technology Direction
-
-Initial architecture direction:
-
-- Zephyr RTOS for MCU firmware
-- Linux ARM64 for central computing
-- C++ for core edge software
-- Taskflow for reconstruction runtime
-- protobuf and gRPC for service contracts
-- Muon EDM for scientific data contracts
-- Arrow and Parquet for analytics storage
-- Qt/QML, VTK, and ParaView for visualization
-- Geant4 and fast simulation for validation loops
-- CMake plus Conan or vcpkg for build and dependency management
-
-Before adding a dependency or framework, check that it solves a real architecture problem, supports Linux ARM64, is maintainable over a long product lifetime, and does not weaken subsystem boundaries.
-
-## Verification Expectations
-
-Architecture and requirements should support this validation chain:
-
-```text
-Requirement
-  -> Test Case
-  -> Simulation/Replay Dataset
-  -> Hardware Validation
-```
-
-Expected test layers include unit tests, integration tests, replay regression tests, and hardware-in-loop tests. Documentation changes that alter requirements or architecture should explain their validation impact.
-
-## Critical reliability concerns
-
-- HV safety
-- gas safety
-- DAQ integrity
-- unattended operation
-- watchdog recovery
-- fault reporting
-- remote diagnostics
-- safe shutdown
+- Develop on x86_64 Linux; deploy to Linux desktops and Linux ARM64 edge appliances with systemd and
+  Debian packages initially. Maintain ARM64 compatibility in technology choices, configuration, data
+  formats and deployment guidance.
+- Technology direction: Zephyr (MCU firmware), C++ with CMake, Taskflow, protobuf/gRPC for services,
+  Muon EDM for scientific data, Arrow/Parquet for analytics, Qt/QML/VTK/ParaView, Geant4. Before
+  adding a dependency or framework, check that it solves a real architecture problem, supports
+  Linux ARM64, is maintainable over a long product lifetime and does not weaken subsystem boundaries.
+- Critical reliability concerns: HV and gas safety, DAQ integrity, unattended operation, watchdog
+  recovery, fault reporting, remote diagnostics and safe shutdown.
+- Trace requirements to tests, replay/simulation datasets and hardware validation. Documentation
+  changes that alter requirements or architecture should explain their validation impact.
 
 ## Agent Working Rules
 

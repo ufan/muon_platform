@@ -45,6 +45,11 @@ Tests name the spec or requirement IDs they cover.
 
 ## 3. Change Lifecycle
 
+> **Not the current procedure as written (ADR-012 §3, §6).** Proposals are optional while prototyping.
+> Contracts used only by `core` change in the same commit as their consumer; shared system contracts
+> are staged in `core/contracts/system/` ([repository model](../architecture/repository_model.md)), not `contracts/`.
+> Cross-repository work follows the [developer guide §4](../workflow/DEVELOPER_GUIDE.md#4-cross-repository-changes), not ADR-009 §8.
+
 Changes to `contracts/`, changes spanning several repositories, and promotions of prototype behaviour into the spec baseline follow this lifecycle (intra-repository work: see §8):
 
 1. **Propose**: `platform/changes/<yyyy-mm>-<slug>/` with `proposal.md`
@@ -112,6 +117,9 @@ Port / refactor / rewrite:
 - IDs are never reused or renumbered. Retired IDs are marked as removed.
 
 ## 8. Prototype Lane
+
+> Revised by ADR-012 §6: the prototype lane is the default for all work; “`contracts/`” below now
+> means shared system contracts, staged in `core/contracts/system/` until extraction.
 
 Early development is often bottom-up and exploratory inside one repository. Inside a single
 `incubating` or `active` repository, prototyping:
