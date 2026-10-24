@@ -92,7 +92,7 @@ the baseline:
 2. give the tests requirement IDs;
 3. record the decision.
 
-Design notes (`docs/guide/`, brainstorms) become baseline the same way, by restating their content in the
+Design notes (`docs/design/`, brainstorms) become baseline the same way, by restating their content in the
 owning architecture, requirement, ADR, spec or contract and turning the note into a mapping record:
 skill `muon-promote`.
 

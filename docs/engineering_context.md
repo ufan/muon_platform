@@ -30,7 +30,7 @@ Use these documents as the canonical platform context:
    for the coarse map, `system_architecture.md` for detailed system design, and `repository_model.md`
    for repository boundaries/dependencies.
 4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
-5. `platform/docs/guide/` for design notes that are not yet decisions; each states its status.
+5. `platform/docs/design/` for design notes (proposals, research, historical design records); each states its status.
 
 Reading order and index: `platform/docs/README.md`.
 

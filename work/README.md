@@ -61,5 +61,5 @@ Unrelated maintenance can be handed off through its commit and final report. Dis
 repository handoff. Keep durable decisions in the decision log or ADRs.
 
 Before adding autonomous claiming, scheduling or recovery infrastructure, evaluate the existing
-[open-source candidates](../docs/guide/agent-coordination-options.md). This foundation implements
+[open-source candidates](../docs/design/agent_coordination_options.md). This foundation implements
 work discovery and scoped assignments; coordinated autonomous execution remains future work.

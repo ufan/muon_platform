@@ -26,7 +26,7 @@ Human discussions, backups and directed changes must coexist with assigned auton
 
 Detailed procedure: [work discovery and session scope](../../work/README.md), implemented through
 [muon-session](../../.agents/skills/muon-session/SKILL.md). Candidate research:
-[agent coordination options](../guide/agent-coordination-options.md).
+[agent coordination options](../design/agent_coordination_options.md).
 
 ## Consequences and validation
 
