@@ -3,6 +3,8 @@
 Version: 1.0
 Status: Accepted (2026-10-23)
 Supersedes: ADR-009 §1, §2 (options), §3, §4, §6, §7, §8, §9, §10, §12, §13 (§5, §11, §14, §15 remain in force, adapted below)
+Revises: [ADR-010](ADR-010_spec_driven_domain_iteration.md) §2–§3 and §8 (repository/contract placement, tooling and staged rigor; see §3, §5–§6 below)
+Amends: [ADR-011](ADR-011_test_data.md) (multiple-host data access; §6 and §8 below)
 Related: ADR-003 (service architecture), ADR-004 (versions), ADR-009, ADR-010, ADR-011
 Change record: `changes/2026-10-workspace-reorg/`
 

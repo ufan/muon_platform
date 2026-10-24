@@ -8,7 +8,7 @@ or architecture document wins and the conflict is flagged (see `../AGENTS.md`).
 | 1 | [product_landscape.md](product_landscape.md) | What the instrument is for: mission, application domains, deployment modes, system composition |
 | 2 | [requirements/](requirements/) | What the system must do (SRD, subsystem requirements) |
 | 3 | [architecture/](architecture/) | How the platform is structured; [LANDSCAPE.md](architecture/LANDSCAPE.md) is the coarse map used by every domain iteration |
-| 4 | [adr/](adr/) | Decisions that constrain implementation, numbered `ADR-NNN` |
+| 4 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
 | 5 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |
 | 6 | [guide/](guide/) | Design notes that are not (yet) decisions |
 | — | [decisions.md](decisions.md) | Dated log of small decisions (shared memory for every session and tool) |

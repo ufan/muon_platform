@@ -15,6 +15,9 @@ Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are i
 
 ## Next
 
+- Documentation maintenance: added the ADR topic/status index and lifecycle guidance, linked the
+  docs overview, and clarified ADR-010/ADR-012 relationships. DAQ review remains next; no hardware tests run.
+
 - Documentation maintenance: removed the stale support-project `config/` entry from the legacy
   inventory; `legacy/config/` is documented under managed legacy repositories. No hardware tests run.
 - Owner review of `as-is.md` (especially discrepancies D1–D14) and `golden-data.md`. Questions for the

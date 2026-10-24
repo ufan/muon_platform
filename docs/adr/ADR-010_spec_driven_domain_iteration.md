@@ -1,7 +1,7 @@
 # ADR-010 Spec-Driven Domain Iteration
 
 Version: 1.0
-Status: Accepted (2026-10-21)
+Status: Accepted (2026-10-21); partly superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (§3, §5–§6: repository/contract placement, tooling, proposal/prototype rules in §2–§3 and §8)
 Extends: ADR-006 §4 "Specification Driven Development"
 Related: ADR-008 (replay), ADR-009 (workspace model)
 Revised: 2026-10-21 (§8 prototype lane; §4 step 8); 2026-10-23 (ADR-012: prototype lane is the default, proposals optional, `muon verify`)
