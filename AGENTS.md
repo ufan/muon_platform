@@ -13,7 +13,7 @@ A repository's own `AGENTS.md` adds local rules; if the two conflict, say so ins
   decisions and tooling (no product code). `testdata/` is data. `legacy/` (including the old detector parameters in `legacy/config`) and `archive/` are read-only.
 - Product, architecture and engineering rules: `platform/docs/engineering_context.md`. Read it before
   design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
-- Current iteration: DAQ (`platform/changes/2026-10-daq-iteration-1/`). Next: preprocess.
+- Work discovery: `platform/work/index.yml`; session modes and assignments: `platform/work/README.md`.
 
 ## Reading path
 
@@ -25,8 +25,9 @@ the documents relevant to the change. Flag unresolved conflicts instead of silen
 
 ## Session protocol (skill `muon-session`)
 
-- **Start:** read `## Next` in the current iteration's `tasks.md`, then run `muon status`.
-- **End:** update `## Next`, commit, and report what was verified and what was not.
+- **Start:** follow the explicit assignment first; otherwise use the work index for orientation.
+- **End:** hand off only the scoped work; verify and commit changes. Discussion alone needs no writes.
+- Follow `muon-session`; the index does not assign work or grant approval.
 
 ## Hard rules
 
@@ -38,7 +39,7 @@ the documents relevant to the change. Flag unresolved conflicts instead of silen
   across repositories (`muon branch`).
 - Run `muon verify <repo>` before claiming done (skill `muon-verify`). Name tests after requirement IDs.
 - Never push, create remotes, delete branches or run destructive commands without the user's confirmation.
-- `support` repositories (config, study, tools) change only on explicit request.
+- `support` repositories (study, testdata, tools) change only on explicit request.
 - Durable decisions go in `platform/docs/decisions.md` or an ADR, not only in tool memory.
 - Respect the architecture: hardware stays behind domain services; algorithms use EDM objects and immutable
   conditions; online and offline share code; raw data is immutable and every scientific product is traceable;

@@ -57,12 +57,12 @@ The repository list is `platform/repos/workspace.repos` and `platform/repos/lega
 
 ## 3. Daily loop
 
-1. **Start:** read `## Next` in the active iteration's `platform/changes/<iteration>/tasks.md`,
-   then run `muon status` (skill `muon-session`).
-2. **Work in a repository.** Start the agent in that repository to keep it focused, or at the
-   workspace root for cross-repository work.
-3. **Verify:** `muon verify <repo>` (skill `muon-verify`).
-4. **End:** update `## Next`, commit small and often, push the branch (`wip/<topic>` is fine).
+Follow the [session skill](../../.agents/skills/muon-session/SKILL.md) and
+[work discovery/scope protocol](../../work/README.md). Start from an explicit assignment or the
+user's current request; the [work index](../../work/index.yml) is orientation, not a global queue.
+Discussion needs no writes. For changes, inspect workspace status, work within the assigned scope,
+verify affected repositories and commit scoped changes. Hand off to the relevant task or integrator;
+only iteration work updates that iteration's pending actions. Pushing needs the owner's confirmation.
 
 Commands: `muon status`, `muon verify [repo…]`, `muon branch <name> <repo…>`,
 `muon ws sync [--update]`, `muon freeze`, `muon doctor`, `muon testdata …`.
@@ -123,9 +123,10 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
   skills loaded on demand. `CLAUDE.md`/`GEMINI.md` are shims. `muon agents sync` regenerates the
   shims, skill links and tool adapters; `muon agents adapters` lists the per-tool status.
 - **Keep the rules lean.** `muon doctor` checks the size limits. Put details in skills or docs.
-- **One fact, one home.** Decisions go in `docs/decisions.md` or an ADR; work in progress goes in `tasks.md` `## Next`.
+- **One fact, one home.** Decisions go in `docs/decisions.md` or an ADR; iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
-- **Parallel agents:** use different repositories, or a git worktree of the one repository involved.
+- **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
+  task scopes and an integrator (see the work scope protocol).
 - **Review diffs, not prose.** Agents propose; you merge. Agents never push, create remotes or
   delete branches without your confirmation.
 - **Fresh-session check:** occasionally start a new session (in each AI tool you use) with a small task in

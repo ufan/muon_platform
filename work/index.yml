@@ -1,0 +1,10 @@
+# Planning/discovery only. Paths are relative to the workspace root.
+# No global current/default iteration; entries are not claims or execution approvals.
+version: 1
+iterations:
+  - id: daq-iteration-1
+    domain: daq
+    status: active
+    proposal: platform/changes/2026-10-daq-iteration-1/proposal.md
+    tasks: platform/changes/2026-10-daq-iteration-1/tasks.md
+# Preprocess is planned next, but has no iteration record yet.

@@ -19,4 +19,9 @@ Steps (ADR-010 §4). Each step has an output; do not skip ahead without it.
 | 7 Strangler switch | new domain replaces legacy in the chain; contracts promoted; maturity updated in `.muon/repo.yml` | user |
 | 8 Retire | legacy tagged `legacy-final`, maturity `legacy`, inventory updated | user |
 
-To resume: read the domain's change directory in `platform/changes/`, find the last completed step, and continue from there. Record the current step in `proposal.md`, and the immediate next actions in `tasks.md` `## Next` (skill `muon-session`).
+To resume: use the explicit iteration/task assignment first; otherwise discover iterations through
+`platform/work/index.yml` using the scope protocol in `platform/work/README.md`. Read the linked
+proposal and tasks to establish the current step, dependencies and review gates. Continue only the
+authorized scope. The integrator records the step in `proposal.md` and pending actions in `tasks.md`
+`## Next`; parallel workers hand off their scoped results instead of editing that shared summary
+(skill `muon-session`).

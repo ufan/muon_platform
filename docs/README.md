@@ -11,6 +11,7 @@ or architecture document wins and the conflict is flagged (see `../AGENTS.md`).
 | 4 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
 | 5 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |
 | 6 | [guide/](guide/) | Design notes that are not (yet) decisions |
+| — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
 | — | [decisions.md](decisions.md) | Dated log of small decisions (shared memory for every session and tool) |
 | — | [engineering_context.md](engineering_context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
 | — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |

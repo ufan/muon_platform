@@ -6,6 +6,7 @@ Supersedes: ADR-009 §1, §2 (options), §3, §4, §6, §7, §8, §9, §10, §12
 Revises: [ADR-010](ADR-010_spec_driven_domain_iteration.md) §2–§3 and §8 (repository/contract placement, tooling and staged rigor; see §3, §5–§6 below)
 Amends: [ADR-011](ADR-011_test_data.md) (multiple-host data access; §6 and §8 below)
 Related: ADR-003 (service architecture), ADR-004 (versions), ADR-009, ADR-010, ADR-011
+Revised: 2026-10-24 (§8: navigation updated for [ADR-013](ADR-013_work_discovery_and_session_scope.md), which supersedes global active-iteration discovery and universal iteration handoff rules)
 Change record: `changes/2026-10-workspace-reorg/`
 
 ## 1. Decision Summary
@@ -170,14 +171,19 @@ another domain. Core may consume other domains' data, but only as conditions (§
 |---|---|
 | Rules, procedures | `AGENTS.md`, skills (git) |
 | Decisions | ADRs; `docs/decisions.md` (dated one-line log for small decisions) |
-| Work in progress | the active iteration's `changes/<iteration>/tasks.md` `## Next` section; pushed `wip/<topic>` branches |
+| Work discovery and plans | `work/index.yml` lists iterations; linked proposal/tasks own their state |
+| Scoped work in progress | explicit assignment and its handoff; isolated task branches/worktrees for concurrent writers |
 | Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
 | Environment | DEVELOPER_GUIDE toolchain section; `muon doctor` |
 | Host-local data | `testdata/golden` (or `$MUON_DATA_ROOT`), `archive/`; listed by `muon doctor` |
 
 **Session protocol** (skill `muon-session`):
-- **start:** read the active `tasks.md` `## Next`, then run `muon status`;
-- **end:** update `## Next`, commit, push the WIP branch (pushing needs the owner's confirmation).
+- **start:** follow the explicit request/assignment; use `work/index.yml` only for orientation.
+  Read relevant task context and run `muon status` before mutations. See [session scope](../../work/README.md).
+- **end:** verify and commit scoped changes; hand off to the assigned task/integrator. Only relevant
+  iteration work updates its `## Next`; discussion requires no writes. Pushing needs owner confirmation.
+- The index supports multiple active iterations but provides no claims, leases or scheduler.
+  Unassigned unattended sessions stop; concurrent writers use isolated checkouts and an explicit integrator.
 
 **Tool memory** (e.g. assistant memory files) is a cache only. Anything that matters for the next
 session or another tool goes into the repository.

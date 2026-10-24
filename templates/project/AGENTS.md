@@ -7,9 +7,10 @@ Platform rules: `../platform/AGENTS.md` (also generated at the workspace root).
 
 In a muon workspace, start by reading `../platform/AGENTS.md`. It holds the workspace rules, which some
 tools do not load automatically from outside this repository. Then follow the session protocol:
-- **start:** read `## Next` in the current iteration's `../platform/changes/<iteration>/tasks.md` (the
-  iteration is named in `../platform/AGENTS.md`), then run `muon status`;
-- **end:** run `muon verify <name>`, update `## Next`, commit, and report what was and was not verified.
+- follow the `muon-session` skill and `../platform/work/README.md`: explicit assignments first;
+  otherwise use `../platform/work/index.yml` for orientation, without automatically taking work;
+- verify and commit scoped changes; update only the relevant assigned handoff. Discussion alone
+  requires no repository edits. Parallel workers report results to their integrator.
 
 - Spec index: [SPEC.md](SPEC.md). Detailed working guidance (if any): `doc/guides/`.
 - Dependencies (platform ADR-012 §4): system contracts only. Never depend on core or on other domains.

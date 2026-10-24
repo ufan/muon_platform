@@ -15,13 +15,6 @@ Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are i
 
 ## Next
 
-- Agent guidance: added the task-specific architecture/spec → linked ADR reading path and synced
-  generated instructions. DAQ owner review remains next; no hardware tests run.
-- Documentation maintenance: added the ADR topic/status index and lifecycle guidance, linked the
-  docs overview, and clarified ADR-010/ADR-012 relationships. DAQ review remains next; no hardware tests run.
-
-- Documentation maintenance: removed the stale support-project `config/` entry from the legacy
-  inventory; `legacy/config/` is documented under managed legacy repositories. No hardware tests run.
 - Owner review of `as-is.md` (especially discrepancies D1–D14) and `golden-data.md`. Questions for the
   hardware/firmware side: D1 (op 0x05), D2 (`ram_id`), D3 (op 0x08 Filter), D9 (CRC-32/MPEG-2), D10
   (`frame_index` scope and reset), D11 (32-bit timestamp), D12 (6 chips per ADM fixed?), D13 (threshold

@@ -1,32 +1,38 @@
 ---
 name: muon-session
-description: Use at the start and at the end of every work session in the muon workspace, in any AI tool and on any host. Loads where the work stands and hands it off through git (ADR-012 §8).
+description: Orient and hand off muon workspace sessions, including discussion, directed changes and assigned batch work, across AI tools and hosts.
 ---
 
 # Session start and handoff
 
 ## Start
 
-1. Find the current iteration in `platform/AGENTS.md` ("Current iteration") and read `## Next` in
-   `platform/changes/<iteration>/tasks.md`.
-2. Run `muon status`. Note repositories that are dirty, ahead, behind or off their pinned branch.
-   If the work is on a `wip/<topic>` branch on another host, fetch it first.
-3. Skim `platform/docs/decisions.md` (newest first) for decisions since the last session.
-4. Tell the user in one short paragraph where things stand and what you plan to do next.
+1. Read the workspace rules in `platform/AGENTS.md` and the scope protocol in
+   `platform/work/README.md`. Follow the explicit user/coordinator assignment first. Otherwise use
+   `platform/work/index.yml` for orientation; it is not a work queue or authorization to implement.
+2. For assigned iteration work, read the linked proposal and relevant tasks, including `## Next`.
+   For discussion or unrelated maintenance, read only relevant context; do not adopt an iteration.
+   An unattended batch session without a bounded assignment reports that it is unassigned and stops.
+3. Before mutations, run `muon status` and note dirty, ahead/behind or off-pin repositories. Inspect
+   branch state as needed for read-only work. Do not fetch, switch or alter other sessions' work
+   merely because it exists; retrieve a remote branch only when required by the assignment.
+4. Skim relevant recent entries in `platform/docs/decisions.md`. For substantial work, briefly
+   explain the scope and next action. Discussion can proceed directly to answering the user.
 
 ## During the session
 
-- Announce each repository you change outside the one you started in. Use the same branch name in each (`muon branch`).
-- Record small decisions in `platform/docs/decisions.md` as you make them: one dated line each.
+- Respect the request's intent: discussion and backup do not authorize iteration implementation.
+- Announce each additional repository changed. Use the same task branch name across changed repos.
+- Concurrent writers use isolated worktrees/checkouts; the index provides no claims or locks.
+- Record agreed durable decisions in `platform/docs/decisions.md` or an ADR when changing guidance.
 
 ## End
 
-1. Run `muon verify <repo>` for every repository you changed (skill `muon-verify`).
-2. Update `## Next` in the iteration's `tasks.md`:
-   - what was done;
-   - what is next;
-   - open questions;
-   - which hardware tests were and were not run.
-3. Commit in each changed repository (small commits, clear messages).
-4. Ask the user before pushing. Unpushed work does not reach other hosts.
-5. Tool-specific memory is optional. Never let it be the only record.
+1. For changed repositories, run `muon verify <repo>` (skill `muon-verify`), inspect the scoped diff
+   and commit only this session's changes. No mandatory writes or commits for discussion alone.
+2. Hand off to the destination specified by the assignment. Workers report task ID, commits,
+   verification, blockers and pending approvals; only the integrator updates shared summaries.
+   For human-directed iteration work, keep its `tasks.md` `## Next` focused on pending actions,
+   questions and hardware validation limits. Unrelated maintenance needs no iteration update.
+3. Report what was verified and what was not. Push only with the user's confirmation.
+4. Tool-specific memory is a cache, not the only durable record of decisions or implementation work.

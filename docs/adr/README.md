@@ -35,7 +35,8 @@ Topic groups are navigation aids, and a decision may concern several topics.
 | [006 — AI-assisted engineering](ADR-006_ai_assisted_engineering_workflow.md) | Not recorded; §2 partly superseded | Repository organization replaced by ADR-009, then ADR-012; spec workflow extended by ADR-010. |
 | [009 — Workspace model](ADR-009_workspace_repository_model.md) | Partly superseded | ADR-012 replaces §1–§4, §6–§10, §12–§13; §5, §11, §14–§15 remain with adaptations. |
 | [010 — Domain iteration](ADR-010_spec_driven_domain_iteration.md) | Accepted; partly superseded | ADR-012 §3, §5–§6 revise repository/contract placement, tooling and the proposal/prototype rules in §2–§3 and §8; the iteration playbook remains. |
-| [012 — Repository baseline and workflow](ADR-012_repository_baseline_and_workflow.md) | Accepted | Current repository baseline; replaces parts of ADR-009, revises ADR-010 and amends ADR-011. |
+| [012 — Repository baseline and workflow](ADR-012_repository_baseline_and_workflow.md) | Accepted; §8 partly superseded | Repository baseline; replaces parts of ADR-009, revises ADR-010 and amends ADR-011. ADR-013 replaces global iteration discovery and universal iteration handoff. |
+| [013 — Work discovery and session scope](ADR-013_work_discovery_and_session_scope.md) | Accepted | Stable instructions, multiple active plans, explicit assignments and scoped human/batch handoffs; replaces those rules in ADR-012 §8. |
 
 ### Simulation and verification
 

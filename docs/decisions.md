@@ -3,6 +3,7 @@
 Small decisions, one dated line each, newest first. Larger ones become ADRs. This file is the shared
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
+- 2026-10-24: Separate stable agent rules from iteration state: `work/index.yml` supports multiple active iterations; explicit scoped assignments take priority, discussion needs no writes, and workers hand off to an integrator. Recorded in ADR-013, partly superseding ADR-012 §8; the index is discovery only, not an autonomous claim queue.
 - 2026-10-24: Keep stable chronological ADR IDs and paths; navigate by a topic/status index, record explicit reciprocal supersession links, and maintain current guidance alongside decision history.
 - 2026-10-24: Agent reading path is explicit in `AGENTS.md`: relevant current architecture and component spec, then linked ADRs; respect explicit supersession and flag unresolved conflicts.
 
