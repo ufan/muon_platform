@@ -3,6 +3,7 @@
 Small decisions, one dated line each, newest first. Larger ones become ADRs. This file is the shared
 memory of every session, AI tool and host (ADR-012 §8): if a decision matters next time, write it here.
 
+- 2026-10-24: Consolidate overlapping system/platform architecture into `system_architecture.md`, retaining `platform_architecture.md` only as a compatibility pointer. The architecture index separates overview, system design and repository ownership; unresolved source discrepancies are explicit in system architecture §10.
 - 2026-10-24: Architecture documents use lowercase filenames; `architecture_overview.md` replaces `LANDSCAPE.md`. The overview describes technical boundaries; work discovery and task records own iteration activity.
 - 2026-10-24: `docs/architecture/repository_model.md` is the current repository-boundary and dependency entry point linked from `AGENTS.md`; ADR-012 retains decision rationale. This consolidates existing rules without changing boundaries.
 - 2026-10-24: Separate stable agent rules from iteration state: `work/index.yml` supports multiple active iterations; explicit scoped assignments take priority, discussion needs no writes, and workers hand off to an integrator. Recorded in ADR-013, partly superseding ADR-012 §8; the index is discovery only, not an autonomous claim queue.

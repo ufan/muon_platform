@@ -24,8 +24,9 @@ Use these documents as the canonical platform context:
 
 1. `platform/docs/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
 2. `platform/docs/requirements/` for system requirements.
-3. `platform/docs/architecture/` for platform architecture: the coarse landscape map (`architecture_overview.md`)
-   and current repository boundaries/dependencies (`repository_model.md`).
+3. `platform/docs/architecture/readme.md` selects the architecture view: `architecture_overview.md`
+   for the coarse map, `system_architecture.md` for detailed system design, and `repository_model.md`
+   for repository boundaries/dependencies.
 4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
 5. `platform/docs/guide/` for design notes that are not yet decisions.
 
@@ -59,9 +60,10 @@ The platform is a modular scientific instrument composed of independent technica
 - Data platform: high value data products generation, persistence and distribution to end user
 - Digital twin and applications: application/field specific ui/ux products
 
-Respect the separation between the control plane and data plane:
+The detailed design is in `architecture/system_architecture.md`. Keep its three information planes separate:
 - Control-plane services handle hardware control, configuration, health monitoring, safety, and instrument state. Examples include DAQ, HV, gas, pose, health, and configuration services.
 - Data-plane handles high-rate scientific data: raw data, muon event data model (EDM), reconstruction, physics products, density products, and analytics storage.
+- Sensor/telemetry measurements are archived and resolved into conditions before scientific algorithms consume them.
 
 ## Hardware Abstraction
 

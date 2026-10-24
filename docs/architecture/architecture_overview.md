@@ -1,9 +1,9 @@
 # System Architecture Overview
 
 Status: living document. Updated at step 0 of every domain iteration (ADR-010).
-Detailed boundary rationale: [guide/repo_boundaries.md](../guide/repo_boundaries.md).
-Current repository boundaries and dependencies: [repository model](repository_model.md).
-Decision rationale: [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md).
+Detailed whole-system design: [system architecture](system_architecture.md).
+Repository boundaries/dependencies: [repository model](repository_model.md).
+Document scopes and rationale links: [architecture index](readme.md).
 
 This map is intentionally coarse: it describes technical responsibilities, data flow and downstream
 needs. Detailed specifications are developed within each domain. Active iterations and task state
@@ -28,31 +28,32 @@ through conditions (ADR-012 §9).
 
 ## 2. Domains and responsibilities
 
-| Domain | Answers | Project | Maturity |
-|---|---|---|---|
-| contracts | Scientific contracts (`core/contracts/science`); system contracts staged in `core/contracts/system`, later `muon_contracts` | `core`, `contracts` (placeholder) | incubating |
-| daq | How is hardware commanded, and how do bytes leave the detector? | `core/daq` | active |
-| preprocess | How are raw frames decoded into validated board-level records? | `core/preprocess` (planned; legacy in `legacy/muon400_process`) | legacy |
-| recon | How are records assembled into events, hits and tracks? | `core/recon` (planned; draft: [guide/recon_draft.md](../guide/recon_draft.md)) | planned |
-| imaging | How are tracks turned into opacity/density products? | — (host-local archive `archive/imaging`; development approach undecided) | planned |
-| analysis | How are outputs validated, calibrated and studied offline? | — (legacy in `legacy/analysis`) | legacy |
-| simulation | How are synthetic events and detector responses generated? | — | planned |
-| conditions | Geometry, mapping, alignment, calibration, telemetry-derived intervals | interpretation in `core`; payloads: future conditions repository, seeded from `legacy/config` | legacy |
-| sensor domains | HV, gas, environment, pose, LV: one repository each (firmware + service) | — | planned |
-| instrument | coordination, operating modes, product profiles, BOM | `muon_instrument` (future) | planned |
-| firmware | FPGA / MCU | — | planned |
-| ux | CLI / TUI / GUI / web adapters | — | planned |
+| Domain | Responsibility |
+|---|---|
+| contracts | Canonical scientific formats and shared domain-service interfaces; ownership is in the repository model. |
+| daq | Command acquisition hardware and produce bytes plus run metadata. |
+| preprocess | Decode raw frames into validated board records; keep transport validation separate from physical event building. |
+| recon | Assemble events and reconstruct hits, clusters and tracks from validated records and conditions. |
+| imaging | Convert tracks/flux into opacity or density products. |
+| analysis | Validate, calibrate and study scientific outputs. |
+| simulation | Generate synthetic truth, detector responses and DAQ-compatible inputs. |
+| conditions | Resolve geometry, mapping, alignment, calibration and telemetry-derived intervals into immutable snapshots. |
+| sensor domains | HV, gas, environment, pose and LV services isolate hardware control and telemetry. |
+| instrument | Coordinate domains, operating modes, interlocks and external access. |
+| applications | Operator interfaces, visualization, engineering interpretation and reporting. |
 
-## 3. Control plane vs data plane
+Repository maturity comes from manifests/metadata (`muon list`); component implementation status
+comes from its specifications. Architectural roles here are not a claim that all domains exist.
 
-- **Control plane**: device state, commands, configuration, health, safety.
-  Covers DAQ control, HV, gas, pose and the central instrument manager. Service
-  contracts are protobuf/gRPC (see [engineering context](../engineering_context.md#technology-direction)).
-- **Data plane**: raw stream → EDM objects → products. It is an in-process
-  dataflow pipeline, not a microservice mesh.
+## 3. Three information planes
 
-DAQ sits on both planes: a control-plane state machine and a data-plane
-raw-stream producer.
+- **Control**: commands, lifecycle, configuration, health and safety through instrument/domain services.
+- **Scientific data**: raw capture → validated records → EDM objects → products; algorithms use an
+  internal dataflow pipeline, not a microservice mesh.
+- **Sensor/telemetry**: archived operating measurements resolved into conditions before reaching
+  scientific algorithms. See [system architecture](system_architecture.md#4-three-information-planes).
+
+DAQ combines a control-plane state machine with a scientific raw-stream producer.
 
 ## 4. Downstream needs (checked before freezing an upstream contract)
 

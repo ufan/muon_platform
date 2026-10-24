@@ -1,5 +1,10 @@
 # Sharper Repo Boundary Proposal
 
+Status: historical design exploration. Current repository boundaries are in the
+[repository model](../architecture/repository_model.md); runtime responsibilities are in the
+[system architecture](../architecture/system_architecture.md). The old repository names and sketches
+below are not current implementation instructions.
+
 > **Note (2026-10-23):** The repository baseline is now [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md).
 > daq, preprocess and recon are modules of `core`, so the dependency rules below now apply between
 > modules inside `core` (`core/contracts/science`). Repository boundaries follow domains (ADR-012 §3).

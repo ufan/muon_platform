@@ -1,761 +1,213 @@
-# Muography Instrument Platform
-
-# System Architecture Specification
-
-Version: 1.0
-
-------------------------------------------------------------------------
-
-# 1. Purpose and Scope
-
-This document defines the system-level architecture of the planned
-muography instrument platform.
-
-It provides the stable architecture reference connecting:
-
--   product requirements
--   hardware architecture
--   firmware architecture
--   instrument services
--   reconstruction software
--   data architecture
--   simulation environment
--   digital twin applications
--   deployment strategy
-
-This document is intended to be the primary context document for:
-
--   engineers
--   suppliers
--   future team members
--   AI coding agents
-
-------------------------------------------------------------------------
-
-# 2. Architecture Principles
-
-The platform follows these principles:
-
-## 2.1 Modular Scientific Instrument Architecture
-
-The instrument is not a single embedded device.
-
-It is a collection of independent technical domains:
-
-    Detector
-
-    DAQ
-
-    HV
-
-    Gas
-
-    Pose
-
-    Computing
-
-    Software Platform
-
-Each domain has:
-
--   clear responsibility
--   stable interface
--   independent evolution
-
-------------------------------------------------------------------------
-
-## 2.2 Separation of Control Plane and Data Plane
-
-The architecture separates:
-
-## Control Plane
-
-Responsible for:
-
--   hardware control
--   configuration
--   health monitoring
--   instrument state
-
-Examples:
-
-    HV Service
-
-    Gas Service
-
-    Pose Service
-
-    DAQ Service
-
-    Health Service
-
-------------------------------------------------------------------------
-
-## Data Plane
-
-Responsible for:
-
--   high-rate scientific data processing
-
-Examples:
-
-    Raw Data
-
-    Muon EDM
-
-    Reconstruction
-
-    Physics Products
-
-------------------------------------------------------------------------
-
-# 3. System Context
-
-The instrument operates as a scientific sensing platform.
-
-                    Users
-
-     Engineering Team
-     Field Operator
-     Customer
-
-
-                        |
-
-                        |
-
-              Muography Instrument
-
-
-                        |
-
-                        |
-
-           Cloud / Data Platform
-
-
-                        |
-
-                        |
-
-           Engineering Database
-
-------------------------------------------------------------------------
-
-# 4. Overall System Architecture
-
-                             Applications
-
-                  GUI / Cloud / AI / Digital Twin
-
-
-                                   |
-
-                             Data Products
-
-
-                                   |
-
-                     Scientific Computing Platform
-
-
-              Reconstruction
-
-              Density Inversion
-
-              AI Interpretation
-
-
-                                   |
-
-                      Instrument Software Platform
-
-
-            +------------+------------+------------+
-
-            DAQ        HV          Gas        Pose
-
-            Service    Service     Service    Service
-
-
-                                   |
-
-                    Hardware Domain Controllers
-
-
-            FPGA       STM32      STM32      MCU
-
-
-                                   |
-
-                       Micromegas Detector
-
-------------------------------------------------------------------------
-
-# 5. Hardware Architecture
-
-The hardware platform consists of independent domain controllers.
-
-------------------------------------------------------------------------
-
-# 5.1 DAQ Controller
-
-Responsibilities:
-
--   detector readout
--   FPGA data processing
--   event generation
--   timestamp generation
-
-Architecture:
-
-    Micromegas Detector
-
-            |
-
-    Front-end Electronics
-
-            |
-
-    FPGA
-
-            |
-
-    DAQ Controller
-
-            |
-
-    DAQ Service
-
-The DAQ controller is a peer domain controller, not a passive
-peripheral.
-
-------------------------------------------------------------------------
-
-# 5.2 High Voltage Controller
-
-Responsibilities:
-
--   detector bias generation
--   voltage ramping
--   current monitoring
--   protection
-
-Target:
-
--   0-2000V output
--   sub-nanoamp current measurement
-
-Architecture:
-
-    HV Module
-
-        |
-
-    STM32 Controller
-
-        |
-
-    HV Service
-
-------------------------------------------------------------------------
-
-# 5.3 Gas Controller
-
-Responsibilities:
-
--   gas flow regulation
--   pressure monitoring
--   environmental monitoring
-
-Architecture:
-
-    Sensors
-
-     |
-
-    STM32
-
-     |
-
-    Gas Service
-
-------------------------------------------------------------------------
-
-# 5.4 Pose Controller
-
-Responsibilities:
-
--   orientation measurement
--   global position
--   future motion control
-
-Architecture:
-
-    IMU/GNSS
-
-     |
-
-    Controller
-
-     |
-
-    Pose Service
-
-------------------------------------------------------------------------
-
-# 5.5 Central Controller
-
-Responsibilities:
-
--   data fusion
--   reconstruction
--   orchestration
--   communication
--   user interaction
-
-Target:
-
--   ARM64 Linux SoM
-
-------------------------------------------------------------------------
-
-# 6. Software Architecture
-
-The software architecture consists of five layers.
-
-------------------------------------------------------------------------
-
-# Layer 0: Hardware
-
-Components:
-
--   Micromegas detector
--   FPGA
--   STM32 controllers
--   sensors
--   power systems
-
-------------------------------------------------------------------------
-
-# Layer 1: Firmware
-
-Responsibilities:
-
--   deterministic control
--   hardware abstraction
--   safety functions
--   communication
-
-Technology:
-
--   Zephyr RTOS
--   FPGA firmware
-
-------------------------------------------------------------------------
-
-# Layer 2: Instrument Service Layer
-
-The service layer abstracts hardware.
-
-Architecture:
-
-    Hardware
-
-       |
-
-    Firmware
-
-       |
-
-    Service API
-
-       |
-
-    Central Software
-
-Recommended technologies:
-
--   protobuf
--   gRPC
--   Zenoh optional
-
-Services:
-
-    DAQ Service
-
-    HV Service
-
-    Gas Service
-
-    Pose Service
-
-    Health Service
-
-    Configuration Service
-
-------------------------------------------------------------------------
-
-# Layer 3: Scientific Computing Platform
-
-The reconstruction system is an internal dataflow pipeline.
-
-Architecture:
-
-    Acquisition
-
-          |
-
-    Muon EDM
-
-          |
-
-    Taskflow Runtime
-
-          |
-
-    Algorithms
-
-          |
-
-    Physics Products
-
-Algorithms are modules, not microservices.
-
-------------------------------------------------------------------------
-
-# Layer 4: Applications
-
-Examples:
-
--   Qt/QML GUI
--   cloud dashboard
--   digital twin
--   AI analytics
-
-------------------------------------------------------------------------
-
-# 7. Data Architecture
-
-The data architecture follows:
-
-    Raw Data
-
-       |
-
-    Muon EDM
-
-       |
-
-    Reconstruction
-
-       |
-
-    Data Products
-
-       |
-
-    Analytics Storage
-
-------------------------------------------------------------------------
-
-# 7.1 Acquisition Sources
-
-The system supports three acquisition backends.
-
-                    Acquisition Service
-
-
-           +-------------+-------------+
-
-           |             |             |
-
-        Live DAQ      Replay      Simulation
-
-        Backend       Backend      Backend
-
-
-           +-------------+-------------+
-
+# System architecture
+
+Status: current design baseline; not a claim of implemented or hardware-validated behavior.
+Consolidated: 2026-10-24 from the former system and platform architecture specifications.
+
+## 1. Scope and document boundaries
+
+This document describes how the complete muography instrument's hardware, services, scientific
+processing and applications interact. It supports survey/offline and continuous-monitoring/online
+operation. Product mission, use cases and evolution belong in the [product landscape](../product_landscape.md);
+requirements belong in the [SRD](../requirements/SRD.md) and subsystem specifications.
+
+Read the [overview](architecture_overview.md) for the coarse map and downstream interface questions.
+The [repository model](repository_model.md) owns repository boundaries, dependency directions and
+contract locations. Component specifications, starting with [core](../../../core/SPEC.md), define
+implementation acceptance. ADRs linked below preserve rationale; unresolved differences are listed
+in §10 rather than resolved by document order or filename.
+
+## 2. System composition
+
+```text
+Physical object and detector deployment
+                  |
+Micromegas detector -> front-end/FPGA -> DAQ -> scientific pipeline -> data products
+                                         |                              |
+                              immutable raw archive            applications / digital twin
+
+HV / gas / pose / environment / LV -> domain services -> instrument coordination
+                  |                                          |
+            telemetry archive <------------------------ status and operation
+                  |
+          conditions providers -> scientific pipeline
+```
+
+The instrument coordinator orchestrates domains, operating modes, sequencing, interlocks and
+external communication. Core processes scientific data; it does not command other domains.
+Sensor information reaches reconstruction through conditions, not live device access.
+These boundaries follow [ADR-003](../adr/ADR-003_instrument_service_architecture.md),
+[ADR-005](../adr/ADR-005_hardware_abstraction.md) and
+[ADR-012 §3–§4, §9](../adr/ADR-012_repository_baseline_and_workflow.md).
+
+| Subsystem | Responsibility |
+|---|---|
+| Detector/front-end/FPGA and DAQ | Detector readout, device control, high-rate transport, raw capture and acquisition metadata. Hardware frames are not reconstructed host events. |
+| HV | Bias generation, voltage ramping, current monitoring and local fault protection. |
+| Gas | Gas supply, valve/flow regulation and relevant monitoring; detailed capabilities follow the gas requirements. |
+| Pose/position | Orientation and location used to interpret measurements; active motion is future scope requiring a defined boundary (§10). |
+| Environment | Pressure, temperature, humidity and other measured operating conditions. |
+| LV | Power support for the instrument; detailed interfaces are specified with its domain. |
+| Central computing / instrument | Service aggregation, coordination, processing runners, communications and operator access. Deterministic device control stays in domain controllers. |
+| Scientific software | Preprocessing, event building, reconstruction, calibration interpretation and physics products. |
+| Applications | Visualization, engineering analysis, density interpretation, reporting and digital twin integration. |
+
+## 3. Services and communication
+
+Applications access capabilities through services:
+
+```text
+Application -> instrument aggregation / domain API -> domain adapter
+            -> transport -> domain controller / firmware -> hardware
+```
+
+Drivers, device registers and transport specifics remain behind the domain boundary. Local
+controllers handle deterministic control and protection; central software handles orchestration.
+Domain services expose lifecycle, status, health, alarms and capabilities, with simulator/fake
+backends for testing. This service separation does not turn scientific algorithms into services.
+
+Protobuf/gRPC is the preferred service interface. DAQ needs a separate high-rate transport such as
+USB/FX3 or Ethernet; CAN-FD is not the raw DAQ stream transport. Slow-control bus details belong in
+the [instrument management bus specification](../requirements/instrument_management_bus_requirement.md).
+RS-485 is its current baseline; the intended CAN-FD evolution and DAQ management participation
+need reconciliation as noted in §10. Optional messaging technologies are selected for demonstrated
+needs, not required by this diagram. Rationale: ADR-003 and ADR-005.
+
+## 4. Three information planes
+
+| Plane | Content and path |
+|---|---|
+| Control | Commands, operating modes, configuration, lifecycle, safety and health through instrument/domain services. |
+| Scientific data | Immutable raw capture, validated records, EDM objects and derived physics/engineering products. |
+| Sensor/telemetry | Continuous operating measurements and pose, archived and resolved into time-dependent conditions. |
+
+DAQ participates in control and scientific acquisition. A shared service framework does not imply
+that low-rate telemetry and raw detector traffic use the same transport. The three-plane model and
+time/conditions boundary follow ADR-012 §9.
+
+## 5. Scientific processing and data
+
+```text
+Live acquisition / recorded replay / synthetic acquisition
                          |
-
-                  Unified Raw Stream
-
-------------------------------------------------------------------------
-
-# 7.2 Raw Data
-
-Properties:
-
--   immutable
--   versioned
--   reproducible
-
-Contains:
-
--   detector packets
--   timestamps
--   metadata
-
-------------------------------------------------------------------------
-
-# 7.3 Muon EDM
-
-Scientific data contract.
-
-Objects:
-
-    MuonEvent
-
-    RawHit
-
-    Hit
-
-    Cluster
-
-    Track
-
-    Conditions
-
-All algorithms communicate through EDM.
-
-------------------------------------------------------------------------
-
-# 8. Reconstruction Architecture
-
-The reconstruction engine uses a DAG model.
-
-    Taskflow Runtime
-
-
-    Decoder
-
-       |
-
-    Hit Reconstruction
-
-       |
-
-    Cluster Reconstruction
-
-       |
-
-    Track Reconstruction
-
-       |
-
-    Physics Products
-
-Design principles:
-
--   modular algorithms
--   configurable pipeline
--   replay validation
--   ARM64 compatible
-
-------------------------------------------------------------------------
-
-# 9. Replay and Simulation Architecture
-
-The platform maintains a digital validation loop.
-
-    Geometry Model
-
-          |
-
-    Density Field
-
-          |
-
-    Muon Simulation
-
-          |
-
-    DAQ Simulation
-
-          |
-
-    Raw Data
-
-          |
-
-    Replay/Reconstruction
-
-          |
-
-    Digital Twin
-
-Replay is a first-class engineering capability.
-
-Uses:
-
--   algorithm development
--   regression testing
--   customer demonstrations
--   AI dataset generation
-
-------------------------------------------------------------------------
-
-# 10. Digital Twin Architecture
-
-The digital twin connects:
-
-    Physical Object
-
-    +
-
-    Detector Deployment
-
-    +
-
-    Measurement Data
-
-    +
-
-    Density Reconstruction
-
-    +
-
-    Engineering Decision
-
-Layers:
-
-1.  Geometry
-2.  Detector placement
-3.  Measurement data
-4.  Density field
-5.  Engineering interpretation
-
-------------------------------------------------------------------------
-
-# 11. Deployment Architecture
-
-Target platform:
-
--   Linux ARM64
-
-Development:
-
--   x86_64
-
-Deployment:
-
-    Application
-
-     |
-
-    systemd service
-
-     |
-
-    ARM64 Linux
-
-Initial:
-
--   Debian packages
-
-Future:
-
--   RAUC/Mender OTA
-
-------------------------------------------------------------------------
-
-# 12. Development Architecture
-
-Recommended repository:
-
-    muon-platform/
-
-    docs/
-
-    hardware/
-
-    firmware/
-
-    services/
-
-    reconstruction/
-
-    muon_edm/
-
-    simulation/
-
-    datasets/
-
-    digital_twin/
-
-    deployment/
-
-    tests/
-
-------------------------------------------------------------------------
-
-# 13. Technology Stack
-
-  Domain          Technology
-  --------------- ----------------
-  MCU Firmware    Zephyr
-  Embedded MCU    STM32
-  FPGA            FPGA-based DAQ
-  OS              Linux ARM64
-  Language        C++20
-  Build           CMake
-  Dependency      Conan/vcpkg
-  Runtime         Taskflow
-  API             gRPC/protobuf
-  Messaging       Zenoh optional
-  EDM             Muon EDM
-  Storage         Arrow/Parquet
-  Visualization   Qt/QML, VTK
-  Simulation      Geant4/FastSim
-
-------------------------------------------------------------------------
-
-# 14. AI Coding Agent Context
-
-AI agents shall use this document as the system architecture reference.
-
-Rules:
-
-1.  Respect hardware/software boundaries.
-2.  Never bypass service interfaces.
-3.  Never bypass Muon EDM.
-4.  Reconstruction algorithms are not microservices.
-5.  Every acquisition feature supports replay.
-6.  Every component must support testing.
-7.  Architecture changes require ADR updates.
-
-------------------------------------------------------------------------
-
-# 15. Final Architecture Statement
-
-The muography instrument platform is designed as:
-
-    Scientific Instrument
-
-    =
-
-    Modular Hardware Domains
-
-    +
-
-    Service-Oriented Control
-
-    +
-
-    EDM-Based Reconstruction
-
-    +
-
-    Replay and Simulation Platform
-
-    +
-
-    Digital Twin
-
-    +
-
-    AI-Assisted Engineering
-
-This architecture supports evolution from prototype instruments to
-scalable commercial scientific products.
+                 common raw-stream contract
+                         |
+      immutable raw persistence + decode/unpack/validation
+                         |
+              validated board-frame records
+                         |
+              event building and reconstruction
+                         |
+          hits / clusters / tracks -> physics products
+                         |
+        angular distributions -> density inversion -> engineering products
+```
+
+Preprocess validates transport records, including CRC and malformed/lost-frame handling. Recon
+owns event assembly from validated fragments and subsequent physical reconstruction. Detailed
+ordering, calibration and clustering are component-specific; the diagram is not an acceptance
+specification for algorithms or a fixed host event format.
+
+Reconstruction is an internal configurable DAG, initially using Taskflow. Online and offline use
+the same library targets. Algorithms consume EDM objects and immutable conditions, not files,
+USB handles, mutable configuration branches or live telemetry. Keep serialization and persistence
+outside algorithm logic and avoid private side channels or hidden global state.
+Rationale: [ADR-001](../adr/ADR-001_reconstruction_runtime.md) and
+[ADR-002](../adr/ADR-002_muon_edm_serialization.md).
+
+| Data layer | Responsibility |
+|---|---|
+| Raw capture | Byte-preserving, immutable and reproducible input with acquisition metadata; processing never overwrites it. |
+| Muon EDM | Canonical scientific vocabulary: events, raw hits, hits, clusters, tracks and conditions. Concrete schemas follow component contracts. |
+| Derived products | Tracks, hit maps, rates, flux/angular distributions, opacity/density estimates and associated quality/uncertainty information. |
+| Analytics and applications | Structured products for studies, reporting and visualization; Arrow/Parquet is the current storage direction, not the raw-capture container decision. |
+
+## 6. Conditions, time and provenance
+
+Conditions combine static detector/model information, assembly/deployment geometry and alignment,
+calibration, and time-dependent measurements. Online providers and offline builders resolve these
+into compatible immutable snapshots. Core owns schemas and interpretation; payload ownership is
+specified in the repository model and [core conditions guidance](../../../core/docs/conditions.md).
+
+The edge appliance is the common time authority, recording monotonic time with `boot_id` and UTC,
+clock source and synchronization state. Domain controllers do not share a common clock. Map device
+clocks to edge time using correlation records with uncertainty; do not equate detector timestamp
+precision with global time accuracy. ADR-012 §9 gives an approximate 1 s common-time budget; exact
+contract and device timestamp semantics remain in the owning specifications.
+
+Every scientific product retains instrument/hardware and firmware identity, software/core revision,
+algorithm version/parameters, geometry/calibration and conditions snapshot identity/hash, and time.
+Raw provenance and selected conditions must permit reproducible reprocessing. An explicit conditions
+override retains both original and replacement identities. Source decisions: ADR-002, ADR-012 §9–§10
+and [ADR-004](../adr/ADR-004_deployment_update_strategy.md).
+
+## 7. Replay, simulation and digital twin
+
+Reconstruction is independent of acquisition origin. Recorded replay and synthetic acquisition
+provide the same downstream raw-stream contract as live acquisition. Replay supports algorithm
+iteration, regression, demonstrations and dataset generation. Fidelity includes timing, ordering,
+trigger structure, metadata and configurable rates/loss injection as specified by the replay component.
+Raw archives remain immutable; versioned validation fixtures follow
+[ADR-011](../adr/ADR-011_test_data.md).
+
+Simulation connects geometry and density models to muon generation, detector response and DAQ-format
+output. Compare reconstruction with synthetic truth and recorded references using documented
+metrics/tolerances such as efficiency, angular resolution, throughput and latency. Simulation does
+not replace hardware acceptance. Rationale: [ADR-008](../adr/ADR-008_simulation_verification_replay.md).
+
+The digital twin connects physical-object geometry, detector deployment/acceptance, measurement
+products, density fields and engineering interpretation. Keep geometry independent of visualization
+code and retain consistent model identities across simulation, reconstruction and display. Sources
+may include CAD/BIM, surveys or geological models; candidate geometry tools include FreeCAD,
+OpenSCAD and Blender. These are options, not mandatory runtime dependencies.
+Rationale: [ADR-007](../adr/ADR-007_digital_twin_strategy.md).
+
+## 8. Deployment and technology direction
+
+Development targets Linux x86_64; deployment includes Linux desktops and ARM64 edge appliances.
+Use systemd service lifecycle management and Debian packages initially. RAUC/Mender-style atomic
+OTA and fleet management are production roadmap items, not implemented capabilities. Preserve
+ARM64 compatibility, reproducible release identity and offline deployment needs. ADR-004 describes
+versioning across hardware, firmware, software, algorithms and calibration; the repository model
+identifies instrument release manifests/BOMs.
+
+| Area | Direction and qualification |
+|---|---|
+| Firmware | Zephyr RTOS on MCU controllers, with STM32 a candidate platform; FPGA handles detector-specific processing. |
+| Scientific software | C++, CMake, Muon EDM and Taskflow. Language standard and dependency tooling follow component build/spec requirements; see §10. |
+| Service communication | Protobuf/gRPC preferred; optional Zenoh/ZeroMQ must have a justified use. Physical bus/transport specifications remain separate. |
+| Dependencies | Conan or vcpkg are candidate package-management directions; no requirement to adopt both. |
+| Analytics | Arrow/Parquet; raw transport and capture formats are separate contracts. |
+| Visualization | Qt/QML, VTK and ParaView; operator access may be remote/headless or local according to deployment. |
+| Simulation | Geant4 plus fast simulation and detector-response models. |
+
+This table consolidates existing direction, not approval to add every dependency. Select technologies
+for the actual problem, maintainability and ARM64 support. Workspace and agent procedures live in the
+[developer guide](../workflow/DEVELOPER_GUIDE.md) and [session scope protocol](../../work/README.md).
+
+## 9. Reliability and verification
+
+Key concerns are HV/gas protection, DAQ integrity, unattended operation, watchdog recovery, fault
+reporting, remote diagnostics and safe shutdown. Keep deterministic safety behavior local to domain
+controllers; orchestration does not substitute for local protection.
+
+Trace requirements to unit/contract tests, replay/golden comparisons, simulation validation and
+hardware-in-loop acceptance as appropriate. Reference requirement IDs and preserve golden inputs.
+Report missing datasets, incomplete interfaces and hardware checks not performed. A successful
+software build or replay is not evidence of verified detector behavior.
+
+## 10. Open points and document discrepancies
+
+These are preserved questions, not decisions introduced by consolidation:
+
+| Topic | Evidence / required resolution |
+|---|---|
+| Slow-control transport evolution | The management bus specification defines RS-485 with COBS/protobuf; engineering context describes eventual CAN-FD. Define the migration scope and compatibility before implementing the change. |
+| DAQ management on the shared bus | The bus diagram includes a DAQ node, while engineering context emphasizes a separate high-rate DAQ link. Separate management participation from raw transport and confirm the intended topology. |
+| Motion-control boundary | Engineering context mentions both pose/motion and an additional unfinished Motion Control entry. Pose measurement is established; decide ownership and safety/interfaces for future active actuation. |
+| HV numerical targets | Earlier architecture text proposed 0–2000 V and sub-nanoamp current measurement. Confirm these against identified HV requirements and hardware evidence before using them as acceptance limits. |
+| C++ standard | Earlier system text named C++20; general guidance says C++, and the developer guide lists a C++17 toolchain. Component specifications/builds govern today; record an explicit requirement before imposing a workspace-wide standard. |
+| DAQ formats and timestamps | Raw-capture container/provenance and device timestamp questions remain in the [DAQ proposal](../../changes/2026-10-daq-iteration-1/proposal.md). Do not infer answers from schematic “event” diagrams in older ADRs. |
+
+Update this architecture and relevant component specifications when these points are decided, and
+record consequential choices in an ADR. Planned services, telemetry/time contracts and later processing
+modules must not be mistaken for completed implementations; inspect their owning specifications.
