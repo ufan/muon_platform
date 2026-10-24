@@ -51,11 +51,12 @@ The platform is a modular scientific instrument composed of independent technica
 
 - Low voltage power supply: essential for the whole system
 - Detector and DAQ: central component of the instrument
--_High voltage supply:  essential life-support for Micromegas detector
-- Gas control: another essential life-support for Micromegas detector
-- Pose/Position Sensing and motion control: deployed condition data essential for data products
-- Environmental Sensing: environmantal condition data essential both for instrument health and data products
+- High voltage supply:  essential life-support for the detector
+- Gas control: another essential life-support for the detector
+- Pose/Position Sensing and motion control: deployed condition data essential for data products; in the future, an active actuator may be integrated
+- Environmental Sensing: environmantal condition data essential both for instrument health and data products, such as atomosphere pressure, temperature, humidity etc.
 - Central computing: brain of the instrument, coordinates all the subsystems
+- Motion Control: 
 - Reconstruction: directly affect the data product quality and data pipeline diagonosis
 - Data platform: high value data products generation, persistence and distribution to end user
 - Digital twin and applications: application/field specific ui/ux products
