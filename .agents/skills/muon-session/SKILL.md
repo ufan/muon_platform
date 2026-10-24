@@ -16,7 +16,7 @@ description: Orient and hand off muon workspace sessions, including discussion, 
 3. Before mutations, run `muon status` and note dirty, ahead/behind or off-pin repositories. Inspect
    branch state as needed for read-only work. Do not fetch, switch or alter other sessions' work
    merely because it exists; retrieve a remote branch only when required by the assignment.
-4. Skim relevant recent entries in `platform/docs/decisions.md`. For substantial work, briefly
+4. Skim the active entries in `platform/docs/decisions.md`. For substantial work, briefly
    explain the scope and next action. Discussion can proceed directly to answering the user.
 
 ## During the session
@@ -24,7 +24,8 @@ description: Orient and hand off muon workspace sessions, including discussion, 
 - Respect the request's intent: discussion and backup do not authorize iteration implementation.
 - Announce each additional repository changed. Use the same task branch name across changed repos.
 - Concurrent writers use isolated worktrees/checkouts; the index provides no claims or locks.
-- Record agreed durable decisions in `platform/docs/decisions.md` or an ADR when changing guidance.
+- Record agreed durable decisions in an ADR, or in `platform/docs/decisions.md` if they pass its log
+  test. A document edit with a clear commit message is the record for decisions that document captures.
 
 ## End
 

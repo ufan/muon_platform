@@ -18,6 +18,7 @@ from . import __version__, agents, legacy
 from .workspace import REPOS_FILES
 
 RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; ADR-012 lean rules
+DECISIONS_LIMIT = 30                            # active entries in docs/decisions.md; ADR-012 §8
 
 
 def git(path, *args, check=False):
@@ -254,7 +255,22 @@ def doctor(ws, log=print):
     for path, limit in rules_files(ws):
         size = os.path.getsize(path)
         check(size <= limit, f"{os.path.relpath(path, ws.topdir)} {size} B (limit {limit})", "keep AGENTS.md lean (ADR-012)")
+    active = active_decisions(ws)
+    if active is not None:
+        advise(active <= DECISIONS_LIMIT, f"docs/decisions.md {active} active entries (limit {DECISIONS_LIMIT})",
+               "fold entries into their home documents and docs/decisions/<year>.md (ADR-012 §8)")
     return problems == 0
+
+
+def active_decisions(ws):
+    """Number of dated entries in the active decision log, or None without a platform checkout."""
+    if not ws.hub:
+        return None
+    try:
+        text = open(os.path.join(ws.hub.abspath, "docs", "decisions.md"), encoding="utf-8").read()
+    except OSError:
+        return None
+    return len(re.findall(r"^- \d{4}-\d{2}-\d{2}\b", text, re.M))
 
 
 def rules_files(ws):

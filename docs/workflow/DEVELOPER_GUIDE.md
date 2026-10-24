@@ -127,9 +127,12 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 
 - **Rules:** each repository's `AGENTS.md` (short, always loaded) plus `platform/AGENTS.md`, and
   skills loaded on demand. `CLAUDE.md`/`GEMINI.md` are shims. `muon agents sync` regenerates the
-  shims, skill links and tool adapters; `muon agents adapters` lists the per-tool status.
+  shims, skill links and tool adapters; `muon agents adapters` lists the per-tool status. Each
+  repository's `AGENTS.md` starts with a read-first block because Codex and Antigravity (agy) do not
+  load `platform/AGENTS.md` from outside the git root; agy also needs `read_file(<workspace>)` and
+  `command(muon status)` in its host settings (`muon doctor` checks the first).
 - **Keep the rules lean.** `muon doctor` checks the size limits. Put details in skills or docs.
-- **One fact, one home.** Decisions go in `docs/decisions.md` or an ADR; iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
+- **One fact, one home.** Decisions go in an ADR, or in `docs/decisions.md` if they pass its log test (folded entries move to `docs/decisions/<year>.md`); iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
 - **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
   task scopes and an integrator (see the work scope protocol).

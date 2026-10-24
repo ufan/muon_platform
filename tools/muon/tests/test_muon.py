@@ -142,6 +142,19 @@ def test_doctor_checks_each_rules_file_once(remotes, monkeypatch):
     assert files == ["platform/AGENTS.md", "core/AGENTS.md", "core/mod/AGENTS.md"]
 
 
+def test_doctor_counts_active_decisions(remotes):
+    from muon_cli import ops
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform)
+    ws = Workspace(topdir=str(top))
+    assert ops.active_decisions(ws) is None
+    docs = top / "platform" / "docs"
+    docs.mkdir()
+    (docs / "decisions.md").write_text("# Decision log\n\nFormat: `- YYYY-MM-DD ...`\n\n"
+                                       "- 2026-10-24 [a] one. Home: log-only.\n- 2026-10-21 [b] two.\n")
+    assert ops.active_decisions(ws) == 2
+
+
 def test_claude_adapter_uses_edit_rules_and_drops_entries_after_a_move(remotes, monkeypatch):
     import json
     import shutil

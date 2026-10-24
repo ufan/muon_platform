@@ -38,8 +38,8 @@ owning documents, and the note becomes a record that maps every section to its n
    `Status: proposed, partly promoted` and put the same table, for the migrated sections only, under
    the status line.
 7. **Update indexes and record it.** Update the guide index in `platform/docs/README.md` and any
-   index of the destination repositories; add a dated line to `platform/docs/decisions.md` naming
-   what was decided and what stays proposed.
+   index of the destination repositories. The commit message records the migration; add a
+   `platform/docs/decisions.md` line only for a new owner decision that passes its log test.
 8. **Verify.** Check that all relative links and anchors resolve. Use the same branch name in every
    repository you changed (`muon branch`), announce them, and run `muon verify` (skill `muon-verify`).
    Mark contract changes additive or breaking in the commit message.

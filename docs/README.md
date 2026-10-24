@@ -33,7 +33,7 @@ carry forward from them, and flag anything asserted only by one of those ADRs.
 | 5 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |
 | 6 | [Guides](#guides) | Design notes that are not (yet) decisions |
 | — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
-| — | [decisions.md](decisions.md) | Dated log of small decisions (shared memory for every session and tool) |
+| — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |
 | — | [engineering_context.md](engineering_context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
 | — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |
 

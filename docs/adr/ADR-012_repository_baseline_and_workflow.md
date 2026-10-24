@@ -6,7 +6,7 @@ Supersedes: ADR-009 §1, §2 (options), §3, §4, §6, §7, §8, §9, §10, §12
 Revises: [ADR-010](ADR-010_spec_driven_domain_iteration.md) §2–§3 and §8 (repository/contract placement, tooling and staged rigor; see §3, §5–§6 below)
 Amends: [ADR-011](ADR-011_test_data.md) (multiple-host data access; §6 and §8 below)
 Related: ADR-003 (service architecture), ADR-004 (versions), ADR-009, ADR-010, ADR-011
-Revised: 2026-10-24 (§8: navigation updated for [ADR-013](ADR-013_work_discovery_and_session_scope.md), which supersedes global active-iteration discovery and universal iteration handoff rules)
+Revised: 2026-10-24 (§8: navigation updated for [ADR-013](ADR-013_work_discovery_and_session_scope.md), which supersedes global active-iteration discovery and universal iteration handoff rules; §8: decision-log admission test, archive and size check)
 Change record: `changes/2026-10-workspace-reorg/`
 
 ## 1. Decision Summary
@@ -170,7 +170,7 @@ another domain. Core may consume other domains' data, but only as conditions (§
 | State | Home |
 |---|---|
 | Rules, procedures | `AGENTS.md`, skills (git) |
-| Decisions | ADRs; `docs/decisions.md` (dated one-line log for small decisions) |
+| Decisions | ADRs; `docs/decisions.md` (short active log of small decisions that pass its admission test; folded entries move to `docs/decisions/<year>.md`; `muon doctor` warns above 30 active entries) |
 | Work discovery and plans | `work/index.yml` lists iterations; linked proposal/tasks own their state |
 | Scoped work in progress | explicit assignment and its handoff; isolated task branches/worktrees for concurrent writers |
 | Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
