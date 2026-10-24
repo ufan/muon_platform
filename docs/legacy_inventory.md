@@ -53,7 +53,6 @@ the `testdata` project (`muon_testdata`, ADR-011) as placeholder versions.
 
 | Project | What it is | Future home |
 |---|---|---|
-| `config/` (branch `dev`) | per-site detector configs: channel and link mapping, alignment, rotation, z positions, hit ranges, `system.json` | `conditions` project |
 | `tools/muon_tools`, `tools/rate_estimate` | ADC level tool, rate estimation | tools / simulation |
 | `study/` | studies and timeline | research |
 | `testdata/` | versioned test datasets (ADR-011) | — |
