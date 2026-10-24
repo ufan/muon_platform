@@ -92,6 +92,10 @@ the baseline:
 2. give the tests requirement IDs;
 3. record the decision.
 
+Design notes (`docs/guide/`, brainstorms) become baseline the same way, by restating their content in the
+owning architecture, requirement, ADR, spec or contract and turning the note into a mapping record:
+skill `muon-promote`.
+
 Domain iterations follow skill `muon-domain-iteration`. Legacy analysis follows skill `muon-legacy-archaeology`.
 
 ## 6. Snapshots and releases

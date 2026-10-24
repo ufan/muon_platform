@@ -13,8 +13,11 @@ Every document states its status under the title:
 | `current` | Authoritative for its declared scope. |
 | `draft` | Requirements baseline under construction; binding only where it says so. |
 | `proposed` | Design input, not a decision. Do not implement from it without a decision or component spec. |
+| `proposed, partly promoted` | As `proposed`, with a table under the status line mapping the sections already promoted to their current homes. |
 | `reference` | Background or dated research. |
 | `historical` | Kept for rationale; names its current home. |
+
+Guide content becomes baseline through skill `muon-promote` (see the [developer guide](workflow/DEVELOPER_GUIDE.md#5-prototype--baseline)).
 
 ADRs carry their own status (proposed, accepted, partly superseded); see the [ADR index](adr/README.md).
 Only `current` documents, accepted ADRs and component specifications bind implementation.
