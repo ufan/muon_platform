@@ -4,7 +4,7 @@ Status: current architecture. Paths are relative to the workspace root.
 
 This document describes repository boundaries and allowed dependencies. Decision rationale:
 [ADR-012 §3–§4 and §6](../adr/ADR-012_repository_baseline_and_workflow.md).
-The [landscape](LANDSCAPE.md) describes scientific data flow and domain boundaries.
+The [architecture overview](architecture_overview.md) describes scientific data flow and domain boundaries.
 The actual repository list and maturity metadata live in `platform/repos/*.repos` and each
 repository's `.muon/repo.yml` (`muon list`). Planned repositories below are not existing dependencies.
 

@@ -15,7 +15,7 @@ Revised: 2026-10-21 (§8 prototype lane; §4 step 8); 2026-10-23 (ADR-012: proto
 ## 1. Decision Summary
 
 The platform is built **bottom-up, one domain at a time**, from a coarse
-global landscape (`docs/architecture/LANDSCAPE.md`). Each domain goes through a
+global landscape (`docs/architecture/architecture_overview.md`). Each domain goes through a
 fixed **iteration playbook** that turns legacy code and domain knowledge
 into executable specifications before any implementation. The system is
 migrated with the **strangler-fig** pattern: new domains replace legacy
@@ -64,7 +64,7 @@ Changes to `contracts/`, changes spanning several repositories, and promotions o
 
 | Step | Output |
 |---|---|
-| 0. Scope | boundary of the domain in `LANDSCAPE.md`; "downstream needs" of its outputs |
+| 0. Scope | boundary of the domain in `architecture_overview.md`; "downstream needs" of its outputs |
 | 1. Legacy archaeology | **as-is spec**: inputs, outputs, file formats, calibration dependencies, failure modes, implicit physics/hardware knowledge |
 | 2. Golden data (ADR-011) | recorded inputs and legacy (or hardware) outputs with tolerances; where legacy cannot run, recorded hardware captures plus hand-checked expectations |
 | 3. To-be spec and contracts | spec deltas, provisional contracts, ADRs for significant choices, and the **port / refactor / rewrite** decision |

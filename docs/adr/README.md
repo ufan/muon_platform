@@ -3,7 +3,7 @@
 ADR numbers follow decision-record order and remain stable. They are identifiers, not topic
 categories or precedence rules. Keep existing IDs and paths when decisions evolve.
 
-Start with the [architecture](../architecture/LANDSCAPE.md) and
+Start with the [architecture](../architecture/architecture_overview.md) and
 [developer guide](../workflow/DEVELOPER_GUIDE.md) for current guidance; use ADRs for rationale,
 alternatives and history. Explicit replacement relationships determine which decision applies
 within their stated scope. Flag contradictions that are not explicitly resolved.
