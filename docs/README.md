@@ -39,7 +39,7 @@ carry forward from them, and flag anything asserted only by one of those ADRs.
 | Guide | Status | Scope / current home |
 |---|---|---|
 | [event_builder.md](guide/event_builder.md) | historical | Migrated to `core/daq/doc/specs/event-builder*.md` and `core/contracts/science/pipeline/`; the file maps each former section. |
-| [online_pipeline.md](guide/online_pipeline.md) | proposed | One decode/event-builder path for live and replay ingress. |
+| [online_pipeline.md](guide/online_pipeline.md) | historical | Migrated to `core/daq/doc/specs/acquisition-sources.md`, the pipeline record contracts and system architecture §7; the file maps each former section. |
 | [recon_draft.md](guide/recon_draft.md) | proposed | Internal layout of the future recon module. |
 | [instrument_architecture.md](guide/instrument_architecture.md) | proposed | Instrument coordination, operating states and interlocks for the planned `muon_instrument`. |
 | [service_api_shape.md](guide/service_api_shape.md) | proposed | External operator/web API shape; internal services stay protobuf/gRPC. |

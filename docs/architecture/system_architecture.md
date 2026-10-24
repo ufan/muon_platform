@@ -146,7 +146,10 @@ and [ADR-004](../adr/ADR-004_deployment_update_strategy.md).
 ## 7. Replay, simulation and digital twin
 
 Reconstruction is independent of acquisition origin. Recorded replay and synthetic acquisition
-provide the same downstream raw-stream contract as live acquisition. Replay supports algorithm
+provide the same downstream raw-stream contract as live acquisition. Decode rules, validation, event
+identity and completion, record schemas and the publisher interface are identical in every mode; only
+the source adapter and its pacing, clock, backpressure and sink policies differ, and each policy is
+recorded in metadata ([core acquisition sources](../../../core/daq/doc/specs/acquisition-sources.md)). Replay supports algorithm
 iteration, regression, demonstrations and dataset generation. Fidelity includes timing, ordering,
 trigger structure, metadata and configurable rates/loss injection as specified by the replay component.
 Raw archives remain immutable; versioned validation fixtures follow
