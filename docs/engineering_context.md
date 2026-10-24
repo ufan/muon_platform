@@ -24,7 +24,8 @@ Use these documents as the canonical platform context:
 
 1. `platform/docs/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
 2. `platform/docs/requirements/` for system requirements.
-3. `platform/docs/architecture/` for platform architecture and the coarse landscape map (`LANDSCAPE.md`).
+3. `platform/docs/architecture/` for platform architecture: the coarse landscape map (`LANDSCAPE.md`)
+   and current repository boundaries/dependencies (`repository_model.md`).
 4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
 5. `platform/docs/guide/` for design notes that are not yet decisions.
 
