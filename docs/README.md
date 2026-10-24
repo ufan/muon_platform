@@ -49,7 +49,6 @@ carry forward from them, and flag anything asserted only by one of those ADRs.
 | [cli_command_model.md](guide/cli_command_model.md) | proposed | `muonctl` operator CLI (not the workspace `muon` tool). |
 | [agent-coordination-options.md](guide/agent-coordination-options.md) | reference | Agent-coordination tool research (2026-10-24). |
 | [repo_boundaries.md](guide/repo_boundaries.md) | historical | Current home: [repository model](architecture/repository_model.md). |
-| [prompt.md](guide/prompt.md) | historical | Original project brief; current home: product landscape and ADR-012. |
 
 Outside `docs/`, the platform repository holds the workspace machinery: `repos/` (the repositories, in vcs2l
 format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `changes/` (change
