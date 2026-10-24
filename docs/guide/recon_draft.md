@@ -1,6 +1,6 @@
 # Recon Draft
 
-Status: proposed (input to the future recon iteration; not a decision). `recon/` is a planned module of `core`; contracts belong in `core/contracts/science/` per the [repository model](../architecture/repository_model.md) (earlier drafts used `protocol/pipeline`). Event-builder requirements already extracted to core are listed in [event_builder.md](event_builder.md).
+Status: proposed (input to the future recon iteration; not a decision). `recon/` is a planned module of `core`; contracts belong in `core/contracts/science/` per the [repository model](../architecture/repository_model.md) (earlier drafts used `protocol/pipeline`). Event-builder requirements and draft record fields now live in core: [event builder requirements](../../../core/daq/doc/specs/event-builder.md) and [pipeline record contracts](../../../core/contracts/science/pipeline/README.md); they take precedence over the event-builder sections below.
 
 ## Purpose
 

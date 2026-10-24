@@ -60,7 +60,8 @@ DAQ combines a control-plane state machine with a scientific raw-stream producer
 | Contract | Consumer | Known needs | Open questions |
 |---|---|---|---|
 | raw stream (daq → preprocess) | preprocess, persistence, replay | byte-exact capture; run/session metadata; loss detection markers | chunking and framing for multiple, possibly disconnected consumers |
-| decoded board frames (preprocess → recon) | recon | `trigger_id`, board/chip/channel identity, timestamps, quality flags | timeout and coverage semantics for incomplete events |
+| decoded board frames (preprocess → recon) | recon event builder | event key (`trigger_id` on FX3), source/chip/channel identity, timestamps, validation flags ([draft fields](../../../core/contracts/science/pipeline/README.md)) | late-fragment, duplicate and timeout values |
+| event frames (recon event builder → downstream) | hit building, monitoring, persistence | explicit status and reason, source coverage, host lifecycle timestamps | schema; payload richness per consumer |
 | tracks (recon → imaging/analysis) | imaging, analysis | direction, position at reference plane, fit quality, time | uncertainty model; selection flags |
 
 ## 5. Boundary questions for any new module

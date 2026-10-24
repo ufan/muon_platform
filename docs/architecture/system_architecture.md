@@ -103,7 +103,10 @@ Live acquisition / recorded replay / synthetic acquisition
 ```
 
 Preprocess validates transport records, including CRC and malformed/lost-frame handling. Recon
-owns event assembly from validated fragments and subsequent physical reconstruction. Detailed
+owns event assembly from validated fragments and subsequent physical reconstruction. Raw bytes never
+enter event building; the published event frame is the canonical handoff, and intermediate observers
+(decoded fragments, builder metrics, lifecycle notifications) never replace it. Event-builder requirements
+are staged in [core](../../../core/daq/doc/specs/event-builder.md) until the recon module exists. Detailed
 ordering, calibration and clustering are component-specific; the diagram is not an acceptance
 specification for algorithms or a fixed host event format.
 

@@ -38,7 +38,7 @@ carry forward from them, and flag anything asserted only by one of those ADRs.
 
 | Guide | Status | Scope / current home |
 |---|---|---|
-| [event_builder.md](guide/event_builder.md) | proposed, partly superseded | Online event building; extracted parts live in `core/daq/doc/specs/event-builder*.md`, remaining content awaits migration. |
+| [event_builder.md](guide/event_builder.md) | historical | Migrated to `core/daq/doc/specs/event-builder*.md` and `core/contracts/science/pipeline/`; the file maps each former section. |
 | [online_pipeline.md](guide/online_pipeline.md) | proposed | One decode/event-builder path for live and replay ingress. |
 | [recon_draft.md](guide/recon_draft.md) | proposed | Internal layout of the future recon module. |
 | [instrument_architecture.md](guide/instrument_architecture.md) | proposed | Instrument coordination, operating states and interlocks for the planned `muon_instrument`. |
