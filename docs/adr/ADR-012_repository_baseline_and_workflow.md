@@ -1,127 +1,242 @@
-# ADR-012 Repository baseline, workspace tooling and workflow
+# ADR-012 Repository Baseline, Workspace Tooling and Workflow
 
-Status: Accepted (2026-10-23; re-baselined 2026-10-25, absorbing the parts of ADR-009 still in force)
-Change record: `changes/archive/2026-10-workspace-reorg/`
+Version: 1.0
+Status: Accepted (2026-10-23)
+Supersedes: ADR-009 §1, §2 (options), §3, §4, §6, §7, §8, §9, §10, §12, §13 (§5, §11, §14, §15 remain in force, adapted below)
+Revises: [ADR-010](ADR-010_spec_driven_domain_iteration.md) §2–§3 and §8 (repository/contract placement, tooling and staged rigor; see §3, §5–§6 below)
+Amends: [ADR-011](ADR-011_test_data.md) (multiple-host data access; §6 and §8 below)
+Related: ADR-003 (service architecture), ADR-004 (versions), ADR-009, ADR-010, ADR-011
+Revised: 2026-10-24 (§8: navigation updated for [ADR-013](ADR-013_work_discovery_and_session_scope.md), which supersedes global active-iteration discovery and universal iteration handoff rules; §8: decision-log admission test, archive and size check)
+Change record: `changes/2026-10-workspace-reorg/`
 
-## 1. Decision summary
+## 1. Decision Summary
 
-- Every technical domain has its own repository; `muon_core` is the scientific domain. An
-  instrument layer coordinates the domains.
-- Dependencies point one way: domains depend only on system contracts.
-- The workspace is a plain directory composed from vcs2l `.repos` files; the `muon` CLI holds all
-  workspace workflow.
-- Rigor is staged: cheap loss-preventing rules now, more when a named trigger fires (§6).
-- Workflow state lives in git, shared by all sessions, AI tools and hosts (§8).
+- **Every technical domain has its own repository.** `muon_core` is the scientific domain and is
+  one domain among several. An upper **instrument** layer coordinates the domains.
+- **Dependencies point one way.** Domains depend on system contracts only. Nothing depends on
+  `muon_core` except instruments and offline consumers.
+- **The workspace is a plain directory** composed from vcs2l `.repos` files in `platform/repos/`.
+  All muon-specific workflow lives in one standalone CLI, `muon` (`platform/tools/muon`). West is no
+  longer the workspace interface. A repository may still use west, or anything else, internally.
+- **Rigor is staged.** During early prototyping (one developer, heavy use of AI agents) only the
+  cheap, irreversible-loss-preventing rules apply. Further mechanisms are added when a named
+  trigger fires (§6).
+- **Workflow state lives in git**, so sessions, AI tools and hosts share one workflow (§8).
 
 ## 2. Context
 
-Sensor subsystems (HV, gas, LV, pose, environment) are developed separately from the detector, and
-the detector domain consumes their data without coordinating them; coordination therefore belongs
-to a separate instrument layer. One developer works with many AI tools and hosts at the
-scaffolding stage, so process must be cheap now and hardenable later. West was replaced because
-it was used far outside its design; vcs2l does its native job (fetch and pin) without state.
+On 2026-10-21/22 the workspace was organized around west (ADR-009): a hub that imports
+repository manifests, about 1,000 lines of west extensions, and about 28 KB of agent rules loaded per DAQ session.
+Two findings on 2026-10-23 changed this:
 
-## 3. Repository baseline
+1. **The hardware domains have separate lifecycles.** Sensor subsystems (HV, gas, environment,
+   pose, LV) are developed separately from the detector. A central controller integrates them.
+   The detector domain is special: it produces what customers want, and it consumes other domains'
+   data without coordinating them. Making it the hub would couple everything to it. So
+   coordination belongs to a separate instrument layer, as in spacecraft bus/payload, observatory
+   control systems (e.g. Rubin CSCs + ScriptQueue) and ISA-88 supervisory control.
+2. **Development style.** There is one developer who relies heavily on AI agents across tools and
+   hosts, and the project is at the scaffolding stage. Process must be cheap now and hardenable later.
 
-Repositories and their responsibilities are in the [repository model](../architecture/repository_model.md).
-Split a repository only when toolchain, lifecycle or audience differs.
+West was also being used outside its design (locking, agent files, verification, test data,
+branch workflows), and its model (manifest-rev, detached HEADs, import restrictions) produced
+workarounds. Its native job, fetching and pinning repositories, is done equally well by vcs2l
+(the maintained vcstool fork, `ros-infrastructure/vcs2l`). vcs2l keeps no workspace state.
 
-## 4. Dependency rules
+## 3. Repository Baseline
 
-Domains depend on system contracts only; core receives sensor data only as conditions; the
-instrument uses domain and core service APIs; offline applications use core packages; platform has
-no build-time dependency. The instrument commands every domain, core included; core never commands
-another domain.
+| Repository | Responsibility |
+|---|---|
+| `muon_core` (`core/`) | Scientific domain: DAQ, scientific contracts (`contracts/science`), conditions interpretation, preprocess, reconstruction, reusable online/offline runners. Online and offline use the same library targets. |
+| Domain repositories (future: HV, gas, env, pose, LV, …) | One per independently developed subsystem: firmware + domain service + simulator/fake + tests. Created when the domain's iteration starts (ADR-010). |
+| `muon_instrument` (future; per product later) | Instrument coordination: orchestration and the instrument state machine, sequencing, interlock policy, aggregation/API gateway, CLI, product profiles, operational config, integration validation. Its release `.repos` file is the product bill of materials. Starts as one repository with `products/<name>/`. |
+| `muon_contracts` (`contracts/`) | System contracts: the domain-service pattern, telemetry signal catalog, time base, conditions interchange, product-profile schema. A **placeholder** until the extraction trigger (§6). Until then the drafts live in `core/contracts/system/`. |
+| `muon_platform` (`platform/`) | System requirements, architecture, decisions, guides, change records, the workspace definition (`repos/`), the `muon` tool and agent skills. No product code. |
+| Conditions payload repository (future; created at the start of preprocess) | Static detector/site parameter payloads (channel mapping, topology, geometry, alignment), seeded from the legacy `muon_config` (`legacy/config`, read-only; amended 2026-10-23). Versions are append-only; schemas and interpretation live in core. Telemetry-derived conditions and operational config do not belong here. |
+| `muon_testdata` (`testdata/`) | Versioned validation datasets and their tool (ADR-011). |
+| Support repositories | `study`, `tools/*`: modified only on explicit request. |
+| Legacy references | `legacy/<dir>`: read-only and locked (ADR-009 §5, §15). Host-local trees live in `archive/<dir>`. |
 
-## 5. Workspace tooling
+Planned outside core: detector front-end firmware (`muon_detector_fw`), simulation (`muon_sim`),
+offline applications (imaging/density, data platform, digital twin). Each consumes core packages
+and contracts and never copies their sources.
 
-- `platform/repos/workspace.repos` (active and support repositories) and `legacy.repos` (legacy
-  references), in vcs2l format with an optional `muon:` block; optional uncommitted `local.repos`.
-- `<repo>/.muon/repo.yml` holds maturity, role, spec, verify command and `informs`. Maturity:
+**Split test for leaving a repository** (replaces ADR-009 §4): split when the toolchain, lifecycle
+or audience/ownership differs. A different deployment target alone is a packaging concern.
 
-  | Level | Meaning |
+## 4. Dependency Rules
+
+```text
+muon_contracts (system)  <- everyone; depends on nothing
+domain repos             -> system contracts only (never on each other, never on core)
+muon_core                -> system contracts; sensor data only via telemetry/conditions contracts
+muon_instrument          -> system contracts + domain and core service APIs (generated clients)
+offline applications     -> core packages + contracts
+muon_config              -> core schemas (validation only)
+muon_platform            -> nothing at build time
+```
+
+**Control vs. data.** The instrument commands every domain, core included. Core never commands
+another domain. Core may consume other domains' data, but only as conditions (§9).
+
+## 5. Workspace Tooling
+
+- **Composition:**
+  - `platform/repos/workspace.repos` lists active and support repositories, including `platform` itself;
+  - `platform/repos/legacy.repos` lists managed legacy references;
+  - an optional, uncommitted `<topdir>/local.repos` holds per-host overrides.
+
+  The files use the vcs2l format. Muon metadata goes in an optional `muon:` block, which vcs2l ignores.
+- **Repository metadata:** `<repo>/.muon/repo.yml` (maturity, role, spec, verify, informs). It
+  overrides the `muon:` block and travels with the repository.
+- **`muon` CLI:**
+
+  | Command | Purpose |
   |---|---|
-  | `legacy` | old implementation; read-only reference |
-  | `support` | data, studies, tools; changed only on explicit request |
-  | `incubating` | new; contracts provisional |
-  | `active` | in its domain iteration |
-  | `stable` | contracts frozen; breaking changes need an ADR |
+  | `ws init` / `ws sync [--update] [--legacy]` | clone missing repos (vcs2l); fast-forward only clean repos on their pinned branch; legacy lock |
+  | `status` | cross-repo branch, dirty, ahead/behind, pin drift, legacy lock state |
+  | `verify [repo…]` | run the repos' verify commands |
+  | `branch <name> <repo…>` | the same branch in several repos |
+  | `freeze` | exact SHAs in vcs2l format (snapshot or BOM) |
+  | `doctor` | tools, clones, locks, agent files, golden data root, rule-size limits |
+  | `list`, `legacy list/status/build-dir` | listings |
+  | `agents sync [--check]` | agent files (§8) |
+  | `testdata …` | passes through to `testdata/tools/testdata.py` |
 
-- `muon` commands: `ws init/sync`, `status`, `verify`, `branch`, `freeze`, `doctor`, `list`,
-  `legacy …`, `agents sync`, `testdata …`. A global dependency-free launcher (`muon-workspace`)
-  runs the implementation pinned by each workspace's platform checkout (`platform/tools/muon`, via uv).
-- No repository needs `muon` to build or test; verify commands are plain shell commands. A domain
-  may use any internal tooling (west, Conan, …).
+- **Launcher and implementation (revised 2026-10-23):** the global `muon` command is a dependency-free
+  launcher (`platform/tools/muon-workspace`). It finds the workspace (`-C`, `$MUON_WORKSPACE`, or upward from the cwd)
+  and runs that workspace's implementation (`platform/tools/muon`) with
+  `uv run --frozen --project <ws>/platform/tools/muon python -m muon_cli`. Each workspace therefore runs the version
+  its platform checkout pins, as with Android's `repo` launcher or Bazelisk. The implementation declares
+  `[tool.muon] min-launcher`. Per-workspace settings (name, `data_root`) live in the uncommitted
+  `<ws>/.muon/workspace.yml`.
+- **Independence:** no repository needs `muon`, vcs2l or west to build or test. Each verify
+  command is a plain shell command run from the repository root.
+- **Internal tooling is the domain's choice.** A domain may use west internally (e.g. Zephyr
+  firmware with its modules), Conan, pixi, etc. The muon level does not depend on that choice.
 
-## 6. Staged rigor
+## 6. Staged Rigor
 
-**Always:** legacy references read-only and locked; golden data, raw data and config payloads
-immutable or append-only; `verify` passes before push; no push, remote creation or branch deletion
-without the owner's confirmation.
+**Always (cheap, and they prevent irreversible loss):**
+- legacy references are read-only and locked;
+- golden test data is immutable, and new data means a new version;
+- config payloads are append-only versions;
+- raw data is immutable;
+- `verify` passes before push;
+- never push, create remotes or delete branches without the owner's confirmation.
 
-**Now (prototyping):** prototyping is the default and change proposals are optional (ADR-010 §8).
-Agents may edit any repository but announce repositories touched outside their starting one, use
-the same branch name across repositories, and run `muon status` before push. Contracts used only
-by core change in the same commit as their consumer. One CI job per repository runs its verify command.
+**Now (prototyping):**
+- The prototype lane (ADR-010 §8) is the default. A change proposal is optional: write one to record a
+  decision or to promote a prototype into the spec baseline.
+- Agents may edit any repository in the workspace. Three rules apply:
+  - **announce** every repository touched outside the one the session started in;
+  - use the **same branch name** across repositories (`muon branch`);
+  - **no silent pins**: run `muon status` before push.
+- Contracts used only by core live in core, in the same commit as their consumer.
+- One CI job per code repository runs its verify command.
 
 **Hardening triggers:**
 
 | Trigger | Add |
 |---|---|
-| Second domain or first instrument | extract `core/contracts/system/` to `muon_contracts`; tags, breaking-change checks |
-| First instrument release or field deployment | instrument BOM (`muon freeze`); enforced product provenance |
-| A contract stable for a while | maturity `stable`, semver, ADR for breaking changes |
-| Second developer or external hardware team | CODEOWNERS, consumer index and reverse-dependency CI, mandatory change classes |
-| Several domains change in parallel | domain-rooted workspaces |
-| Second host needs replay data | remote store for golden bytes (ADR-011) |
+| Second domain or first instrument starts | Extract `core/contracts/system/` into `muon_contracts` (history kept); pin it by tag; `buf breaking` / schema-diff in its CI; a domain's `main` pins only tags |
+| First instrument release or field deployment | Instrument `bom.repos` (`muon freeze`) as release identity; provenance enforced in data products |
+| A contract has been stable for a while | Maturity `stable`; semver; breaking changes need an ADR |
+| A second developer or an external hardware team | CODEOWNERS; per-domain `consumes:` declarations, a consumer index and reverse-dependency CI in `muon_contracts`; the `muon-propose-upstream` skill; change classes (below) become mandatory |
+| Several domains change in parallel | Domain-rooted workspaces (a domain repo carries its own `.repos` that imports `platform/repos` fragments) |
+| Second development host needs replay data | Remote store for golden bytes (ADR-011 amendment) |
 
-## 7. Agent rules and setup
+**Change classes for upper layers** (mandatory once the second-developer trigger fires):
 
-- `platform/AGENTS.md` ≤ about 3.5 KB and each repository's `AGENTS.md` ≤ about 2.5 KB (`muon
-  doctor` checks): mission, map, hard rules, session protocol. Everything else is in skills or docs.
-- Each procedure exists once, as a skill in `platform/.agents/skills/muon-*`; guides link to them.
-- Canonical sources are `AGENTS.md` and the skills. `muon agents sync` generates, never by hand:
-  `CLAUDE.md`/`GEMINI.md` shims, the workspace-root `AGENTS.md`, per-repository skill links and
-  per-tool permission adapters. Adding an AI tool means adding a shim or adapter.
+| Class | Example | From a domain context | Gate |
+|---|---|---|---|
+| D0 data | new alignment or dataset version | yes | the data repo's own validation |
+| C0 own namespace, additive | new optional field in `domains/<d>/` | yes, as a PR | compatibility check + reverse-dependency CI green |
+| C1 own namespace, breaking | rename a field in its own API | draft only | affected owners acknowledge; semver major |
+| C2 `common/` or system spec | lifecycle FSM, requirement, ADR | draft only | change proposal; decided in the upper repo's context |
 
-## 8. Continuity across sessions, tools and hosts
+## 7. Agent Rules and Guides
+
+- The root `platform/AGENTS.md` stays at or below about 3.5 KB, and each repository's `AGENTS.md` at or
+  below about 2.5 KB (checked by `muon doctor`). These files hold the mission, map, hard rules and session
+  protocol. Everything else goes into skills or docs that load on demand.
+- Each procedure exists once, as a skill (`platform/.agents/skills/muon-*`, Agent Skills format).
+  The human guide (`docs/workflow/DEVELOPER_GUIDE.md`) links to the skills instead of repeating them.
+- Tool-neutral setup per ADR-009 §14: canonical `AGENTS.md` + skills, and generated shims, skill links and
+  permission adapters (`muon agents sync`).
+
+## 8. Continuity Across Sessions, Tools and Hosts
 
 | State | Home |
 |---|---|
-| Rules, procedures | `AGENTS.md`, skills |
-| Decisions | ADRs; `docs/decisions.md` for small decisions passing its log test (archived yearly; `muon doctor` warns above 30) |
-| Work discovery | `work/index.yml` and linked iteration records ([ADR-013](ADR-013_work_discovery_and_session_scope.md)) |
-| Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`, `muon freeze` |
-| Host-local data | golden data root, `archive/` (reported by `muon doctor`) |
+| Rules, procedures | `AGENTS.md`, skills (git) |
+| Decisions | ADRs; `docs/decisions.md` (short active log of small decisions that pass its admission test; folded entries move to `docs/decisions/<year>.md`; `muon doctor` warns above 30 active entries) |
+| Work discovery and plans | `work/index.yml` lists iterations; linked proposal/tasks own their state |
+| Scoped work in progress | explicit assignment and its handoff; isolated task branches/worktrees for concurrent writers |
+| Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
+| Environment | DEVELOPER_GUIDE toolchain section; `muon doctor` |
+| Host-local data | `testdata/golden` (or `$MUON_DATA_ROOT`), `archive/`; listed by `muon doctor` |
 
-Tool memory is a cache; anything needed by another session or tool goes into a repository.
+**Session protocol** (skill `muon-session`):
+- **start:** follow the explicit request/assignment; use `work/index.yml` only for orientation.
+  Read relevant task context and run `muon status` before mutations. See [session scope](../../work/README.md).
+- **end:** verify and commit scoped changes; hand off to the assigned task/integrator. Only relevant
+  iteration work updates its `## Next`; discussion requires no writes. Pushing needs owner confirmation.
+- The index supports multiple active iterations but provides no claims, leases or scheduler.
+  Unassigned unattended sessions stop; concurrent writers use isolated checkouts and an explicit integrator.
 
-## 9. Data planes, time and conditions
+**Tool memory** (e.g. assistant memory files) is a cache only. Anything that matters for the next
+session or another tool goes into the repository.
 
-Three planes (control, scientific data, telemetry); telemetry reaches algorithms only as
-immutable conditions snapshots; the edge clock is the common time base with clock-correlation
-records and a ~1 s budget. Details: [system architecture §4–§6](../architecture/system_architecture.md#4-information-planes).
-Contracts are staged in `core/contracts/system/`.
+## 9. Data Planes, Time and Conditions
+
+- **Three planes:**
+  - control: commands, state, alarms;
+  - scientific data: raw → EDM → products, run-scoped, immutable raw;
+  - sensor/telemetry: low-rate continuous time series, stored locally first and then forwarded.
+- **Telemetry reaches reconstruction only as conditions.**
+  - Online, a live provider supplies the current values and records every value it hands out.
+  - Offline, a conditions builder derives versioned payloads with validity intervals from the
+    archive: gas state and gain factors, HV good-time intervals, pose segments.
+  - Algorithms never query telemetry directly.
+- **Conditions have two kinds of sources:**
+  - static tiers: detector model in core; instrument assembly and deployment geometry/alignment in the future conditions payload repository;
+  - dynamic, telemetry-derived intervals.
+
+  Both resolve into an immutable snapshot with an ID and content hash.
+- **Time base:**
+  - the edge appliance clock is the only common reference (it keeps both monotonic + `boot_id` and UTC);
+  - sensor controllers and the DAQ electronics have no shared clock; each source is mapped to edge
+    time through clock-correlation records, with a recorded uncertainty;
+  - the accuracy budget is about 1 s, so no PTP is needed;
+  - the raw capture records `boot_id`, the clock sync state and periodic clock-correlation records.
+
+  These contracts are staged in `core/contracts/system/`.
 
 ## 10. Provenance
 
-A software state is identified by the core SHA or tag, the full workspace by `muon freeze` and
-later the instrument BOM. Every product records core SHA, conditions snapshot ID and hash, firmware
-and instrument version.
+- A software state is identified by the core SHA or tag. The full workspace state is `muon freeze`
+  output, and later the instrument's BOM.
+- Every scientific product records the core SHA, the conditions snapshot ID + hash, the firmware
+  version and the instrument version (ADR-004 §7).
 
-## 11. Legacy guardrails
+## 11. Consequences
 
-| Layer | Mechanism |
-|---|---|
-| L1 enforced | read-only working tree, disabled push URLs and refusing git hooks, applied by `muon ws sync --legacy` |
-| L2 instruction | `AGENTS.md` lists legacy and archive paths as read-only |
-| L3 tool settings | generated permission adapters grant read and deny write |
+Positive:
+- low friction now: one workspace, no proposals for prototypes, short rules;
+- hardening steps are written down and reversible;
+- no workspace-tool state;
+- domains follow real lifecycle boundaries.
 
-Legacy references live in `legacy/<dir>` (managed, in `legacy.repos`, with `informs`); host-local
-trees without a remote live in `archive/<dir>` (L2 only). Legacy code runs only from out-of-tree
-builds (`muon legacy build-dir`).
+Negative and mitigations:
+- **No atomic commits across repositories.** Mitigated by keeping co-evolving code in core and by the same-branch rule.
+- **Contract drift is possible once domains multiply.** Mitigated by the triggers in §6.
+- **Rule compliance depends on agents reading `AGENTS.md`.** Mitigated by the legacy L1 lock, `muon doctor`, CI, and fresh-session checks.
 
 ## 12. Validation
 
-`muon` unit tests pass, `muon doctor` is clean, `muon verify` passes for every repository, and a
-fresh session in each AI tool follows the session protocol.
+- `muon` unit tests (`platform/tools/muon/tests`).
+- `muon doctor` is clean in the workspace.
+- `muon verify` passes for every repository with a verify command.
+- A fresh agent session in `core/` (with at least two different AI tools) follows the session
+  protocol and verifies before finishing.

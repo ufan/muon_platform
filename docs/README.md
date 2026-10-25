@@ -1,40 +1,63 @@
 # Platform documentation
 
-## Where things are, and what binds
+Status: current (documentation index).
 
-| Location | Content | Binding |
+Read in this order. The documents are revised often. When they disagree, authority comes from each
+document's declared scope and status and from explicit supersession, not from specificity, filename
+or ADR number; flag conflicts that are not explicitly resolved (see `../AGENTS.md`).
+
+Every document states its status under the title:
+
+| Status | Meaning |
+|---|---|
+| `current` | Authoritative for its declared scope. |
+| `draft` | Requirements baseline under construction; binding only where it says so. |
+| `proposed` | Design input, not a decision. Do not implement from it without a decision or component spec. |
+| `proposed, partly promoted` | As `proposed`, with a table under the status line mapping the sections already promoted to their current homes. |
+| `reference` | Background or dated research. |
+| `historical` | Kept for rationale; names its current home. |
+
+Design-note content becomes baseline through skill `muon-promote` (see the [developer guide](workflow/DEVELOPER_GUIDE.md#5-prototype--baseline)).
+
+ADRs carry their own status (proposed, accepted, partly superseded); see the [ADR index](adr/README.md).
+Only `current` documents, accepted ADRs and component specifications bind implementation.
+ADR-001…005, 007 and 008 were re-baselined on 2026-10-25 into short decisions; their original option
+studies are reference design notes.
+
+| # | Section | What it answers |
 |---|---|---|
-| [requirements/](requirements/SRD.md) | What the system must do | yes (draft until IDs are assigned) |
-| [architecture/](architecture/system_architecture.md) | [System architecture](architecture/system_architecture.md), [repository model](architecture/repository_model.md) | yes |
-| [adr/](adr/README.md) | Consequential decisions | yes, when Accepted |
-| [decisions.md](decisions.md) | Log of small decisions ([archive](decisions/2026.md)) | yes |
-| [workflow/](workflow/DEVELOPER_GUIDE.md) | How to work: [developer guide](workflow/DEVELOPER_GUIDE.md), [release guide](workflow/RELEASE_GUIDE.md) | procedures |
-| [legacy_inventory.md](legacy_inventory.md) | Legacy and archive trees and what they inform | reference |
-| [design/](#design-notes) | Proposals, discussions, research and option studies | no |
-
-Official documents (requirements, architecture, ADRs) are short and declarative: they state what
-holds, not how it was reached. Explanation, alternatives and detail belong in design notes. A design
-note never overrides an official document; when two official documents disagree, fix one and flag
-the conflict instead of choosing silently. Design content becomes official through skill
-`muon-promote`.
-
-Component specifications live in their repositories (e.g. [core](../../core/SPEC.md)); work
-discovery is in [`work/`](../work/README.md).
+| 1 | [SRD §1](requirements/SRD.md#1-product) | What the instrument is for (narrative: [product landscape](design/product_landscape.md)) |
+| 2 | [requirements/](requirements/) | What the system must do (SRD, subsystem requirements) |
+| 3 | [Architecture index](architecture/readme.md) | Overview for the coarse map, system architecture for detailed design, repository model for boundaries and dependencies |
+| 4 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
+| 5 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |
+| 6 | [Design notes](#design-notes) | Proposals, research and historical design records; not decisions |
+| — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
+| — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |
+| — | [engineering_context.md](engineering_context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
+| — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |
 
 ## Design notes
 
-Each note states its status: `proposed` (input for a future decision) or `reference` (background).
+`design/` holds proposals, research and the records left after promotion. How-to guides live in
+`workflow/`.
 
-| Note | Status | Topic |
+| Design note | Status | Scope / current home |
 |---|---|---|
-| [product_landscape.md](design/product_landscape.md) | reference | Product vision, use cases, deployment modes |
-| [instrument_architecture.md](design/instrument_architecture.md) | proposed | Instrument coordination, operating states, interlocks |
-| [service_api_shape.md](design/service_api_shape.md) | proposed | External operator/web API |
-| [cli_command_model.md](design/cli_command_model.md) | proposed | `muonctl` operator CLI (not the workspace `muon` tool) |
-| [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol |
-| [recon_draft.md](design/recon_draft.md) | proposed | Internal layout of the recon module |
-| [deployment_update_report.md](design/deployment_update_report.md) | reference | Option study behind ADR-004 |
-| [hardware_abstraction_report.md](design/hardware_abstraction_report.md) | reference | Option study behind ADR-005 |
-| [digital_twin_report.md](design/digital_twin_report.md) | reference | Option study behind ADR-007 |
-| [simulation_replay_report.md](design/simulation_replay_report.md) | reference | Option study behind ADR-008 |
-| [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tools (2026-10-24) |
+| [event_builder.md](design/event_builder.md) | historical | Migrated to `core/daq/doc/specs/event-builder*.md` and `core/contracts/science/pipeline/`; the file maps each former section. |
+| [online_pipeline.md](design/online_pipeline.md) | historical | Migrated to `core/daq/doc/specs/acquisition-sources.md`, the pipeline record contracts and system architecture §7; the file maps each former section. |
+| [recon_draft.md](design/recon_draft.md) | proposed | Internal layout of the future recon module. |
+| [instrument_architecture.md](design/instrument_architecture.md) | proposed | Instrument coordination, operating states and interlocks for the planned `muon_instrument`. |
+| [service_api_shape.md](design/service_api_shape.md) | proposed | External operator/web API shape; internal services stay protobuf/gRPC. |
+| [cli_command_model.md](design/cli_command_model.md) | proposed | `muonctl` operator CLI (not the workspace `muon` tool). |
+| [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol (COBS/protobuf RPC); not decided, see ADR-014. |
+| [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
+| [product_landscape.md](design/product_landscape.md) | reference | Product vision, use cases and deployment modes (narrative). |
+| [deployment_update_report.md](design/deployment_update_report.md) | reference | Option study behind ADR-004. |
+| [hardware_abstraction_report.md](design/hardware_abstraction_report.md) | reference | Option study behind ADR-005. |
+| [digital_twin_report.md](design/digital_twin_report.md) | reference | Option study behind ADR-007. |
+| [simulation_replay_report.md](design/simulation_replay_report.md) | reference | Option study behind ADR-008. |
+
+Outside `docs/`, the platform repository holds the workspace machinery: `repos/` (the repositories, in vcs2l
+format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `changes/` (change
+records), `templates/` (new-repository skeleton) and `.agents/skills/` (playbook skills). See ADR-012.

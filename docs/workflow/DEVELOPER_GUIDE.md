@@ -93,7 +93,7 @@ the baseline:
 3. record the decision.
 
 Design notes (`docs/design/`, brainstorms) become baseline the same way, by restating their content in the
-owning architecture, requirement, ADR, spec or contract and then deleting or trimming the note:
+owning architecture, requirement, ADR, spec or contract and turning the note into a mapping record:
 skill `muon-promote`.
 
 Domain iterations follow skill `muon-domain-iteration`. Legacy analysis follows skill `muon-legacy-archaeology`.

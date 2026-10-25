@@ -25,7 +25,7 @@ owning documents, and the note becomes a record that maps every section to its n
    | Plausible but undecided rule | the owning spec, marked "proposed default (not yet decided)" | proposed |
    | Useful design detail | "Reference design (non-normative)" section of the owning spec | non-normative |
    | Unresolved question or conflict | open-points list of the owning spec or system architecture §10 | open |
-   | Obsolete or rejected | the commit message (step 6), with the reason | rejected |
+   | Obsolete or rejected | the mapping in step 6, with the reason | rejected |
 
    Keep hardware-independent rules generic; put target-specific names in the hardware profile.
    Never upgrade a proposal into a requirement or decision without the owner's agreement: ask, or
@@ -33,9 +33,10 @@ owning documents, and the note becomes a record that maps every section to its n
 4. **Write the destinations.** Cite the source note in each destination's status or provenance line.
 5. **Check completeness.** Walk the source section by section and confirm each has a destination
    or a rejection reason. Nothing unique may be lost; the old text stays in git history.
-6. **Retire the source.** If everything was promoted or rejected, delete the note; otherwise remove
-   the promoted sections and keep `Status: proposed`. Record the mapping *former section → new home*
-   (and rejection reasons) in the commit message; the old text stays in git.
+6. **Retire the source.** Replace its body with `Status: historical`, the migration date and a table
+   *former section → current home*. If only part is promoted, keep the body, set
+   `Status: proposed, partly promoted` and put the same table, for the migrated sections only, under
+   the status line.
 7. **Update indexes and record it.** Update the design-note index in `platform/docs/README.md` and any
    index of the destination repositories. The commit message records the migration; add a
    `platform/docs/decisions.md` line only for a new owner decision that passes its log test.

@@ -1,27 +1,39 @@
-# ADR-013 Work discovery and session scope
+# ADR-013 Work Discovery and Session Scope
 
-Status: Accepted (2026-10-24; re-baselined 2026-10-25)
+Status: Accepted (2026-10-24; owner agreement in discussion)
+Supersedes: [ADR-012](ADR-012_repository_baseline_and_workflow.md) §8 global active-iteration discovery and universal iteration handoff rules only
+Related: [ADR-010](ADR-010_spec_driven_domain_iteration.md) (domain playbook)
+
+## Context
+
+A changing iteration pointer in global agent instructions mixes stable rules with project state.
+A universal `tasks.md` handoff also directs discussion and unrelated maintenance into one iteration.
+Independent workers need explicit scope; discovering an active plan cannot safely allocate work.
+Human discussions, backups and directed changes must coexist with assigned autonomous batches.
 
 ## Decision
 
-- `AGENTS.md` stays stable and never names a current iteration. The work index (`work/index.yml`)
-  lists iterations, possibly several active ones, and links to their records. It is for
-  orientation, not a queue, lock or approval.
-- An explicit user or coordinator assignment decides a session's scope. An unattended session
-  without one stops.
-- Session intent is inferred from the request: discussion needs no writes; directed changes are
-  verified and committed in scope.
-- Concurrent writers use separate worktrees; a designated integrator updates shared iteration
-  summaries.
-- Before building claims, leases or scheduling, evaluate existing tools
-  ([options](../design/agent_coordination_options.md)).
+- Keep `AGENTS.md` stable: it points to `work/index.yml` and the session protocol, not a current iteration.
+- The versioned work index allows multiple active iterations and links to their proposal/task records.
+  It is a discovery document, not a scheduler, lock or approval. Linked records own detailed plan state.
+- The explicit user/coordinator assignment takes precedence over discovery, within existing rules,
+  dependencies and approval gates. Unassigned unattended sessions stop without taking work.
+- Infer session intent from the request. Discussion needs no repository writes; directed changes
+  use normal verification and scoped commits. Backup requests retain their explicit scope.
+- Concurrent writers use isolated worktrees/checkouts. Workers hand off scoped results; the
+  designated integrator maintains shared iteration summaries. No global ownership service is added.
+- Evaluate existing open-source coordination tools before implementing claims, leases or scheduling.
 
-## Why
+Detailed procedure: [work discovery and session scope](../../work/README.md), implemented through
+[muon-session](../../.agents/skills/muon-session/SKILL.md). Candidate research:
+[agent coordination options](../design/agent_coordination_options.md).
 
-Mixing project state into global rules, or routing all sessions through one iteration's task list,
-misdirected work and could not allocate it safely.
+## Consequences and validation
 
-## Consequences
+Iteration transitions no longer require editing agent instructions. Human and batch sessions share
+rules without sharing a global execution cursor. Task allocation and integration remain the user's
+or coordinator's responsibility; this change does not make unattended competing workers safe.
 
-Procedure: [work protocol](../../work/README.md) and skill `muon-session`. Safe unattended
-competing workers are not solved here.
+Validate index paths, skill metadata, generated instructions and affected repository verification.
+Review discussion, explicit assignment and unassigned batch cases against the protocol. Runtime
+coordination, recovery and multi-host claims require a later tool pilot; they are not validated here.

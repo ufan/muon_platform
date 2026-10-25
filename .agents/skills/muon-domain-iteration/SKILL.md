@@ -9,7 +9,7 @@ Steps (ADR-010 §4). Each step has an output; do not skip ahead without it.
 
 | Step | Output | Who decides |
 |---|---|---|
-| 0 Scope | domain boundary and downstream needs in `platform/docs/architecture/system_architecture.md` §5; list the proposed design notes that touch the domain (skill `muon-promote`, step 1) | user |
+| 0 Scope | domain boundary and downstream needs in `platform/docs/architecture/architecture_overview.md`; list the proposed design notes that touch the domain (skill `muon-promote`, step 1) | user |
 | 1 Archaeology | `as-is.md` (skill `muon-legacy-archaeology`) | agent drafts, user corrects |
 | 2 Golden data | `golden-data.md`, fixtures in the project's `tests/` | agent |
 | 3 To-be spec | spec deltas, provisional contracts, port / refactor / rewrite decision (prototype first is fine; a change proposal via `muon-new-change` when recording a baseline); content from the listed design notes promoted with skill `muon-promote` | user approves |

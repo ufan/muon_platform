@@ -78,16 +78,8 @@ DAQ takes part in control and scientific data; telemetry and raw detector traffi
 
 ## 5. Scientific data path
 
-```text
- detector ──USB/FX3──▶ daq ──raw stream──▶ preprocess ──board frames──▶ recon ──events/hits/tracks──▶ imaging
-                        │                  (decode, CRC,               (event building,               (opacity,
-                        │                   validation)                 hits, tracking)                inversion)
-                        └──▶ raw persistence (immutable)                       └──▶ analysis
- replay / simulation ──same raw-stream contract──▶ preprocess …
-```
+The module chain, contract owners and downstream needs are in the [architecture overview](architecture_overview.md).
 
-- daq, preprocess and recon are modules of `core`; the arrows are contracts in `core/contracts/science/`.
-  The device ↔ host wire protocol belongs to the DAQ hardware reference (`core/daq/ref/<target>/`).
 - Preprocess validates transport records (framing, CRC, malformed or lost frames). Raw bytes never
   reach event building.
 - Recon owns event building and reconstruction. The published event frame is the canonical handoff;
@@ -97,15 +89,6 @@ DAQ takes part in control and scientific data; telemetry and raw detector traffi
   immutable conditions; serialization stays outside algorithm logic.
 - Products: hits, clusters, tracks, rates, angular and flux distributions, opacity/density estimates,
   each with quality and uncertainty. Analytics storage uses Arrow/Parquet.
-
-Downstream needs, checked before an upstream contract is frozen (updated at step 0 of each domain iteration):
-
-| Contract | Consumers | Known needs | Open |
-|---|---|---|---|
-| Raw stream (daq → preprocess) | preprocess, persistence, replay | byte-exact capture, run metadata, loss markers | chunking for several, possibly disconnected consumers |
-| Board frames (preprocess → recon) | event builder | event key, source/chip/channel identity, timestamps, validation flags ([draft](../../../core/contracts/science/pipeline/README.md)) | late, duplicate and timeout policy |
-| Event frames (recon → downstream) | hit building, monitoring, persistence | status and reason, source coverage, host timestamps | schema, per-consumer payload |
-| Tracks (recon → imaging, analysis) | imaging, analysis | direction, reference-plane position, fit quality, time | uncertainty model, selection flags |
 
 ## 6. Conditions, time and provenance
 
