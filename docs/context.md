@@ -24,13 +24,12 @@ The platform is not a generic IoT device and not only a detector. Its value come
 
 Use these documents as the canonical platform context:
 
-1. `platform/docs/product_landscape.md` for product vision, application domains, deployment modes, and system composition.
-2. `platform/docs/requirements/` for system requirements.
-3. `platform/docs/architecture/readme.md` selects the architecture view: `architecture_overview.md`
+1. `platform/docs/requirements/SRD.md` for product vision, application domains, deployment modes and system requirements.
+2. `platform/docs/architecture/readme.md` selects the architecture view: `architecture_overview.md`
    for the coarse map, `system_architecture.md` for detailed system design, and `repository_model.md`
    for repository boundaries/dependencies.
-4. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
-5. `platform/docs/design/` for design notes (proposals, research, historical design records); each states its status.
+3. `platform/docs/adr/` for architecture decisions that constrain implementation choices.
+4. `platform/docs/design/` for design notes (proposals, research, historical design records); each states its status.
 
 Reading order and index: `platform/docs/README.md`.
 
