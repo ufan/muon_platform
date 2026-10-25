@@ -17,7 +17,7 @@ Every document states its status under the title:
 | `reference` | Background or dated research. |
 | `historical` | Kept for rationale; names its current home. |
 
-Design-note content becomes baseline through skill `muon-promote` (see the [developer guide](workflow/DEVELOPER_GUIDE.md#5-prototype--baseline)).
+Design-note content becomes baseline through skill `muon-promote` (see the [developer guide](workflow/developer_guide.md#5-prototype--baseline)).
 
 ADRs carry their own status (proposed, accepted, partly superseded); see the [ADR index](adr/README.md).
 Only `current` documents, accepted ADRs and component specifications bind implementation.
@@ -29,7 +29,7 @@ studies are reference design notes.
 | 1 | [requirements/](requirements/system_requirements.md) | What the instrument is for (product, applications, deployment modes) and what it must do |
 | 2 | [Architecture index](architecture/readme.md) | Overview for the coarse map, system architecture for detailed design, repository model for boundaries and dependencies |
 | 3 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
-| 4 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |
+| 4 | [workflow/](workflow/) | How to work in the workspace: [developer_guide.md](workflow/developer_guide.md); releasing tools: [release_guide.md](workflow/release_guide.md) |
 | 5 | [Design notes](#design-notes) | Proposals, research and historical design records; not decisions |
 | — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
 | — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |

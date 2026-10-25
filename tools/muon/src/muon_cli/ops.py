@@ -227,9 +227,9 @@ def doctor(ws, log=print):
         check(not need or _version_tuple(lv) >= _version_tuple(need), f"launcher {lv} (workspace needs >= {need or '-'})",
               "uv tool upgrade muon-workspace")
     else:
-        advise(False, "started without the launcher", "install muon-workspace (DEVELOPER_GUIDE §1)")
+        advise(False, "started without the launcher", "install muon-workspace (developer guide §1)")
     for tool in ("git", "vcs", "cmake"):
-        check(shutil.which(tool) is not None, f"{tool} on PATH", "see DEVELOPER_GUIDE §1")
+        check(shutil.which(tool) is not None, f"{tool} on PATH", "see developer guide §1")
     check(sys.version_info >= (3, 9), f"python {sys.version.split()[0]}")
     for rel in REPOS_FILES[:2]:
         check(os.path.isfile(os.path.join(ws.topdir, rel)), rel)
@@ -243,7 +243,7 @@ def doctor(ws, log=print):
     check(not stale, "agent files up to date", "muon agents sync")
     root, source = ws.data_root
     check(bool(root) and os.path.isdir(root), f"golden test data root: {root or '-'} ({source})",
-          "copy golden bytes, or set data_root in .muon/workspace.yml (DEVELOPER_GUIDE §1)")
+          "copy golden bytes, or set data_root in .muon/workspace.yml (developer guide §1)")
     if os.path.isfile(AGY_SETTINGS):
         try:
             allow = json.load(open(AGY_SETTINGS, encoding="utf-8")).get("permissions", {}).get("allow", [])

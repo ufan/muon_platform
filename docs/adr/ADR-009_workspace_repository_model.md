@@ -132,7 +132,7 @@ on a copied or vendored version.
 
 ## 8. Cross-Repository Change Protocol
 
-> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: [developer guide §4](../workflow/DEVELOPER_GUIDE.md#4-cross-repository-changes).
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: [developer guide §4](../workflow/developer_guide.md#4-cross-repository-changes).
 
 A change touching several projects:
 
@@ -177,7 +177,7 @@ Negative / mitigations:
 
 ## 12. West Usage Policy
 
-> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: `muon` CLI and vcs2l `.repos` files ([developer guide](../workflow/DEVELOPER_GUIDE.md)).
+> Superseded by [ADR-012](ADR-012_repository_baseline_and_workflow.md) (2026-10-23); kept for history. Current: `muon` CLI and vcs2l `.repos` files ([developer guide](../workflow/developer_guide.md)).
 
 West is required only at the **workspace** level: setting up or updating a multi-repository
 workspace, the catalog, pinning revisions and releases, cross-repository branches, and
@@ -192,7 +192,7 @@ extensions. Their implementation is the internal Python package
 `platform/scripts/west_commands/muon_ws`, which is not a user-facing tool. (Revised 2026-10-22: an earlier
 standalone `muon-ws` CLI was dropped to keep one entry point.)
 
-Procedures: `docs/workflow/WORKSPACE_GUIDE.md` (retired; current procedures are in the [developer guide](../workflow/DEVELOPER_GUIDE.md)).
+Procedures: `docs/workflow/WORKSPACE_GUIDE.md` (retired; current procedures are in the [developer guide](../workflow/developer_guide.md)).
 
 ## 13. Repository-Owned Manifests
 

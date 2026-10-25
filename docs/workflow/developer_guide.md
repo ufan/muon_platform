@@ -33,7 +33,7 @@ launcher, implementation and data root are in use. Outside any workspace, use `m
 **Installing the launcher.** It is published on PyPI as `muon-workspace` and has no dependencies.
 Upgrade it with `uv tool upgrade muon-workspace` when `muon doctor` says the workspace needs a newer one.
 Releasing a new launcher version, and keeping it compatible with the implementation, is described in
-[RELEASE_GUIDE.md](RELEASE_GUIDE.md).
+[release_guide.md](release_guide.md).
 
 **AI tool setup per host.** `muon agents sync` generates the Claude and OpenCode adapters. Antigravity
 (`agy`) needs a one-time entry in `~/.gemini/antigravity-cli/settings.json` under `permissions.allow`:
@@ -100,7 +100,7 @@ Domain iterations follow skill `muon-domain-iteration`. Legacy analysis follows 
 
 ## 6. Snapshots and releases
 
-Tool releases (the `muon-workspace` launcher): [RELEASE_GUIDE.md](RELEASE_GUIDE.md).
+Tool releases (the `muon-workspace` launcher): [release_guide.md](release_guide.md).
 
 `muon freeze -o <file>` records exact SHAs of every repository (vcs2l format). Data products
 record the core SHA and the conditions snapshot (ADR-012 §10). Instrument release BOMs start with

@@ -27,7 +27,7 @@ See ADR-012 §2. In short:
 - **platform:**
   - `west.yml` and the west extensions are removed; `repos/*.repos` and `tools/muon` (the CLI, with tests) replace them;
   - lean `AGENTS.md`, with the moved content in `docs/engineering_context.md`;
-  - new docs: ADR-012, `docs/decisions.md`, `docs/workflow/DEVELOPER_GUIDE.md` (replaces WORKSPACE_GUIDE);
+  - new docs: ADR-012, `docs/decisions.md`, `docs/workflow/developer_guide.md` (replaces WORKSPACE_GUIDE);
   - skills: `muon-session` added, `muon-bump-manifest` removed, the others updated;
   - ADR-006/009/010/011, LANDSCAPE, the legacy inventory and the DAQ iteration records amended.
 

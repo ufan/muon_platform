@@ -1,6 +1,6 @@
 # Project template
 
-Copy these files into a new repository (skill `muon-new-project`; DEVELOPER_GUIDE §7):
+Copy these files into a new repository (skill `muon-new-project`; developer guide §7):
 
 - rename `gitignore` → `.gitignore` (it is kept unhidden here so that the template itself is not affected);
 - replace every `<placeholder>`, including those in `.muon/repo.yml`;

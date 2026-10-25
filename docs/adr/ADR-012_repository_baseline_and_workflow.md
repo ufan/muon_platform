@@ -161,7 +161,7 @@ another domain. Core may consume other domains' data, but only as conditions (§
   below about 2.5 KB (checked by `muon doctor`). These files hold the mission, map, hard rules and session
   protocol. Everything else goes into skills or docs that load on demand.
 - Each procedure exists once, as a skill (`platform/.agents/skills/muon-*`, Agent Skills format).
-  The human guide (`docs/workflow/DEVELOPER_GUIDE.md`) links to the skills instead of repeating them.
+  The human guide (`docs/workflow/developer_guide.md`) links to the skills instead of repeating them.
 - Tool-neutral setup per ADR-009 §14: canonical `AGENTS.md` + skills, and generated shims, skill links and
   permission adapters (`muon agents sync`).
 
@@ -174,7 +174,7 @@ another domain. Core may consume other domains' data, but only as conditions (§
 | Work discovery and plans | `work/index.yml` lists iterations; linked proposal/tasks own their state |
 | Scoped work in progress | explicit assignment and its handoff; isolated task branches/worktrees for concurrent writers |
 | Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
-| Environment | DEVELOPER_GUIDE toolchain section; `muon doctor` |
+| Environment | developer guide toolchain section; `muon doctor` |
 | Host-local data | `testdata/golden` (or `$MUON_DATA_ROOT`), `archive/`; listed by `muon doctor` |
 
 **Session protocol** (skill `muon-session`):

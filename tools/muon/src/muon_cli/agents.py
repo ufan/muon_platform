@@ -311,6 +311,6 @@ ADAPTERS = {
                 "(duplicate-name warnings in its log are harmless)",
     "antigravity": "rules + skills (.agents/skills); reads ../platform via the read-first block. Per host, add to "
                    "~/.gemini/antigravity-cli/settings.json permissions.allow: read_file(<workspace>) and "
-                   "command(muon status) (DEVELOPER_GUIDE §1)",
+                   "command(muon status) (developer guide §1)",
     "gemini": "slot: rules + L1 only until its local permission format is verified",
 }

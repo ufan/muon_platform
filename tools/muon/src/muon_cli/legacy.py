@@ -17,7 +17,7 @@ HOOK_MARKER = "# muon-ws legacy lock"   # unchanged so existing locks stay recog
 HOOK_BODY = f"""#!/bin/sh
 {HOOK_MARKER}
 echo "This is a managed muon legacy repository: read-only, no commits or pushes." >&2
-echo "See platform/docs/workflow/DEVELOPER_GUIDE.md (Legacy references)." >&2
+echo "See platform/docs/workflow/developer_guide.md (Legacy references)." >&2
 exit 1
 """
 HOOKS = ("pre-commit", "pre-push")
