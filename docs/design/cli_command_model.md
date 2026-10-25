@@ -1,6 +1,6 @@
 # Centralized CLI Command Model
 
-Status: proposed. Scope: `muonctl`, the planned instrument operator CLI (future `muon_instrument`). It is unrelated to the workspace tool `muon` ([developer guide](../workflow/DEVELOPER_GUIDE.md)).
+Status: proposed. Scope: `muonctl`, the planned instrument operator CLI (future `muon_instrument`). It is unrelated to the workspace tool `muon` ([developer guide](../workflow/DEVELOPER_GUIDE.md)). Per [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md), the `thermal` (cooling/dehumidifier) commands are out of scope, and `bus` diagnostics address configured host ports, not a fixed set of buses.
 
 ## Purpose
 

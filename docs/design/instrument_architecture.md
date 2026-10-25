@@ -1,6 +1,6 @@
 # Instrument-Level System Architecture
 
-Status: proposed (design input for the planned `muon_instrument` coordinator; not a decision). Repository ownership follows the [repository model](../architecture/repository_model.md); the ownership section below is historical. The bus description is an unconfirmed observation of current hardware, not the approved topology; see [system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies).
+Status: proposed (design input for the planned `muon_instrument` coordinator; not a decision). Repository ownership follows the [repository model](../architecture/repository_model.md); the ownership section below is historical. Slow-control domains, controllers and transports are decided in [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md), which overrides this note; cooling and dehumidification are out of scope.
 
 ## Purpose
 
@@ -22,7 +22,7 @@ The current detector instrument includes at least:
 1. data acquisition
 2. sensor network
 3. gas control
-4. cooling and dehumidifier
+4. cooling and dehumidifier (out of scope, ADR-014)
 5. voltage supply
 
 ### 1. Data acquisition
@@ -81,6 +81,8 @@ Primary protocol:
 
 ### 4. Cooling and dehumidifier
 
+Out of scope ([ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)); kept for history.
+
 Responsibilities:
 
 - ambient or cabinet thermal control
@@ -108,7 +110,7 @@ Primary protocol:
 
 ## Bus topology implication
 
-When this note was written, most non-DAQ subsystems used Modbus and were grouped into three RS485 buses. This is an unconfirmed description of current hardware; the [management bus specification](../requirements/instrument_management_bus_requirement.md) proposes a single RS-485 bus with COBS/protobuf, and engineering context names CAN-FD as a later evolution. The approved topology is open ([system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies)).
+All current non-DAQ subsystems use Modbus RTU on the host's RS-485 ports (three today, not all necessarily used), grouped by assembly convenience. [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md) makes the port count, port names and grouping configuration (a versioned device map), puts safety and interlocks in the domain controller (host adapter or on-board), and treats the [IMB protocol draft](instrument_management_bus.md) and CAN-FD as later aspirations.
 
 That means the architecture should not model every device as an unrelated standalone service. It should explicitly represent:
 
@@ -127,7 +129,7 @@ instrument service layer
 -> physical bus or transport
 ```
 
-For RS485/Modbus paths, one process or module should own arbitration on each bus.
+For RS485/Modbus paths, one process or module should own arbitration on each bus. The bus manager is per host port and may serve several domains; which devices sit on which port comes from the device map, not from code (ADR-014).
 
 ## Required abstraction layers
 
@@ -216,7 +218,6 @@ Real operation will often require rules such as:
 - do not start DAQ acquisition until HV is within range
 - do not enable HV unless gas flow and pressure are valid
 - stop acquisition or ramp down HV if humidity exceeds threshold
-- hold detector in standby if cooling or dehumidification is unhealthy
 - switch to degraded operation if a non-critical environmental sensor is lost
 
 Those are not DAQ rules and not pure Modbus rules. They are instrument-level coordination rules.

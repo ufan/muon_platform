@@ -50,6 +50,7 @@ carry forward from them, and flag anything asserted only by one of those ADRs.
 | [instrument_architecture.md](design/instrument_architecture.md) | proposed | Instrument coordination, operating states and interlocks for the planned `muon_instrument`. |
 | [service_api_shape.md](design/service_api_shape.md) | proposed | External operator/web API shape; internal services stay protobuf/gRPC. |
 | [cli_command_model.md](design/cli_command_model.md) | proposed | `muonctl` operator CLI (not the workspace `muon` tool). |
+| [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol (COBS/protobuf RPC); not decided, see ADR-014. |
 | [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
 | [repo_boundaries.md](design/repo_boundaries.md) | historical | Current home: [repository model](architecture/repository_model.md). |
 

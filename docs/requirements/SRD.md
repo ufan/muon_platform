@@ -453,7 +453,7 @@ Possible:
 -   CAN-FD
 -   Ethernet
 
-Selection depends on subsystem requirements.
+Selection depends on subsystem requirements. Selected approach: [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md) (Modbus RTU now; custom protocol and CAN-FD are aspirations).
 
 ------------------------------------------------------------------------
 

@@ -28,7 +28,8 @@ Topic groups are navigation aids, and a decision may concern several topics.
 |---|---|---|
 | [003 — Instrument services](ADR-003_instrument_service_architecture.md) | Not recorded | Hardware domain service boundaries. |
 | [004 — Deployment and updates](ADR-004_deployment_update_strategy.md) | Not recorded | Deployment, lifecycle and versioning. |
-| [005 — Hardware abstraction](ADR-005_hardware_abstraction.md) | Not recorded | Domain controllers and interfaces. |
+| [005 — Hardware abstraction](ADR-005_hardware_abstraction.md) | Not recorded; §1, §5–§6 partly superseded | Domain controllers and interfaces; ADR-014 revises host-side controllers and the bus recommendations. |
+| [014 — Slow-control domains and transports](ADR-014_slow_control_domains_and_transports.md) | Accepted | Stable domain service interfaces; host-adapter or on-board domain controllers; transports and ports as configuration; Modbus RTU now, custom protocol and CAN-FD as aspirations; DAQ off the slow-control bus. |
 
 ### Development and repositories
 

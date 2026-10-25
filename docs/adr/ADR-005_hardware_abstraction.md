@@ -19,6 +19,8 @@ Domain controllers:
 The central ARM64 controller shall not directly control low-level
 hardware.
 
+> Revised by [ADR-014](ADR-014_slow_control_domains_and_transports.md): a domain controller may be a host software adapter; orchestration software still never addresses devices. The DAQ controller is not on a slow-control bus.
+
 Decision:
 
 -   Deterministic functions stay inside domain controllers.
@@ -162,6 +164,8 @@ Recommended hierarchy:
 
 # 5. Modbus RTU Evaluation
 
+> Bus recommendation superseded by [ADR-014](ADR-014_slow_control_domains_and_transports.md): current and planned custom devices use Modbus RTU behind configurable domain controllers.
+
 Suitable for:
 
 -   industrial sensors
@@ -184,6 +188,8 @@ Use for:
 ------------------------------------------------------------------------
 
 # 6. CAN-FD Evaluation
+
+> CAN-FD is a later aspiration under [ADR-014](ADR-014_slow_control_domains_and_transports.md), not a selected bus.
 
 Advantages:
 

@@ -1,6 +1,6 @@
-# Instrument Management Bus Requirement & Architecture Specification
+# Instrument Management Bus: Protocol Draft
 
-Status: draft (proposed slow-control bus baseline). The topology (single RS-485 bus vs current hardware vs CAN-FD evolution, and whether DAQ has a management node) is an open decision: [system architecture §10](../architecture/system_architecture.md#10-open-points-and-document-discrepancies). Requirement IDs follow ADR-010 §7: functional `IMB-001…` (formerly `FR-01…`), non-functional `IMB-101…` (formerly `NFR-01…`).
+Status: proposed (future IMB protocol idea; not decided). [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md) governs slow control and overrides this draft where they differ: custom boards speak Modbus RTU first and IMB is a later aspiration; there is no fixed single bus or port (`/dev/ttyS1` is an example); DAQ has no node on any slow-control bus, so the `daq_domain` examples below are obsolete; safety and interlocks belong to the domain controller; domain service interfaces stay the same whatever protocol is chosen. Requirement IDs follow ADR-010 §7: functional `IMB-001…` (formerly `FR-01…`), non-functional `IMB-101…` (formerly `NFR-01…`); they apply only if this protocol is adopted.
 
 **Document ID:** IMB-SPEC
 

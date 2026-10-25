@@ -56,21 +56,26 @@ These boundaries follow [ADR-003](../adr/ADR-003_instrument_service_architecture
 Applications access capabilities through services:
 
 ```text
-Application -> instrument aggregation / domain API -> domain adapter
-            -> transport -> domain controller / firmware -> hardware
+Application -> instrument aggregation -> domain service API
+            -> domain controller (host software adapter, or on-board controller via a host proxy)
+            -> transport (configured per device) -> hardware
 ```
 
-Drivers, device registers and transport specifics remain behind the domain boundary. Local
-controllers handle deterministic control and protection; central software handles orchestration.
-Domain services expose lifecycle, status, health, alarms and capabilities, with simulator/fake
-backends for testing. This service separation does not turn scientific algorithms into services.
+Drivers, device registers and transport specifics remain behind the domain boundary. Domain
+controllers handle deterministic control, safety and interlocks; central software handles
+orchestration and never addresses devices. Domain services expose lifecycle, status, health, alarms
+and capabilities, with simulator/fake backends for testing. This service separation does not turn
+scientific algorithms into services.
 
 Protobuf/gRPC is the preferred service interface. DAQ needs a separate high-rate transport such as
-USB/FX3 or Ethernet; CAN-FD is not the raw DAQ stream transport. Slow-control bus details belong in
-the [instrument management bus specification](../requirements/instrument_management_bus_requirement.md).
-RS-485 is its current baseline; the intended CAN-FD evolution and DAQ management participation
-need reconciliation as noted in §10. Optional messaging technologies are selected for demonstrated
-needs, not required by this diagram. Rationale: ADR-003 and ADR-005.
+USB/FX3 or Ethernet and is never on a slow-control bus. Slow control follows
+[ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md): current devices are Modbus RTU
+slaves on the host's RS-485 ports, grouped freely; a versioned device map assigns each device to a
+domain and transport, so the number of ports, their names and the grouping are configuration. One
+bus owner serialises each port. Custom HV/LV/gas boards start on Modbus RTU; a custom protocol
+([IMB draft](../design/instrument_management_bus.md)) and CAN-FD are later aspirations that must not
+change domain service interfaces. Optional messaging technologies are selected for demonstrated
+needs, not required by this diagram. Rationale: ADR-003, ADR-005 and ADR-014.
 
 ## 4. Three information planes
 
@@ -207,8 +212,7 @@ These are preserved questions, not decisions introduced by consolidation:
 
 | Topic | Evidence / required resolution |
 |---|---|
-| Slow-control bus topology | Four sources differ: the [instrument architecture design note](../design/instrument_architecture.md) describes three RS-485/Modbus buses (apparently current hardware); the management bus specification proposes one RS-485 bus with COBS/protobuf; ADR-005 §5–§6 evaluates Modbus for gas/auxiliary sensors and CAN-FD for distributed control; engineering context describes eventual CAN-FD, and SRD §10 lists all options. Record current hardware, baseline target and future evolution separately, with migration scope and compatibility, before implementing. |
-| DAQ management on the shared bus | The bus diagram includes a DAQ node, while engineering context emphasizes a separate high-rate DAQ link. Separate management participation from raw transport and confirm the intended topology. |
+| Slow-control domain service interfaces | Bus topology and DAQ separation are decided in [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md). The HV, LV, gas, environment and pose service interfaces are next: design them transport-independent, implement first with Modbus host adapters, and state per domain which protection lives in the device and which in the domain controller. |
 | Motion-control boundary | Engineering context and SRD §6.4 combine pose sensing with future motion control. Pose measurement is established; decide ownership and safety/interfaces for future active actuation. |
 | HV numerical targets | [SRD §6.2](../requirements/SRD.md) gives 0–2000 V and sub-nanoamp current measurement as an “Example target”, not an acceptance requirement. Confirm them against HV hardware evidence and assign HV requirement IDs before using them as acceptance limits. |
 | C++ standard | Earlier system text named C++20; general guidance says C++, and the developer guide lists a C++17 toolchain. Component specifications/builds govern today; record an explicit requirement before imposing a workspace-wide standard. |
