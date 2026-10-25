@@ -6,7 +6,7 @@ Old code and data are kept **only to inform** new work: a source of domain knowl
 golden data, never a dependency of new code. During each domain iteration, the
 "legacy archaeology" step turns the relevant entries below into an as-is spec.
 
-There are two kinds, kept in two directories (ADR-009 §5, ADR-012):
+There are two kinds, kept in two directories (ADR-012 §5, §11):
 
 | Kind | Directory | Declared in a manifest | Reproducible elsewhere | Read-only protection |
 |---|---|---|---|---|

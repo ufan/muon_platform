@@ -1,4 +1,4 @@
-"""Generated agent files for all AI coding tools (`muon agents sync`; ADR-009 §14, ADR-012).
+"""Generated agent files for all AI coding tools (`muon agents sync`; ADR-012 §7).
 
 Canonical, committed sources:
   rules   AGENTS.md (every repo; platform/AGENTS.md for workspace-wide rules)
@@ -116,7 +116,7 @@ def build_plan(ws):
     data_root = test_data_root(ws)
     siblings = [r for r in ws.repos if not r.is_legacy and r.cloned]
     # Per-repo files only in repos under development; `support` and `legacy` repos are
-    # modified only on explicit request (ADR-009 §5).
+    # modified only on explicit request (ADR-012 §5).
     for r in [m for m in ws.repos if m.cloned and (m.is_dev or m.path == "platform")]:
         if r.path != "platform":                 # the skills' source; its .claude/skills is a committed link
             skill_links(r.abspath)

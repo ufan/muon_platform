@@ -1,6 +1,6 @@
 # Muography Instrument Product Landscape
 
-Status: reference (product vision, use cases and deployment modes; not requirements or architecture).
+Status: reference. Product vision and use-case narrative. Requirements: [SRD](../requirements/SRD.md); architecture: [system architecture](../architecture/system_architecture.md); its architecture and hardware sections (§9–§12) are superseded by them.
 
 # 1. Purpose
 

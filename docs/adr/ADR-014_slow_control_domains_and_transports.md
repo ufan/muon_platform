@@ -1,8 +1,7 @@
-# ADR-014 Slow-Control Domains and Transports
+# ADR-014 Slow-control domains and transports
 
 Status: Accepted (2026-10-25; owner answers in discussion)
-Supersedes: [ADR-005](ADR-005_hardware_abstraction.md) §5–§6 bus recommendations, and §1 "the central controller shall not directly control low-level hardware" as revised below
-Related: [ADR-003](ADR-003_instrument_service_architecture.md) (domain services), [system architecture §3](../architecture/system_architecture.md#3-services-and-communication)
+Related: [ADR-003](ADR-003_instrument_service_architecture.md) (domain services), [ADR-005](ADR-005_hardware_abstraction.md) (domain controllers)
 
 ## Context
 
@@ -32,7 +31,7 @@ Slow control is layered: **domain service → domain controller → transport �
    - a physical on-board controller, reached through a thin host proxy.
 
    Orchestration software (instrument, applications) never addresses devices; only domain
-   controllers do. This revises ADR-005 §1: a domain controller may run on the host.
+   controllers do.
 3. **Transport is configuration.** A versioned device map gives, per device or controller, the domain,
    instance, transport and driver. Today the only transport is `modbus-rtu` (port, slave ID,
    device-type register map); `imb` and `can-fd` may be added later. Moving a device between ports, or

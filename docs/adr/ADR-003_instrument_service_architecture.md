@@ -1,46 +1,22 @@
-# ADR-003 Instrument Service Architecture
+# ADR-003 Instrument services
+
+Status: Accepted (re-baselined 2026-10-25)
 
 ## Decision
 
-Use service-oriented boundaries between hardware domains and central software.
+- Each hardware domain (DAQ, HV, gas, LV, pose, environment) is exposed through a domain service.
+- Services expose capabilities, never registers. Applications and orchestration never access
+  hardware directly.
+- Service interfaces use protobuf/gRPC; other messaging (e.g. Zenoh) only for a demonstrated need.
+- Every service has lifecycle, status, health, alarms and capabilities, and a simulator or fake
+  backend.
 
-Domains:
+## Why
 
-- DAQ
-- HV
-- Gas
-- Pose
-- Health
+Domains have separate hardware and lifecycles; stable service contracts let them evolve, be
+simulated and be tested independently.
 
-## Architecture
+## Consequences
 
-Hardware
-
-|
-
-Firmware
-
-|
-
-Service API
-
-|
-
-Central Controller
-
-## Interface
-
-Preferred:
-
-- protobuf
-- gRPC
-
-Optional:
-
-- Zenoh
-
-## Principle
-
-Hardware exposes capabilities, not registers.
-
-Applications never directly access hardware.
+- The instrument coordinates domains through these APIs ([ADR-012](ADR-012_repository_baseline_and_workflow.md)).
+- Scientific algorithms are not services ([ADR-001](ADR-001_reconstruction_runtime.md)).

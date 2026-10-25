@@ -11,8 +11,8 @@ A repository's own `AGENTS.md` adds local rules; if the two conflict, say so ins
   `platform/docs/architecture/repository_model.md`.
 - `core/` is the scientific domain (DAQ, scientific contracts, preprocess, recon). `platform/` holds specs,
   decisions and tooling (no product code). `testdata/` is data. `legacy/` (including the old detector parameters in `legacy/config`) and `archive/` are read-only.
-- Product, architecture and engineering rules: `platform/docs/engineering_context.md`. Read it before
-  design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
+- Architecture and engineering rules: `platform/docs/architecture/system_architecture.md`. Read it
+  before design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
 - Work discovery: `platform/work/index.yml`; session modes and assignments: `platform/work/README.md`.
 
 ## Reading path

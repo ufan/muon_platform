@@ -1,4 +1,4 @@
-# Managed legacy references (ADR-009 §5, §15; ADR-012). Read-only: `muon ws sync --legacy` clones
+# Managed legacy references (ADR-012 §5, §11). Read-only: `muon ws sync --legacy` clones
 # them and applies the L1 lock (read-only tree, push disabled, refusing hooks). Never edit or build
 # inside them; build out of tree (`muon legacy build-dir <name>`).
 repositories:

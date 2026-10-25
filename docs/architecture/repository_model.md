@@ -1,73 +1,51 @@
 # Repository model
 
-Status: current architecture. Paths are relative to the workspace root.
+Repository boundaries, dependency directions and contract ownership. Binding; rationale in
+[ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md). The actual repository list is
+`platform/repos/*.repos` (`muon list`). Planned repositories are not existing dependencies.
 
-This document describes repository boundaries and allowed dependencies. Decision rationale:
-[ADR-012 §3–§4 and §6](../adr/ADR-012_repository_baseline_and_workflow.md).
-The [architecture overview](architecture_overview.md) is the coarse map;
-[system architecture](system_architecture.md) owns detailed runtime and subsystem relationships.
-The actual repository list and maturity metadata live in `platform/repos/*.repos` and each
-repository's `.muon/repo.yml` (`muon list`). Planned repositories below are not existing dependencies.
+## Repositories
 
-## Responsibilities
-
-| Repository / path | Responsibility and state |
+| Repository | Responsibility |
 |---|---|
-| `muon_core` / `core/` | Scientific domain: DAQ, scientific contracts, conditions interpretation, preprocess, reconstruction and online/offline runners. DAQ, preprocess and recon are modules within core. Online and offline share library targets. |
-| Sensor domain repositories (planned: HV, gas, environment, pose, LV) | One repository per independently developed subsystem: firmware, domain service and simulator/fake with tests. Created when that domain enters its iteration. |
-| `muon_instrument` (planned) | Coordination: instrument state machine, sequencing, interlock policy, aggregation/API gateway, CLI, product profiles, operational configuration and integration validation. Starts with `products/<name>/`; its release manifest is the product bill of materials. |
-| `muon_contracts` / `contracts/` | Placeholder for shared system contracts. Drafts currently live in `core/contracts/system/` until extraction below. |
-| Conditions payload repository (planned for preprocess) | Versioned detector/site payloads, seeded from read-only `legacy/config`: mapping, topology, geometry and alignment. Versions are append-only; schemas and interpretation belong in core. Telemetry-derived conditions and operational application settings do not belong here. |
-| `muon_platform` / `platform/` | Requirements, architecture, decisions, guides, change records, repository manifests, workspace tooling and agent skills. No product code or build-time dependency on product repositories. |
-| `muon_testdata` / `testdata/` | Dataset catalog and tooling. Dataset bytes remain local and immutable; see [ADR-011](../adr/ADR-011_test_data.md). Support maturity: changes require an explicit request. |
-| `study/`, `tools/*` | Support studies and utilities; changes require an explicit request. |
-| `legacy/*`, `archive/*` | Read-only references, never build or runtime dependencies. Managed legacy repositories are declared in `platform/repos/legacy.repos`; archives are host-local. See the [legacy inventory](../legacy_inventory.md). |
+| `muon_core` (`core/`) | Scientific domain: DAQ, preprocess, recon, conditions interpretation, scientific contracts, online/offline runners (shared library targets). |
+| Domain repositories (planned: HV, gas, LV, pose, environment) | Firmware, domain service and simulator/fake with tests, one per independently developed subsystem. Created when the domain's iteration starts. |
+| `muon_instrument` (planned) | Instrument state machine, sequencing, interlock policy, aggregation/API gateway, operator CLI, product profiles and operational configuration. Its release manifest is the product bill of materials. |
+| `muon_contracts` (`contracts/`) | Shared system contracts. Placeholder: drafts live in `core/contracts/system/` until extraction. |
+| Conditions payloads (planned at preprocess) | Append-only detector/site payload versions (mapping, topology, geometry, alignment), seeded from `legacy/config`. Schemas and interpretation stay in core. |
+| `muon_platform` (`platform/`) | Requirements, architecture, decisions, workflow, change records, repository manifests, the `muon` tool and agent skills. No product code. |
+| `muon_testdata` (`testdata/`) | Dataset catalog and tool; bytes stay local and immutable ([ADR-011](../adr/ADR-011_test_data.md)). |
+| `study/`, `tools/*` | Support; changed only on explicit request. |
+| `legacy/*`, `archive/*` | Read-only references, never dependencies ([legacy inventory](../legacy_inventory.md)). |
 
-Detector front-end firmware, simulation and offline applications (imaging/density, data platform,
-digital twin) are planned outside core. Where they consume scientific software, use core packages
-and canonical contracts rather than copying their sources. Sensor-domain independence below still
-applies; this does not permit sensor domains to depend on core.
+Also planned outside core: detector front-end firmware, simulation and offline applications
+(imaging/density, data platform, digital twin). They use core packages and contracts, never copies.
 
-## Dependency directions
+## Dependencies
 
-An arrow means “depends on”; allowed service dependencies use generated API clients.
-
-| Consumer | Allowed dependency / boundary |
+| Consumer | May depend on |
 |---|---|
-| Shared system contracts | No dependency on domain implementations. |
-| Sensor domains | Shared system contracts; never another domain implementation or core. |
-| Core | Shared system contracts; sensor information arrives through telemetry/conditions contracts, not direct sensor control or implementation imports. |
-| Instrument | Shared system contracts and domain/core service APIs. The instrument commands domains, including core. Core never commands another domain. |
-| Offline applications | Core packages and canonical contracts. |
-| Future conditions payload repository | Core schemas for validation only; no embedded algorithm or pipeline implementation. This does not authorize changing or building in `legacy/config`. |
-| Platform | No product build-time dependencies. Workspace tooling manages repositories without becoming a product runtime dependency. |
-
-System contracts are currently staged inside core; the shared-contract dependency direction is the
-target boundary, not a requirement to import the placeholder `contracts/` repository today.
-Sensor data reaches reconstruction only as immutable conditions snapshots. Conditions interpretation
-is specified further in [core conditions guidance](../../../core/docs/conditions.md).
+| System contracts | Nothing. |
+| Domain repositories | System contracts only; never another domain or core. |
+| Core | System contracts; sensor data only through telemetry/conditions contracts. |
+| Instrument | System contracts and the domain and core service APIs (generated clients). |
+| Offline applications | Core packages and contracts. |
+| Conditions payloads | Core schemas, for validation only. |
+| Platform | Nothing at build time. |
 
 ## Contract ownership
 
-| Contract | Current owner |
+| Contract | Owner |
 |---|---|
-| Scientific formats and objects: raw capture, EDM, pipeline records, DAQ API and device FSM | `core/contracts/science/`; evolve with their core consumers. |
-| Domain-service pattern, telemetry catalog, time base, conditions interchange, product-profile schema | Drafts in `core/contracts/system/`; move to `contracts/` at the extraction trigger. |
-| Device ↔ host wire protocol | DAQ hardware references in `core/daq/ref/<target>/`. |
-| Conditions payload schemas, validation and interpretation | Core; payload versions live in the future payload repository. |
+| Raw capture, EDM, pipeline records, DAQ API and device FSM | `core/contracts/science/` |
+| Domain-service pattern, telemetry catalog, time base, conditions interchange, product-profile schema | `core/contracts/system/` until extraction to `contracts/` |
+| Device ↔ host wire protocol | `core/daq/ref/<target>/` |
+| Conditions payload schemas and interpretation | Core |
 
 ## Splitting and extraction
 
-Split a repository when toolchain, lifecycle or audience/ownership differs. A different deployment
-target alone is a packaging concern. Scientific modules are not separate repositories merely
-because they represent successive processing stages.
-
-When a second domain or the first instrument starts, extract `core/contracts/system/` into
-`muon_contracts` with history preserved. Publish semver tags; consuming domains' `main` branches
-pin tags, and contract CI checks breaking changes with `buf breaking` or schema diff.
-Scientific contracts stay in core. Create the conditions payload repository at the start of preprocess.
-These are existing triggers from ADR-012, not instructions to perform extraction now.
-
-Keep this document current when repository boundaries or dependencies change, with links to the
-relevant decision records. Workspace operations belong in the [developer guide](../workflow/DEVELOPER_GUIDE.md);
-work discovery and session scope belong in the [work protocol](../../work/README.md).
+- Split a repository only when toolchain, lifecycle or audience differs. A different deployment
+  target is a packaging concern; successive processing stages are not a reason to split.
+- When a second domain or the first instrument starts, extract `core/contracts/system/` into
+  `muon_contracts` with history, publish semver tags and check breaking changes in its CI.
+- Create the conditions payload repository when preprocess starts.

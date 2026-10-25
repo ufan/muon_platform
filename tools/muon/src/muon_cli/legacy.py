@@ -1,5 +1,5 @@
 """Managed legacy repositories (`muon legacy`, `muon ws sync`): checkouts and the L1 read-only lock
-(ADR-009 §15, ADR-012).
+(ADR-012 §11).
 
 L1 is tool-neutral: it works for every AI coding tool and for humans.
   (a) working tree made read-only (`.git` excluded, so status/fetch still work)
