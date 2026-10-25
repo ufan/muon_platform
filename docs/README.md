@@ -34,7 +34,7 @@ studies are reference design notes.
 | 6 | [Design notes](#design-notes) | Proposals, research and historical design records; not decisions |
 | — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
 | — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |
-| — | [engineering_context.md](engineering_context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
+| — | [context.md](context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
 | — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |
 
 ## Design notes
@@ -47,9 +47,7 @@ studies are reference design notes.
 | [event_builder.md](design/event_builder.md) | historical | Migrated to `core/daq/doc/specs/event-builder*.md` and `core/contracts/science/pipeline/`; the file maps each former section. |
 | [online_pipeline.md](design/online_pipeline.md) | historical | Migrated to `core/daq/doc/specs/acquisition-sources.md`, the pipeline record contracts and system architecture §7; the file maps each former section. |
 | [recon_draft.md](design/recon_draft.md) | proposed | Internal layout of the future recon module. |
-| [instrument_architecture.md](design/instrument_architecture.md) | proposed | Instrument coordination, operating states and interlocks for the planned `muon_instrument`. |
-| [service_api_shape.md](design/service_api_shape.md) | proposed | External operator/web API shape; internal services stay protobuf/gRPC. |
-| [cli_command_model.md](design/cli_command_model.md) | proposed | `muonctl` operator CLI (not the workspace `muon` tool). |
+| [instrument.md](design/instrument.md) | proposed | Instrument layer: orchestration, operating states and policies, operator CLI, external API. |
 | [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol (COBS/protobuf RPC); not decided, see ADR-014. |
 | [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
 | [product_landscape.md](design/product_landscape.md) | reference | Product vision, use cases and deployment modes (narrative). |

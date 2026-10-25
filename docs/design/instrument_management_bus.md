@@ -1,6 +1,6 @@
-# Instrument Management Bus: Protocol Draft
+# Instrument management bus: protocol draft
 
-Status: proposed (future IMB protocol idea; not decided). [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md) governs slow control and overrides this draft where they differ: custom boards speak Modbus RTU first and IMB is a later aspiration; there is no fixed single bus or port (`/dev/ttyS1` is an example); DAQ has no node on any slow-control bus, so the `daq_domain` examples below are obsolete; safety and interlocks belong to the domain controller; domain service interfaces stay the same whatever protocol is chosen. Requirement IDs follow ADR-010 §7: functional `IMB-001…` (formerly `FR-01…`), non-functional `IMB-101…` (formerly `NFR-01…`); they apply only if this protocol is adopted.
+Status: proposed. A possible future protocol for custom domain controllers; not decided and not scheduled. Today all slow-control devices, including the first custom boards, use Modbus RTU ([ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)). Requirement IDs `IMB-NNN` apply only if this protocol is adopted.
 
 **Document ID:** IMB-SPEC
 
@@ -10,7 +10,7 @@ Status: proposed (future IMB protocol idea; not decided). [ADR-014](../adr/ADR-0
 
 **Target Application:** Cosmic-Ray Muon Instrumentation Platform
 
-**Physical Topology:** Single Intra-Cabinet RS-485 Bus ($1\,\text{m}\times 1\,\text{m}\times 1\,\text{m}$ instrument cabinet)
+**Physical Topology:** RS-485 port(s) dedicated to IMB nodes inside the cabinet ($1\,\text{m}\times 1\,\text{m}\times 1\,\text{m}$ instrument cabinet)
 
 ---
 
@@ -21,7 +21,7 @@ This specification defines the system requirements and firmware/software archite
 The baseline physics and link layer is based on RS-485 serial bus.
 The system described in this document decouples upper-layer Linux applications from physical hardware details using a **Centralized Serial Gateway Daemon** on the System Controller and **Remote Procedure Call (RPC) domain abstractions** over COBS (Consistent Overhead Byte Stuffing) and Protobuf on Zephyr-based Domain Controllers.
 
-The architecture natively supports multi-tenant operation, handling **multiple distinct domain types** (e.g., High-Voltage Bias, Gas-Supply Control, Environmental/IMU Sensors) as well as **multiple instances of the same domain type** (e.g., HV Board #1, HV Board #2) on a single physical RS-485 bus without hardware port sprawl or register-level leakages.
+The architecture natively supports multi-tenant operation, handling **multiple distinct domain types** (e.g., High-Voltage Bias, Gas-Supply Control, Environmental/IMU Sensors) as well as **multiple instances of the same domain type** (e.g., HV Board #1, HV Board #2) on one RS-485 port without hardware port sprawl or register-level leakages.
 
 ```
 +---------------------------------------------------------------------------------------------------+
@@ -43,12 +43,12 @@ The architecture natively supports multi-tenant operation, handling **multiple d
 |   +-------------------------------------------------------------------------------------------+   |
 |                                           │ Serial Port (/dev/ttyS1 @ 921.6k - 1.5M baud)         |
 +-------------------------------------------┼-------------------------------------------------------+
-                                            │ Single Physical RS-485 Bus
+                                            │ RS-485 port dedicated to IMB
         ┌───────────────────────────────────┼───────────────────────────────────┐
         ▼                                   ▼                                   ▼
 +───────────────────────────+   +───────────────────────────+   +───────────────────────────+
-| Node 0x0A                 |   | Node 0x0B                 |   | Node 0x10                 |
-| - Domain: "hv_domain"     |   | - Domain: "hv_domain"     |   | - Domain: "daq_domain"    |
+| Node 0x0A                 |   | Node 0x0B                 |   | Node 0x30                 |
+| - Domain: "hv_domain"     |   | - Domain: "hv_domain"     |   | - Domain: "gas_domain"    |
 | - Instance ID: 1          |   | - Instance ID: 2          |   | - Instance ID: 1          |
 | - Zephyr RTOS + Nanopb    |   | - Zephyr RTOS + Nanopb    |   | - Zephyr RTOS + Nanopb    |
 +───────────────────────────+   +───────────────────────────+   +───────────────────────────+
@@ -62,7 +62,7 @@ The architecture natively supports multi-tenant operation, handling **multiple d
 ### 2.1 Functional Requirements
 
 * **[IMB-001] Bus Ownership Isolation:** The Linux Serial Gateway Daemon shall be the sole process with read/write access to the host physical serial interface (`/dev/ttyS1` or equivalent).
-* **[IMB-002] Domain API Abstraction:** Domain controllers shall expose strong-typed RPC methods (e.g., `SetVoltage`, `StartAcquisition`). Raw register offsets and memory-mapped address layouts shall **not** be exposed to upper-layer Linux host software.
+* **[IMB-002] Domain API Abstraction:** Domain controllers shall expose strong-typed RPC methods (e.g., `SetVoltage`, `SetFlow`). Raw register offsets and memory-mapped address layouts shall **not** be exposed to upper-layer Linux host software.
 * **[IMB-003] Multi-Client Concurrent Access:** The Gateway Daemon shall accept concurrent IPC requests from multiple host-side service clients, multiplexing their requests transparently onto the half-duplex bus.
 * **[IMB-004] Dynamic Node Discovery & Addressing:** The Gateway Daemon shall maintain a dynamic board registry mapping abstract logical endpoints (`domain_type` + `instance_id`) to physical wire addresses (`node_id`). Host applications shall invoke services using logical identity rather than physical node addresses.
 * **[IMB-005] Multi-Instance Support:** The architecture shall support multiple physical boards sharing the exact same domain type and firmware on the same bus without address collisions or service ambiguity.
@@ -115,7 +115,7 @@ message PingRequest {}
 
 message PingResponse {
   uint32 node_id       = 1;  // Physical address (e.g., 0x0A)
-  string domain_type   = 2;  // e.g., "hv_domain", "daq_domain"
+  string domain_type   = 2;  // e.g., "hv_domain", "gas_domain"
   uint32 instance_id   = 3;  // e.g., 1, 2, 3 (Board instance index)
   string hardware_uid  = 4;  // MCU 128-bit unique hardware ID
   string fw_version    = 5;  // Firmware version "1.2.0"
@@ -170,8 +170,8 @@ The Gateway Daemon populates an internal **Routing Table**:
 | --- | --- | --- | --- | --- |
 | `0x0A` | `hv_domain` | `1` | `STM32F4-98A1...` | `/services/hv/1` |
 | `0x0B` | `hv_domain` | `2` | `STM32F4-98A2...` | `/services/hv/2` |
-| `0x10` | `daq_domain` | `1` | `STM32F4-33B1...` | `/services/daq/1` |
 | `0x20` | `sensor_domain` | `1` | `STM32F4-77C1...` | `/services/sensor/1` |
+| `0x30` | `gas_domain` | `1` | `STM32F4-33B1...` | `/services/gas/1` |
 
 ### 4.3 Host Client Routing Workflow
 
@@ -385,9 +385,9 @@ void process_incoming_frame(uint8_t target_id, uint8_t *payload_bytes, size_t le
     if (request.service_id == 100) {
         // hv_domain_dispatch(request.method_id, &payload_stream);
     }
-    #elif defined(CONFIG_APP_IS_DAQ_DOMAIN)
+    #elif defined(CONFIG_APP_IS_GAS_DOMAIN)
     if (request.service_id == 200) {
-        // daq_domain_dispatch(request.method_id, &payload_stream);
+        // gas_domain_dispatch(request.method_id, &payload_stream);
     }
     #endif
 }
