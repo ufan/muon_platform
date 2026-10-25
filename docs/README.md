@@ -26,7 +26,7 @@ studies are reference design notes.
 
 | # | Section | What it answers |
 |---|---|---|
-| 1 | [requirements/](requirements/SRD.md) | What the instrument is for (product, applications, deployment modes) and what it must do |
+| 1 | [requirements/](requirements/system_requirements.md) | What the instrument is for (product, applications, deployment modes) and what it must do |
 | 2 | [Architecture index](architecture/readme.md) | Overview for the coarse map, system architecture for detailed design, repository model for boundaries and dependencies |
 | 3 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
 | 4 | [workflow/](workflow/) | How to work in the workspace: [DEVELOPER_GUIDE.md](workflow/DEVELOPER_GUIDE.md); releasing tools: [RELEASE_GUIDE.md](workflow/RELEASE_GUIDE.md) |

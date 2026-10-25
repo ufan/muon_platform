@@ -6,5 +6,5 @@
 | [System architecture](system_architecture.md) | Whole-instrument principles, composition, services, information planes, conditions and time, replay, deployment and open points. |
 | [Repository model](repository_model.md) | Repository responsibilities, dependency directions, contract ownership and extraction triggers. |
 
-Requirements: [SRD](../requirements/SRD.md). Decisions: [ADR index](../adr/README.md). Proposals and
+Requirements: [system requirements](../requirements/system_requirements.md). Decisions: [ADR index](../adr/README.md). Proposals and
 option studies: [design notes](../README.md#design-notes) (not binding).

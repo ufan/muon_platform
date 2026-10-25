@@ -137,6 +137,6 @@ not evidence of verified detector behaviour; report checks not performed.
 | Topic | State |
 |---|---|
 | Slow-control service interfaces | Deferred. When started: transport-independent, Modbus host adapters first, and each domain states which protection lives in the device and which in its controller. |
-| HV numeric targets | The SRD example (0–2000 V, sub-nA measurement) is not an acceptance limit until confirmed against hardware. |
+| HV numeric targets | The [system requirements](../requirements/system_requirements.md#7-performance) example (0–2000 V, sub-nA measurement) is not an acceptance limit until confirmed against hardware. |
 | C++ standard | Component builds decide (C++17 toolchain today); no workspace-wide standard yet. |
 | DAQ formats and timestamps | Raw-capture container, provenance and device timestamp semantics: [DAQ iteration](../../changes/2026-10-daq-iteration-1/proposal.md). |

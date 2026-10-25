@@ -1,4 +1,4 @@
-# System requirements (SRD)
+# Product and system requirements
 
 Status: draft. Product context (§1–§3) and the agreed top-level requirements (§4–§7). Each domain
 adds IDs (`SYS-NNN`, `HV-NNN`, …), numeric targets and acceptance criteria when it enters its
