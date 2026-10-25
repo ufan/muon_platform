@@ -56,7 +56,7 @@ The platform is a modular scientific instrument composed of independent technica
 - Detector and DAQ: central component of the instrument
 - High voltage supply: essential life-support for the detector
 - Gas control: another essential life-support for the detector
-- Pose/Position Sensing and motion control: deployed condition data essential for data products; in the future, an active actuator may be integrated
+- Pose/Position Sensing and motion control: deployed condition data essential for data products; active motion control is an aspiration, not a requirement
 - Environmental Sensing: environmental condition data essential both for instrument health and data products, such as atmospheric pressure, temperature and humidity
 - Central computing: brain of the instrument, coordinates all the subsystems
 - Reconstruction: directly affects data product quality and data pipeline diagnosis

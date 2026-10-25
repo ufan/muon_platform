@@ -223,7 +223,8 @@ The system shall:
 
 -   measure detector orientation
 -   provide position information
--   support future motion control
+
+Active motion control is an aspiration, not a requirement (owner, 2026-10-25).
 
 ------------------------------------------------------------------------
 

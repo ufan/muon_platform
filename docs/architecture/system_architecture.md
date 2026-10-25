@@ -44,7 +44,7 @@ These boundaries follow [ADR-003](../adr/ADR-003_instrument_service_architecture
 | Detector/front-end/FPGA and DAQ | Detector readout, device control, high-rate transport, raw capture and acquisition metadata. Hardware frames are not reconstructed host events. |
 | HV | Bias generation, voltage ramping, current monitoring and local fault protection. |
 | Gas | Gas supply, valve/flow regulation and relevant monitoring; detailed capabilities follow the gas requirements. |
-| Pose/position | Orientation and location used to interpret measurements; active motion is future scope requiring a defined boundary (§10). |
+| Pose/position | Orientation and location used to interpret measurements; active motion control is an aspiration with no requirement; define its boundary only if it becomes one. |
 | Environment | Pressure, temperature, humidity and other measured operating conditions. |
 | LV | Power support for the instrument; detailed interfaces are specified with its domain. |
 | Central computing / instrument | Service aggregation, coordination, processing runners, communications and operator access. Deterministic device control stays in domain controllers. |
@@ -212,8 +212,7 @@ These are preserved questions, not decisions introduced by consolidation:
 
 | Topic | Evidence / required resolution |
 |---|---|
-| Slow-control domain service interfaces | Bus topology and DAQ separation are decided in [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md). The HV, LV, gas, environment and pose service interfaces are next: design them transport-independent, implement first with Modbus host adapters, and state per domain which protection lives in the device and which in the domain controller. |
-| Motion-control boundary | Engineering context and SRD §6.4 combine pose sensing with future motion control. Pose measurement is established; decide ownership and safety/interfaces for future active actuation. |
+| Slow-control domain service interfaces | Bus topology and DAQ separation are decided in [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md). The HV, LV, gas, environment and pose service interfaces are deferred (owner, 2026-10-25); when started, design them transport-independent, implement first with Modbus host adapters, and state per domain which protection lives in the device and which in the domain controller. |
 | HV numerical targets | [SRD §6.2](../requirements/SRD.md) gives 0–2000 V and sub-nanoamp current measurement as an “Example target”, not an acceptance requirement. Confirm them against HV hardware evidence and assign HV requirement IDs before using them as acceptance limits. |
 | C++ standard | Earlier system text named C++20; general guidance says C++, and the developer guide lists a C++17 toolchain. Component specifications/builds govern today; record an explicit requirement before imposing a workspace-wide standard. |
 | DAQ formats and timestamps | Raw-capture container/provenance and device timestamp questions remain in the [DAQ proposal](../../changes/2026-10-daq-iteration-1/proposal.md). Do not infer answers from schematic “event” diagrams in older ADRs. |
