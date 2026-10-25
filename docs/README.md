@@ -26,7 +26,7 @@ studies are reference design notes.
 
 | # | Section | What it answers |
 |---|---|---|
-| 1 | [SRD §1](requirements/SRD.md#1-product) | What the instrument is for (narrative: [product landscape](design/product_landscape.md)) |
+| 1 | [product_landscape.md](product_landscape.md) | What the instrument is for: mission, application domains, deployment modes |
 | 2 | [requirements/](requirements/) | What the system must do (SRD, subsystem requirements) |
 | 3 | [Architecture index](architecture/readme.md) | Overview for the coarse map, system architecture for detailed design, repository model for boundaries and dependencies |
 | 4 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
@@ -50,7 +50,6 @@ studies are reference design notes.
 | [instrument.md](design/instrument.md) | proposed | Instrument layer: orchestration, operating states and policies, operator CLI, external API. |
 | [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol (COBS/protobuf RPC); not decided, see ADR-014. |
 | [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
-| [product_landscape.md](design/product_landscape.md) | reference | Product vision, use cases and deployment modes (narrative). |
 | [deployment_update_report.md](design/deployment_update_report.md) | reference | Option study behind ADR-004. |
 | [hardware_abstraction_report.md](design/hardware_abstraction_report.md) | reference | Option study behind ADR-005. |
 | [digital_twin_report.md](design/digital_twin_report.md) | reference | Option study behind ADR-007. |

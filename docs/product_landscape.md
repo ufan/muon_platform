@@ -1,6 +1,6 @@
 # Muography Instrument Product Landscape
 
-Status: reference. Product vision and use-case narrative. Requirements: [SRD](../requirements/SRD.md); architecture: [system architecture](../architecture/system_architecture.md).
+Status: reference. Product vision and use-case narrative. Requirements: [SRD](requirements/SRD.md); architecture: [system architecture](architecture/system_architecture.md).
 
 # 1. Purpose
 
@@ -289,7 +289,7 @@ Workflow:
 
 # 9–12. Architecture, hardware and software composition
 
-Removed 2026-10-25; see the [system architecture](../architecture/system_architecture.md).
+Removed 2026-10-25; see the [system architecture](architecture/system_architecture.md).
 
 ------------------------------------------------------------------------
 
