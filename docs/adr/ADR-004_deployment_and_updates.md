@@ -1,4 +1,4 @@
-# ADR-004 Deployment, updates and versions
+# ADR-004 Deployment and updates
 
 Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26)
 

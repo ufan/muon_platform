@@ -120,7 +120,7 @@ The module chain, contract owners and downstream needs are in the [architecture 
 ## 8. Deployment and technology
 
 - Develop on Linux x86_64; deploy on Linux desktops and ARM64 edge appliances, with systemd and
-  Debian packages. Atomic OTA and fleet management are later ([ADR-004](../adr/ADR-004_deployment_update_strategy.md)).
+  Debian packages. Atomic OTA and fleet management are later ([ADR-004](../adr/ADR-004_deployment_and_updates.md)).
 - Firmware: Zephyr on MCU controllers; FPGA for detector front-end processing.
 - Software: C++ and CMake, Taskflow, protobuf/gRPC, Muon EDM, Arrow/Parquet; Qt/QML, VTK and
   ParaView for visualization.
