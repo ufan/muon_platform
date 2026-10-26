@@ -1,6 +1,6 @@
 # ADR-001 Reconstruction runtime
 
-Status: Accepted (re-baselined 2026-10-25)
+Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26)
 
 ## Decision
 
