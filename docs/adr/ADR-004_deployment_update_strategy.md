@@ -1,6 +1,6 @@
 # ADR-004 Deployment, updates and versions
 
-Status: Accepted (re-baselined 2026-10-25). Option study: [deployment and update report](../design/deployment_update_report.md).
+Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26). Option study: [deployment and update report](../design/deployment_update_report.md).
 
 ## Decision
 

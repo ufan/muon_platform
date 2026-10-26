@@ -4,7 +4,7 @@
 
 Re-baselined on 2026-10-25: each ADR below states the decision in force in short form; the long
 option studies behind 004, 005, 007 and 008 are reference [design notes](../README.md#design-notes),
-and the earlier text is in git (tag `docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001, 002, 003).
+and the earlier text is in git (tag `docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001–004).
 
 | ADR | Decision | Status |
 |---|---|---|
