@@ -2,13 +2,13 @@
 
 Status: current. The project-management rules in force: how the product is developed, specified,
 changed and hardened. Procedures are in the [developer guide](developer_guide.md) and the skills
-(`.agents/skills/`); session scope is in [work discovery](../../work/README.md). Consolidated
+(`.agents/skills/`); session scope is in [work discovery](../work/README.md). Consolidated
 2026-10-26 from the retired workflow ADRs 009, 010, 012 and 013 (full text in git).
 
 ## 1. Development approach
 
 - **Bottom-up, one domain at a time**, from the coarse map in
-  [architecture overview](../architecture/architecture_overview.md). Order of the scientific chain:
+  [architecture overview](../docs/architecture/architecture_overview.md). Order of the scientific chain:
   DAQ → preprocess → recon → imaging/analysis. Hardware domains start when their iteration starts.
 - **Strangler fig:** each new domain replaces its legacy stage while the chain keeps working.
 - **Domain iteration playbook** (skill `muon-domain-iteration`): scope → legacy archaeology →
@@ -51,7 +51,7 @@ Each layer should end in something a program can check. Tests name the requireme
 - Definition of done: `muon verify` passes for changed repositories, specs and docs are updated,
   tests reference requirement IDs.
 - Decisions: consequential choices with alternatives become ADRs; small ones go to
-  [decisions.md](../decisions.md) if they pass its admission test.
+  [decisions.md](decisions.md) if they pass its admission test.
 
 ## 5. Staged rigor
 
@@ -77,7 +77,7 @@ Each layer should end in something a program can check. Tests name the requireme
 | A contract stays stable | Maturity `stable`; semver; breaking changes need an ADR |
 | Second developer or an external hardware team | CODEOWNERS; per-domain `consumes:` declarations with reverse-dependency CI; the change classes below become mandatory |
 | Several domains change in parallel | Domain-rooted workspaces (a domain repository carries a `.repos` that imports platform fragments) |
-| Second development host needs replay data routinely | Remote store for golden bytes ([ADR-011](../adr/ADR-011_test_data.md)) |
+| Second development host needs replay data routinely | Remote store for golden bytes ([ADR-011](../docs/adr/ADR-011_test_data.md)) |
 
 When a trigger fires, add the mechanism and record it in `decisions.md`.
 
@@ -92,8 +92,8 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
 
 ## 6. Repositories and workspace
 
-- Repository boundaries and dependencies: [ADR-015](../adr/ADR-015_repository_and_instrument_layering.md),
-  [repository model](../architecture/repository_model.md). Adding one: skill `muon-new-project`.
+- Repository boundaries and dependencies: [ADR-015](../docs/adr/ADR-015_repository_and_instrument_layering.md),
+  [repository model](../docs/architecture/repository_model.md). Adding one: skill `muon-new-project`.
 - **Maturity** (`.muon/repo.yml`):
 
   | Level | Meaning | Rules |
@@ -111,7 +111,7 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
 - **Legacy:** managed references live in `legacy/<dir>` (locked on disk, pushes disabled, refusing
   hooks; listed in `platform/repos/legacy.repos`); host-local trees without a remote live in
   `archive/<dir>` and are protected by the rules only. Both are recorded in the
-  [legacy inventory](../legacy_inventory.md). Never a build or runtime dependency; build out of
+  [legacy inventory](../docs/legacy_inventory.md). Never a build or runtime dependency; build out of
   tree. Knowledge from legacy code goes into the as-is spec; copied code records its source
   (repository, path, commit).
 
@@ -127,14 +127,14 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
   | State | Home |
   |---|---|
   | Rules, procedures | `AGENTS.md`, skills |
-  | Decisions | ADRs; `docs/decisions.md` (at most about 30 active entries) |
+  | Decisions | ADRs; `governance/decisions.md` (at most about 30 active entries) |
   | Work discovery, plans | `work/index.yml`; linked proposal and task records |
   | Scoped work in progress | explicit assignment and its handoff; isolated branches or worktrees |
   | Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
   | Host-local data | `testdata/golden` or `$MUON_DATA_ROOT`, `archive/` |
 
 - Tool memory is a cache only.
-- **Work discovery** ([work/README.md](../../work/README.md), skill `muon-session`): an explicit
+- **Work discovery** ([work/README.md](../work/README.md), skill `muon-session`): an explicit
   assignment comes first; the work index is orientation, not a queue, lock or approval, and may list
   several active iterations. Unassigned unattended sessions stop. Concurrent writers use isolated
   checkouts, and a designated integrator maintains shared iteration summaries. Evaluate existing

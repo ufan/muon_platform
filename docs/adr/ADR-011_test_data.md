@@ -2,7 +2,7 @@
 
 Version: 1.0
 Status: Accepted (2026-10-22); amended 2026-10-23
-Related: [ADR-008](ADR-008_data_sources_and_verification.md) (data sources), [engineering process](../workflow/engineering_process.md) (golden data in domain iterations, hardening triggers)
+Related: [ADR-008](ADR-008_data_sources_and_verification.md) (data sources), [engineering process](../../governance/engineering_process.md) (golden data in domain iterations, hardening triggers)
 
 ## Decision
 

@@ -1,7 +1,7 @@
 # Architecture overview: scientific data chain
 
 Living map of the scientific modules and the contracts between them, updated at step 0 of every
-domain iteration ([engineering process §1](../workflow/engineering_process.md#1-development-approach)). Whole-system design: [system architecture](system_architecture.md).
+domain iteration ([engineering process §1](../../governance/engineering_process.md#1-development-approach)). Whole-system design: [system architecture](system_architecture.md).
 
 ## 1. Chain
 

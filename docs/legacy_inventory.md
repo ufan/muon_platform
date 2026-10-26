@@ -1,12 +1,12 @@
 # Legacy Inventory
 
-Status: current; living document ([engineering process §6](workflow/engineering_process.md#6-repositories-and-workspace)). Last full scan: 2026-10-22; DAQ archaeology 2026-10-23.
+Status: current; living document ([engineering process §6](../governance/engineering_process.md#6-repositories-and-workspace)). Last full scan: 2026-10-22; DAQ archaeology 2026-10-23.
 
 Old code and data are kept **only to inform** new work: a source of domain knowledge and
 golden data, never a dependency of new code. During each domain iteration, the
 "legacy archaeology" step turns the relevant entries below into an as-is spec.
 
-There are two kinds, kept in two directories ([engineering process §6](workflow/engineering_process.md#6-repositories-and-workspace)):
+There are two kinds, kept in two directories ([engineering process §6](../governance/engineering_process.md#6-repositories-and-workspace)):
 
 | Kind | Directory | Declared in a manifest | Reproducible elsewhere | Read-only protection |
 |---|---|---|---|---|

@@ -1,6 +1,6 @@
 # Change Proposals
 
-Spec-driven changes to the platform ([engineering process §4](../docs/workflow/engineering_process.md#4-changes)).
+Spec-driven changes to the platform ([engineering process §4](../governance/engineering_process.md#4-changes)).
 
 A change proposal describes **deltas against the living specs**. Specs are
 project `SPEC.md` files, `contracts/`, and the platform docs. A proposal is

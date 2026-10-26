@@ -1,4 +1,4 @@
-"""muon: workspace tool of the muon platform (docs/workflow/developer_guide.md).
+"""muon: workspace tool of the muon platform (governance/developer_guide.md).
 
 This is the implementation pinned by each workspace (platform/tools/muon). Run it through the global
 `muon` launcher (package muon-workspace), which picks the implementation of the workspace you are in.

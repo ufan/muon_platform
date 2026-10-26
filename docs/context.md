@@ -23,7 +23,7 @@ More: [product and system requirements](requirements/system_requirements.md).
 | Scientific chain: modules, stages, contracts, downstream needs | [architecture/architecture_overview.md](architecture/architecture_overview.md) |
 | Repositories and dependency rules | [architecture/repository_model.md](architecture/repository_model.md) |
 | Why a decision was made | [adr/README.md](adr/README.md) |
-| How the project is developed: specs, changes, rigor, legacy | [workflow/engineering_process.md](workflow/engineering_process.md) |
+| How the project is developed: specs, changes, rigor, legacy | [governance/engineering_process.md](../governance/engineering_process.md) |
 | Proposals and research (not decisions) | [design notes](README.md#design-notes) |
 | A component's behaviour | its `SPEC.md` |
 

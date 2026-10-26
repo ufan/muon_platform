@@ -33,5 +33,5 @@ observatory control systems, ISA-88).
 ## Consequences
 
 - Shared system contracts are staged in `core/contracts/system/` and extracted to `muon_contracts`
-  when a second domain or the first instrument starts ([engineering process](../workflow/engineering_process.md#5-staged-rigor)).
+  when a second domain or the first instrument starts ([engineering process](../../governance/engineering_process.md#5-staged-rigor)).
 - The instrument's release manifest is the product bill of materials.

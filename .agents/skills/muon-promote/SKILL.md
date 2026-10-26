@@ -20,7 +20,7 @@ owning documents, and the note becomes a record that maps every section to its n
    | Required behaviour, acceptance | component spec (`<repo>/…/SPEC.md`, `specs/`) or `platform/docs/requirements/` with an ID (engineering process §3) | normative |
    | Boundary, ownership, data flow | `platform/docs/architecture/` | current |
    | Consequential choice with alternatives | new ADR (owner decides) | proposed until accepted |
-   | Small agreed decision | `platform/docs/decisions.md` | — |
+   | Small agreed decision | `platform/governance/decisions.md` | — |
    | Record or message fields | `contracts/…` README or schema | proposed until frozen |
    | Plausible but undecided rule | the owning spec, marked "proposed default (not yet decided)" | proposed |
    | Useful design detail | "Reference design (non-normative)" section of the owning spec | non-normative |
@@ -39,7 +39,7 @@ owning documents, and the note becomes a record that maps every section to its n
    the status line.
 7. **Update indexes and record it.** Update the design-note index in `platform/docs/README.md` and any
    index of the destination repositories. The commit message records the migration; add a
-   `platform/docs/decisions.md` line only for a new owner decision that passes its log test.
+   `platform/governance/decisions.md` line only for a new owner decision that passes its log test.
 8. **Verify.** Check that all relative links and anchors resolve. Use the same branch name in every
    repository you changed (`muon branch`), announce them, and run `muon verify` (skill `muon-verify`).
    Mark contract changes additive or breaking in the commit message.

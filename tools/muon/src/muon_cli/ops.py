@@ -18,7 +18,7 @@ from . import __version__, agents, legacy
 from .workspace import REPOS_FILES
 
 RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; engineering process §7
-DECISIONS_LIMIT = 30                            # active entries in docs/decisions.md; engineering process §7
+DECISIONS_LIMIT = 30                            # active entries in governance/decisions.md; engineering process §7
 
 
 def git(path, *args, check=False):
@@ -257,8 +257,8 @@ def doctor(ws, log=print):
         check(size <= limit, f"{os.path.relpath(path, ws.topdir)} {size} B (limit {limit})", "keep AGENTS.md lean (engineering process §7)")
     active = active_decisions(ws)
     if active is not None:
-        advise(active <= DECISIONS_LIMIT, f"docs/decisions.md {active} active entries (limit {DECISIONS_LIMIT})",
-               "fold entries into their home documents and docs/decisions/<year>.md (docs/decisions.md)")
+        advise(active <= DECISIONS_LIMIT, f"governance/decisions.md {active} active entries (limit {DECISIONS_LIMIT})",
+               "fold entries into their home documents and governance/decisions/<year>.md (governance/decisions.md)")
     return problems == 0
 
 
@@ -267,7 +267,7 @@ def active_decisions(ws):
     if not ws.hub:
         return None
     try:
-        text = open(os.path.join(ws.hub.abspath, "docs", "decisions.md"), encoding="utf-8").read()
+        text = open(os.path.join(ws.hub.abspath, "governance", "decisions.md"), encoding="utf-8").read()
     except OSError:
         return None
     return len(re.findall(r"^- \d{4}-\d{2}-\d{2}\b", text, re.M))

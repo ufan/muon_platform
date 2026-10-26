@@ -2,7 +2,7 @@
 
 Status: draft. Product context (§1–§3) and the agreed top-level requirements (§4–§7). Each domain
 adds IDs (`SYS-NNN`, `HV-NNN`, …), numeric targets and acceptance criteria when it enters its
-iteration ([engineering process §3](../workflow/engineering_process.md#3-requirement-ids)). How
+iteration ([engineering process §3](../../governance/engineering_process.md#3-requirement-ids)). How
 the system meets them is in the [system architecture](../architecture/system_architecture.md).
 Merged 2026-10-25 with the former `product_landscape.md` (full text in git).
 

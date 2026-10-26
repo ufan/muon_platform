@@ -12,7 +12,7 @@ A repository's own `AGENTS.md` adds local rules; if the two conflict, say so ins
 - `core/` is the scientific domain (DAQ, scientific contracts, preprocess, recon). `platform/` holds specs,
   decisions and tooling (no product code). `testdata/` is data. `legacy/` (including the old detector parameters in `legacy/config`) and `archive/` are read-only.
 - Agent primer (product, document map, invariants): `platform/docs/context.md`. Read it before
-  design work. Docs index: `platform/docs/README.md`. Small decisions: `platform/docs/decisions.md`.
+  design work. Docs index: `platform/docs/README.md`. Process, guides, decision log: `platform/governance/`.
 - Work discovery: `platform/work/index.yml`; session modes and assignments: `platform/work/README.md`.
 
 ## Reading path
@@ -40,7 +40,7 @@ the documents relevant to the change. Flag unresolved conflicts instead of silen
 - Run `muon verify <repo>` before claiming done (skill `muon-verify`). Name tests after requirement IDs.
 - Never push, create remotes, delete branches or run destructive commands without the user's confirmation.
 - `support` repositories (study, testdata, tools) change only on explicit request.
-- Durable decisions go in an ADR or, if they pass its log test, `platform/docs/decisions.md`; never only in tool memory.
+- Durable decisions go in an ADR or, if they pass its log test, `platform/governance/decisions.md`; never only in tool memory.
 - Respect the architecture: hardware stays behind domain services; algorithms use EDM objects and immutable
   conditions; online and offline share code; raw data is immutable and every scientific product is traceable;
   Linux ARM64 stays supported.

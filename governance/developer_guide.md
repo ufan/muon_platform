@@ -4,7 +4,7 @@ Status: current.
 
 How to work in the muon platform workspace, for the human developer and for AI agents.
 The rules behind it are in the [engineering process](engineering_process.md).
-Procedures exist once, as skills in [`.agents/skills/`](../../.agents/skills/). This guide links to them.
+Procedures exist once, as skills in [`.agents/skills/`](../.agents/skills/). This guide links to them.
 
 ## 1. New host setup
 
@@ -59,9 +59,9 @@ The repository list is `platform/repos/workspace.repos` and `platform/repos/lega
 
 ## 3. Daily loop
 
-Follow the [session skill](../../.agents/skills/muon-session/SKILL.md) and
-[work discovery/scope protocol](../../work/README.md). Start from an explicit assignment or the
-user's current request; the [work index](../../work/index.yml) is orientation, not a global queue.
+Follow the [session skill](../.agents/skills/muon-session/SKILL.md) and
+[work discovery/scope protocol](../work/README.md). Start from an explicit assignment or the
+user's current request; the [work index](../work/index.yml) is orientation, not a global queue.
 Discussion needs no writes. For changes, inspect workspace status, work within the assigned scope,
 verify affected repositories and commit scoped changes. Hand off to the relevant task or integrator;
 only iteration work updates that iteration's pending actions. Pushing needs the owner's confirmation.
@@ -78,7 +78,7 @@ While prototyping (engineering process §5):
 - Use the same branch name in each repository: `muon branch <topic> core platform`.
 - Agents may edit any repository, but must **announce** every repository they touched outside their starting one.
 - Contracts used only by core stay in core and change in the same commit as their consumer.
-- System contracts are drafted in `core/contracts/system/`. Record notable decisions in `docs/decisions.md`.
+- System contracts are drafted in `core/contracts/system/`. Record notable decisions in `governance/decisions.md`.
 - Run `muon status` before pushing, so that no repository is left dirty or on an unexpected branch.
 
 A change proposal (`changes/`, skill `muon-new-change`) is optional. Write one to record a decision, or
@@ -108,7 +108,7 @@ the first instrument release (engineering process §5).
 
 ## 7. Adding repositories
 
-Skill `muon-new-project`. Apply the split test ([ADR-015](../adr/ADR-015_repository_and_instrument_layering.md)): a new repository is justified only when
+Skill `muon-new-project`. Apply the split test ([ADR-015](../docs/adr/ADR-015_repository_and_instrument_layering.md)): a new repository is justified only when
 the toolchain, lifecycle or audience differs. Otherwise add a directory to an existing repository. Add the
 repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and `AGENTS.md` (template:
 `templates/project/`).
@@ -120,7 +120,7 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 - **Never** edit, `chmod`, commit, push or build inside `legacy/` or `archive/`. To run legacy code,
   build out of tree in `$(muon legacy build-dir <name>)`.
 - Adding a legacy reference: an entry in `platform/repos/legacy.repos` with
-  `muon: {maturity: legacy, informs: [...]}`, and a row in [legacy_inventory.md](../legacy_inventory.md).
+  `muon: {maturity: legacy, informs: [...]}`, and a row in [legacy_inventory.md](../docs/legacy_inventory.md).
   Trees without a remote go to `archive/` (host-local, not managed).
 
 ## 9. Working with AI agents
@@ -132,7 +132,7 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
   load `platform/AGENTS.md` from outside the git root; agy also needs `read_file(<workspace>)` and
   `command(muon status)` in its host settings (`muon doctor` checks the first).
 - **Keep the rules lean.** `muon doctor` checks the size limits. Put details in skills or docs.
-- **One fact, one home.** Decisions go in an ADR, or in `docs/decisions.md` if they pass its log test (folded entries move to `docs/decisions/<year>.md`); iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
+- **One fact, one home.** Decisions go in an ADR, or in `governance/decisions.md` if they pass its log test (folded entries move to `governance/decisions/<year>.md`); iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
 - **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
   task scopes and an integrator (see the work scope protocol).
@@ -144,4 +144,4 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 ## 10. Hardening
 
 When a hardening trigger in [engineering process §5](engineering_process.md#5-staged-rigor) fires (second domain, first release, second developer, …), add the
-listed mechanism and record it in `docs/decisions.md`.
+listed mechanism and record it in `governance/decisions.md`.

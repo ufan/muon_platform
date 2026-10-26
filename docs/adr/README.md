@@ -31,18 +31,18 @@ original form; ADR-015 restates the repository layering of the retired ADR-012.
 | 013 | Work discovery and session scope | Retired 2026-10-26 |
 
 Project-management rules from 006, 009, 010, 012 and 013 now live in the
-[engineering process](../workflow/engineering_process.md); their text is in git. Numbers are not reused.
+[engineering process](../../governance/engineering_process.md); their text is in git. Numbers are not reused.
 
 ## Maintaining the record
 
 - Use ADRs for consequential choices with alternatives and lasting implications. Keep small
-  decisions in [decisions.md](../decisions.md) and implementation details in component docs.
+  decisions in [decisions.md](../../governance/decisions.md) and implementation details in component docs.
 - Edit proposed ADRs during review. Correct wording, links and factual errors in place; record
   meaningful clarifications in a revision note.
 - For a material change to an accepted decision, add a new ADR. Identify the exact decisions or
   sections it supersedes, and add reciprocal links to the affected ADRs. Preserve their rationale.
 - Platform ADR numbers are unqualified (`ADR-006`). A repository's own decision records keep their
-  numbering and are qualified outside that repository, like requirement IDs ([engineering process §3](../workflow/engineering_process.md#3-requirement-ids)):
+  numbering and are qualified outside that repository, like requirement IDs ([engineering process §3](../../governance/engineering_process.md#3-requirement-ids)):
   `daq:ADR-006` is the DAQ decision on online event building, not platform ADR-006.
 - Distinguish related or extending decisions from replacement. For partial supersession, state
   what remains in force; a later number alone does not override earlier text.

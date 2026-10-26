@@ -17,7 +17,7 @@ description: Use when adding a repository (domain, instrument, support or legacy
    or on each other.
 5. Add an entry to `platform/repos/workspace.repos`, then run `muon ws sync`, `muon verify <name>` and
    `muon agents sync`.
-6. Commit in `platform` with the reason. Add a line to `docs/decisions.md` only if the rationale is not
+6. Commit in `platform` with the reason. Add a line to `governance/decisions.md` only if the rationale is not
    recorded elsewhere (its log test). Do not push without confirmation.
 
 ## Legacy reference
