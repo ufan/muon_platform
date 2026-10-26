@@ -5,6 +5,6 @@ iterations:
   - id: daq-iteration-1
     domain: daq
     status: active
-    proposal: platform/changes/2026-10-daq-iteration-1/proposal.md
-    tasks: platform/changes/2026-10-daq-iteration-1/tasks.md
+    proposal: platform/iterations/2026-10-daq-iteration-1/proposal.md
+    tasks: platform/iterations/2026-10-daq-iteration-1/tasks.md
 # Preprocess is planned next, but has no iteration record yet.

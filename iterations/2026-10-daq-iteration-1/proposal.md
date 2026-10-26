@@ -1,6 +1,6 @@
 # DAQ iteration 1: fx3/gen1 acquisition service
 
-Status: draft
+Status: active
 Playbook step: 1 (legacy archaeology). Step 0 is done in `docs/architecture/architecture_overview.md`.
 Owner: project owner
 Affected repositories: `core` (`daq/`, `contracts/`; active); references: `legacy/usb_app2`, `legacy/muon400_process` (`src/fx3`)

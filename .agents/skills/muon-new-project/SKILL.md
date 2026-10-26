@@ -13,6 +13,8 @@ description: Use when adding a repository (domain, instrument, support or legacy
 3. Copy `platform/templates/project/` and fill in the placeholders. Write `.muon/repo.yml` with `maturity`
    (normally `incubating`), `role`, `spec` and `verify`. The verify command is a plain shell command run
    from the repo root, with no workspace tool. Internal tooling (west, Conan, pixi, …) is the repository's own choice.
+   Fill in `openspec/config.yaml` and run `openspec init --tools <tools>` (developer guide §1). Capabilities
+   stay in exploration until their first spec is approved (engineering process §4).
 4. Respect the dependency rules (ADR-015, repository model): domains depend only on system contracts, and never on core
    or on each other.
 5. Add an entry to `platform/repos/workspace.repos`, then run `muon ws sync`, `muon verify <name>` and

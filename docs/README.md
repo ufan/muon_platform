@@ -17,7 +17,7 @@ Every document states its status under the title:
 | `reference` | Background or dated research. |
 | `historical` | Kept for rationale; names its current home. |
 
-Design-note content becomes baseline through skill `muon-promote` (see the [developer guide](../governance/developer_guide.md#5-prototype--baseline)).
+Design-note content becomes baseline through skill `muon-promote` (see the [developer guide](../governance/developer_guide.md#5-exploration--baseline--controlled)).
 
 ADRs carry their own status (proposed, accepted, partly superseded); see the [ADR index](adr/README.md).
 Only `current` documents, accepted ADRs and component specifications bind implementation.
@@ -50,5 +50,5 @@ guides live in [`governance/`](../governance/README.md).
 | [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
 
 Outside `docs/`, the platform repository holds the workspace machinery: `repos/` (the repositories, in vcs2l
-format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `changes/` (change
-records), `templates/` (new-repository skeleton) and `.agents/skills/` (playbook skills). See the [engineering process](../governance/engineering_process.md).
+format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `iterations/` (system-level
+plans), `templates/` (new-repository skeleton) and `.agents/skills/` (playbook skills). See the [engineering process](../governance/engineering_process.md).

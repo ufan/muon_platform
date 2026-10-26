@@ -53,7 +53,6 @@ Skills live in `platform/.agents/skills/` (linked for every tool by `muon agents
 - `muon-domain-iteration`
 - `muon-legacy-archaeology`
 - `muon-new-project`
-- `muon-new-change` (optional)
 - `muon-promote`
 
 Tools without skill support read the `SKILL.md` files directly.
