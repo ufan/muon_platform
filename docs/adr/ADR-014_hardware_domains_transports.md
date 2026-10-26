@@ -35,7 +35,7 @@ ADR-003 fixes the service and controller layers; this ADR decides how controller
 | Next | Custom HV/LV/gas boards with on-board domain controllers, also Modbus RTU | planned |
 | Later | IMB protocol for custom controllers, then IMB on CAN-FD | aspiration; not designed, no trigger |
 
-Not decided here: the IMB protocol (the [management-bus draft](../design/instrument_management_bus.md)
+Not decided here: the IMB protocol (the [management-bus draft](../notes/instrument_management_bus.md)
 is an input, not a baseline); the device-map format, Modbus library and adapter code structure (the
 instrument iteration).
 

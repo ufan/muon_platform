@@ -8,7 +8,7 @@ changed and hardened. Procedures are in the [developer guide](developer_guide.md
 ## 1. Development approach
 
 - **Bottom-up, one domain at a time**, from the coarse map in
-  [architecture overview](../docs/architecture/architecture_overview.md). Order of the scientific chain:
+  [scientific data path](../docs/architecture/system_architecture.md#5-scientific-data-path). Order of the scientific chain:
   DAQ → preprocess → recon → imaging/analysis. Hardware domains start when their iteration starts.
 - **Strangler fig:** each new domain replaces its legacy stage while the chain keeps working.
 - **Domain iteration playbook** (skill `muon-domain-iteration`): scope → legacy archaeology →
@@ -114,7 +114,7 @@ OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt
 
 - **Iterations** (`iterations/`, skill `muon-domain-iteration`) plan and order work across
   repositories; their tasks link the component changes that carry them out.
-- Requirements, architecture and governance change by commits the owner approves. Design notes are
+- Requirements, architecture and governance change by commits the owner approves. Notes (`docs/notes/`) are
   promoted with skill `muon-promote`.
 
 ### Rules for every change

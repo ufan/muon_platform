@@ -20,11 +20,11 @@ More: [product and system requirements](requirements/system_requirements.md).
 |---|---|
 | What the product must do; applications, deployment modes | [requirements/system_requirements.md](requirements/system_requirements.md) |
 | How the system is built: domains, planes, data path, conditions | [architecture/system_architecture.md](architecture/system_architecture.md) |
-| Scientific chain: modules, stages, contracts, downstream needs | [architecture/architecture_overview.md](architecture/architecture_overview.md) |
+| Scientific chain: modules, stages, contracts, downstream needs | [system architecture §5](architecture/system_architecture.md#5-scientific-data-path) |
 | Repositories and dependency rules | [architecture/repository_model.md](architecture/repository_model.md) |
 | Why a decision was made | [adr/README.md](adr/README.md) |
 | How the project is developed: specs, changes, rigor, legacy | [governance/engineering_process.md](../governance/engineering_process.md) |
-| Proposals and research (not decisions) | [design notes](README.md#design-notes) |
+| Proposals and research (not decisions) | [notes](README.md#notes) |
 | A component's requirements, architecture and behaviour | its `SPEC.md`; behaviour specs in its `openspec/specs/` (system and component levels: [engineering process §2](../governance/engineering_process.md#2-specification-levels)) |
 
 Authority comes from each document's declared status and scope and from explicit supersession, not

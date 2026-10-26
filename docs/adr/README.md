@@ -9,16 +9,35 @@ alternatives where they mattered; the earlier long text and option studies are i
 `docs-pre-cleanup`). All were confirmed by the owner on 2026-10-26 (005 merged into 003). ADR-011 keeps its
 original form; ADR-015 restates the repository layering of the retired ADR-012.
 
+Grouped by topic; numbers are permanent identifiers and are never reused or renumbered.
+
+### Scientific processing and data
+
 | ADR | Decision | Status |
 |---|---|---|
 | [001](ADR-001_reconstruction_runtime.md) | Reconstruction is an in-process DAG (Taskflow), not services | Accepted |
 | [002](ADR-002_muon_edm_serialization.md) | Muon EDM is the scientific contract; serialization outside algorithms | Accepted |
-| [003](ADR-003_hardware_domains_services_and_controllers.md) | Hardware domains: services and controllers. gRPC domain services over controllers that own control and safety; DAQ on a dedicated link | Accepted |
-| [004](ADR-004_deployment_and_updates.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
-| [007](ADR-007_digital_twin.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_data_sources_and_verification.md) | Offline data for components, live and replay for the online pipeline; no physics simulation | Accepted |
 | [011](ADR-011_test_data.md) | Versioned, immutable test datasets; bytes host-local, catalog in git | Accepted; amended 2026-10-23 |
+
+### Hardware domains
+
+| ADR | Decision | Status |
+|---|---|---|
+| [003](ADR-003_hardware_domains_services_and_controllers.md) | Hardware domains: services and controllers. gRPC domain services over controllers that own control and safety; DAQ on a dedicated link | Accepted |
 | [014](ADR-014_hardware_domains_transports.md) | Hardware domains: slow-control transports. Device map, bus owner per port, Modbus RTU now | Accepted |
+
+### Product and deployment
+
+| ADR | Decision | Status |
+|---|---|---|
+| [007](ADR-007_digital_twin.md) | Layered product architecture with a digital twin | Accepted |
+| [004](ADR-004_deployment_and_updates.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
+
+### Repositories
+
+| ADR | Decision | Status |
+|---|---|---|
 | [015](ADR-015_repository_and_instrument_layering.md) | One repository per domain; an instrument layer coordinates; dependencies point one way | Accepted |
 
 ## Retired

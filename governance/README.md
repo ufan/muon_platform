@@ -1,7 +1,7 @@
 # Governance
 
 Status: current (index). How the project is developed and managed. Product documentation
-(requirements, architecture, ADRs, design notes) is in [`docs/`](../docs/README.md).
+(requirements, architecture, ADRs, notes) is in [`docs/`](../docs/README.md).
 
 | Document | Kind | What it answers |
 |---|---|---|

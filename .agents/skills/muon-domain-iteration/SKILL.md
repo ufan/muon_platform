@@ -9,10 +9,10 @@ Steps (engineering process §1). Each step has an output; do not skip ahead with
 
 | Step | Output | Who decides |
 |---|---|---|
-| 0 Scope | domain boundary and downstream needs in `platform/docs/architecture/architecture_overview.md`; list the proposed design notes that touch the domain (skill `muon-promote`, step 1) | user |
+| 0 Scope | domain boundary and downstream needs in `platform/docs/architecture/system_architecture.md` §5; list the proposed notes that touch the domain (skill `muon-promote`, step 1) | user |
 | 1 Archaeology | `as-is.md` (skill `muon-legacy-archaeology`) | agent drafts, user corrects |
 | 2 Golden data | `golden-data.md`, fixtures in the project's `tests/` | agent |
-| 3 To-be spec (baseline) | for each capability: the first OpenSpec change in its component repository, creating its spec from what exploration and archaeology taught (engineering process §4); provisional contracts; port / refactor / rewrite decision; content from the listed design notes promoted with skill `muon-promote` | user approves each change |
+| 3 To-be spec (baseline) | for each capability: the first OpenSpec change in its component repository, creating its spec from what exploration and archaeology taught (engineering process §4); provisional contracts; port / refactor / rewrite decision; content from the listed notes promoted with skill `muon-promote` | user approves each change |
 | 4 Skeleton | interfaces and failing contract/golden tests | agent |
 | 5 Implement | code, through approved OpenSpec changes once a capability is baselined | agents (separate worktrees) |
 | 6 Differential verify | golden comparison passes; deviations documented in the spec (an OpenSpec change if behaviour is decided) | agent + user |

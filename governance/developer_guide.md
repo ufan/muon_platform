@@ -108,7 +108,7 @@ Each capability passes through three stages (engineering process §4):
    tooling, docs and fixes that restore the spec are ordinary commits.
 
 At the system level, decisions go to ADRs or `governance/decisions.md`, plans to iterations, and
-requirement or architecture changes are commits the owner approves. Design notes (`docs/design/`,
+requirement or architecture changes are commits the owner approves. Notes (`docs/notes/`,
 brainstorms) become baseline by restating their content in the owning document and turning the note
 into a mapping record: skill `muon-promote`.
 
