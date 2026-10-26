@@ -14,8 +14,8 @@ are not claims of implementation; component specifications state what exists.
 - Control, scientific data and telemetry are separate planes (§4). Sensor data reaches algorithms
   only as immutable conditions.
 - Raw data is immutable, and every scientific product is traceable to its inputs (§6).
-- Live, replayed and simulated acquisition feed one raw-stream contract; online and offline
-  processing share code ([ADR-008](../adr/ADR-008_simulation_verification_replay.md)).
+- Live and replayed acquisition feed one raw-stream contract; online and offline processing share
+  code ([ADR-008](../adr/ADR-008_replay_and_verification.md)).
 - Algorithms exchange Muon EDM objects inside a DAG runtime, not through services
   ([ADR-001](../adr/ADR-001_reconstruction_runtime.md), [ADR-002](../adr/ADR-002_muon_edm_serialization.md)).
 - Linux ARM64 stays supported.
@@ -104,17 +104,17 @@ The module chain, contract owners and downstream needs are in the [architecture 
   version and parameters, conditions snapshot ID and hash, and time. A conditions override keeps
   both identities.
 
-## 7. Replay, simulation and digital twin
+## 7. Replay and digital twin
 
-- Replay and simulation produce the same raw-stream contract as live acquisition. Decoding,
+- Replay produces the same raw-stream contract as live acquisition. Decoding,
   validation, event building, schemas and publishing are identical in every mode; only the source
   adapter's pacing, clock, backpressure and sink policies differ, and they are recorded in metadata
   ([acquisition sources](../../../core/daq/doc/specs/acquisition-sources.md)).
 - Golden datasets are versioned and immutable ([ADR-011](../adr/ADR-011_test_data.md)).
-- Simulation (Geant4 plus fast detector response) produces DAQ-format output and synthetic truth.
-  It does not replace hardware acceptance.
+- Physics simulation is not part of this project; a separate simulation project could feed the
+  pipeline only through the raw-stream contract. Hardware domain simulators and fakes remain (§3).
 - The digital twin links object geometry, detector deployment, products, density fields and
-  interpretation, with consistent model identities across simulation, reconstruction and display
+  interpretation, with consistent model identities across reconstruction and display
   ([ADR-007](../adr/ADR-007_digital_twin_strategy.md)).
 
 ## 8. Deployment and technology
@@ -128,8 +128,8 @@ The module chain, contract owners and downstream needs are in the [architecture 
 
 ## 9. Verification
 
-Requirements trace to unit and contract tests, replay/golden comparisons, simulation and
-hardware-in-the-loop tests. Tests name the requirement IDs they cover. A passing build or replay is
+Requirements trace to unit and contract tests, replay/golden comparisons, domain-simulator
+integration and hardware-in-the-loop tests. Tests name the requirement IDs they cover. A passing build or replay is
 not evidence of verified detector behaviour; report checks not performed.
 
 ## 10. Open points

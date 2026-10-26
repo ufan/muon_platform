@@ -23,7 +23,6 @@ The device ↔ host wire protocol belongs to the DAQ hardware reference (`core/d
 | recon | Build events and reconstruct hits, clusters and tracks from validated records and conditions. |
 | imaging | Convert tracks and flux into opacity or density products. |
 | analysis | Validate, calibrate and study outputs. |
-| simulation | Synthetic truth, detector response and DAQ-format input. |
 | conditions | Resolve geometry, mapping, alignment, calibration and telemetry intervals into immutable snapshots. |
 
 ## 2. Downstream needs
@@ -39,6 +38,6 @@ Checked before an upstream contract is frozen.
 
 ## 3. Boundary test for a new module
 
-Is it about bytes, records, events, tracks, studies, images or simulated truth? Does it produce or
+Is it about bytes, records, events, tracks, studies or images? Does it produce or
 consume a canonical contract? Can it run online, or only offline? If it spans more than one layer,
 the boundary is too wide.

@@ -1,6 +1,6 @@
 # ADR-007 Digital twin
 
-Status: Accepted (re-baselined 2026-10-25)
+Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26)
 
 ## Decision
 
@@ -10,7 +10,7 @@ Status: Accepted (re-baselined 2026-10-25)
 - The digital twin links the physical object model, detector deployment, measurement products,
   density field and engineering interpretation.
 - Geometry is independent of visualization code, and model identities are the same across
-  simulation, reconstruction and display.
+  reconstruction and display.
 
 ## Why
 

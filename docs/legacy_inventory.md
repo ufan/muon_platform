@@ -53,7 +53,7 @@ the `testdata` project (`muon_testdata`, ADR-011) as placeholder versions.
 
 | Project | What it is | Future home |
 |---|---|---|
-| `tools/muon_tools`, `tools/rate_estimate` | ADC level tool, rate estimation | tools / simulation |
+| `tools/muon_tools`, `tools/rate_estimate` | ADC level tool, rate estimation | tools |
 | `study/` | studies and timeline | research |
 | `testdata/` | versioned test datasets (ADR-011) | — |
 

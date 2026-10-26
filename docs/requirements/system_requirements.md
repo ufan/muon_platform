@@ -57,9 +57,8 @@ The system shall:
    temperature, humidity);
 5. reconstruct hits, clusters and tracks, and produce rates, angular distributions and inputs for
    density reconstruction;
-6. process live, replayed and simulated data identically;
-7. simulate the detector and produce synthetic data in the real acquisition format;
-8. record, for every scientific product, the instrument, firmware, detector configuration, geometry,
+6. process live and replayed data identically;
+7. record, for every scientific product, the instrument, firmware, detector configuration, geometry,
    calibration, algorithm and software versions, and time.
 
 ## 5. Operation and lifecycle

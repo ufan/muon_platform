@@ -18,8 +18,9 @@ Repository boundaries, dependency directions and contract ownership. Binding; ra
 | `study/`, `tools/*` | Support; changed only on explicit request. |
 | `legacy/*`, `archive/*` | Read-only references, never dependencies ([legacy inventory](../legacy_inventory.md)). |
 
-Also planned outside core: detector front-end firmware, simulation and offline applications
-(imaging/density, data platform, digital twin). They use core packages and contracts, never copies.
+Also planned outside core: detector front-end firmware and offline applications (imaging/density,
+data platform, digital twin). Physics simulation is a separate project, not part of this platform
+(ADR-008). They use core packages and contracts, never copies.
 
 ## Dependencies
 
