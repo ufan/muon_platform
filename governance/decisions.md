@@ -27,5 +27,6 @@ Fold entries at the end of each domain iteration, or when `muon doctor` warns (m
 
 ## Active decisions
 
+- 2026-10-26 [process] Pilot OpenSpec (1.4.1) as the change and behavioural-spec mechanism before adopting it: per-repository `openspec/`, a forked muon schema, and our own owner-only `approved` gate (OpenSpec has none). ADRs, architecture and `governance/` stay outside it; `changes/` remains the record until the pilot is judged. Home: log-only.
 - 2026-10-21 [workflow] Development is bottom-up, one domain at a time: DAQ first (rewrite from spec; legacy is reference only), then preprocess. Home: log-only.
 - 2026-10-21 [repos] GitHub (`ufan`) is the default remote; legacy and support repositories may keep gitee or other remotes. Home: log-only.
