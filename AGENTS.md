@@ -26,7 +26,7 @@ the documents relevant to the change. Flag unresolved conflicts instead of silen
 ## Session protocol (skill `muon-session`)
 
 - **Start:** follow the explicit assignment first; otherwise use the work index for orientation.
-- **End:** hand off only the scoped work; verify and commit changes. Discussion alone needs no writes.
+- **End:** verify, then commit your own scoped changes (format: `platform/governance/engineering_process.md` §4).
 - Follow `muon-session`; the index does not assign work or grant approval.
 
 ## Hard rules

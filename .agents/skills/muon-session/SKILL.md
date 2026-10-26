@@ -30,7 +30,8 @@ description: Orient and hand off muon workspace sessions, including discussion, 
 ## End
 
 1. For changed repositories, run `muon verify <repo>` (skill `muon-verify`), inspect the scoped diff
-   and commit only this session's changes. No mandatory writes or commits for discussion alone.
+   and commit only this session's changes, in the commit format of
+   `governance/engineering_process.md` §4. No mandatory writes or commits for discussion alone.
 2. Hand off to the destination specified by the assignment. Workers report task ID, commits,
    verification, blockers and pending approvals; only the integrator updates shared summaries.
    For human-directed iteration work, keep its `tasks.md` `## Next` focused on pending actions,

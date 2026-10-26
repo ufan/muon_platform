@@ -50,6 +50,18 @@ Each layer should end in something a program can check. Tests name the requireme
 - **Agents draft; the owner approves** requirements, ADRs, contract changes and merges to platform docs.
 - Definition of done: `muon verify` passes for changed repositories, specs and docs are updated,
   tests reference requirement IDs.
+- **Agents commit their own work.** After `muon verify` passes, the agent that made a scoped change
+  commits it in each changed repository, on the task branch, and only its own changes (never another
+  session's). Committing is not publishing: pushing, merging to `main` and deleting branches still
+  need the owner's confirmation.
+- **Commit format** (all tools; not Conventional Commits, so no `feat(...)!:` types):
+  - Subject `<scope>: <summary>`, at most 72 characters, no trailing period. The scope is the area
+    changed: a module (`daq`), tool (`muon`), document area (`docs`, `governance`), file
+    (`AGENTS.md`) or mechanism (`openspec`). The summary says what changes.
+  - Body, unless trivial: why, wrapped at about 100 columns, citing requirement IDs, ADRs and the
+    change or task. Contract changes say `additive` or `breaking`; a breaking interface change
+    starts a body line with `BREAKING:`. An approval made on the owner's instruction quotes it.
+  - Commits made by an AI tool end with `Co-Authored-By: <tool or model> <noreply address>`.
 - Decisions: consequential choices with alternatives become ADRs; small ones go to
   [decisions.md](decisions.md) if they pass its admission test.
 
