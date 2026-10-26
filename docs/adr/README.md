@@ -13,7 +13,7 @@ alternatives where they mattered; the earlier long text and option studies are i
 | [003](ADR-003_hardware_domains_services_and_controllers.md) | Hardware domains: services and controllers. gRPC domain services over controllers that own control and safety; DAQ on a dedicated link | Accepted |
 | [004](ADR-004_deployment_and_updates.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
 | 005 | Domain controllers | Merged into 003 (2026-10-26) |
-| [007](ADR-007_digital_twin_strategy.md) | Layered product architecture with a digital twin | Accepted |
+| [007](ADR-007_digital_twin.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_data_sources_and_verification.md) | Offline data for components, live and replay for the online pipeline; no physics simulation | Accepted |
 | [014](ADR-014_hardware_domains_transports.md) | Hardware domains: slow-control transports. Device map, bus owner per port, Modbus RTU now | Accepted |
 

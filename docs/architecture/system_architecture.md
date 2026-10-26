@@ -118,7 +118,7 @@ The module chain, contract owners and downstream needs are in the [architecture 
   pipeline only through the raw-stream contract. Hardware domain simulators and fakes remain (§3).
 - The digital twin links object geometry, detector deployment, products, density fields and
   interpretation, with consistent model identities across reconstruction and display
-  ([ADR-007](../adr/ADR-007_digital_twin_strategy.md)).
+  ([ADR-007](../adr/ADR-007_digital_twin.md)).
 
 ## 8. Deployment and technology
 
