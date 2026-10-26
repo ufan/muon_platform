@@ -13,7 +13,7 @@ Status: Accepted (re-baselined 2026-10-25; revised and confirmed by owner 2026-1
   ordering, backpressure, event building) without hardware.
 - Physics simulation (detector Monte Carlo such as Geant4) is not part of this project; offline
   and replayed data drive reconstruction algorithm development.
-- Hardware domain simulators and fakes stay ([ADR-003](ADR-003_hardware_domains.md)); they are the
+- Hardware domain simulators and fakes stay ([ADR-003](ADR-003_hardware_domains_services_and_controllers.md)); they are the
   integration-test infrastructure for domain services and the instrument.
 - Verification layers: unit and contract tests, offline-dataset regression against golden data,
   online-pipeline replay, domain-simulator integration tests and hardware-in-the-loop tests.

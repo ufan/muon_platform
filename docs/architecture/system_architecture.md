@@ -7,7 +7,7 @@ are not claims of implementation; component specifications state what exists.
 ## 1. Principles
 
 - Hardware stays behind domain services. Applications and orchestration never address devices
-  ([ADR-003](../adr/ADR-003_hardware_domains.md), [ADR-014](../adr/ADR-014_slow_control_transports.md)).
+  ([ADR-003](../adr/ADR-003_hardware_domains_services_and_controllers.md), [ADR-014](../adr/ADR-014_hardware_domains_transports.md)).
 - Domain controllers own deterministic control, safety and interlocks; central software orchestrates.
 - The instrument commands every domain, core included; core never commands another domain
   ([ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md)).
@@ -61,7 +61,7 @@ Application -> instrument -> domain service API
   controller form changes.
 - Service interfaces use protobuf/gRPC. Other messaging (Zenoh, ZeroMQ) needs a demonstrated use.
 - DAQ uses a dedicated high-rate link (USB today) and is never on a slow-control bus.
-- Slow control ([ADR-014](../adr/ADR-014_slow_control_transports.md)): devices are Modbus
+- Slow control ([ADR-014](../adr/ADR-014_hardware_domains_transports.md)): devices are Modbus
   RTU slaves on host RS-485 ports. A versioned device map assigns each device to a domain and
   transport, so port count, port names and grouping are configuration. One bus owner serialises each
   port. A custom protocol and CAN-FD are later aspirations.

@@ -1,8 +1,8 @@
-# ADR-014 Slow-control transports
+# ADR-014 Hardware domains: slow-control transports
 
 Status: Accepted (2026-10-25; owner answers in discussion). Refactored 2026-10-26 to remove overlap
-with ADR-003; the decision is unchanged.
-Related: [ADR-003](ADR-003_hardware_domains.md) (domain services and controllers, DAQ link)
+with ADR-003; the decision is unchanged. Content confirmed by owner 2026-10-26.
+Related: [ADR-003](ADR-003_hardware_domains_services_and_controllers.md) (domain services and controllers, DAQ link)
 
 ## Context
 

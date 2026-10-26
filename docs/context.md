@@ -83,7 +83,7 @@ Hardware
 
 Domain controllers are peer subsystems with deterministic control, safety and interlocks, behind stable domain service interfaces. A domain controller is either a host software adapter or an on-board controller. Hardware details must remain isolated behind services.
 
-DAQ is separate: control and scientific data use a dedicated link (USB today), never a slow-control bus. Slow control follows [ADR-014](adr/ADR-014_slow_control_transports.md): devices are Modbus RTU slaves on host RS-485 ports (three today, possibly fewer on a future single-board computer), grouped by assembly convenience; a versioned device map assigns them to domains, so ports and grouping are configuration. Custom HV/LV/gas boards start on Modbus RTU; a custom protocol and CAN-FD are later aspirations. Design domain service interfaces so that none of these changes affects them.
+DAQ is separate: control and scientific data use a dedicated link (USB today), never a slow-control bus. Slow control follows [ADR-014](adr/ADR-014_hardware_domains_transports.md): devices are Modbus RTU slaves on host RS-485 ports (three today, possibly fewer on a future single-board computer), grouped by assembly convenience; a versioned device map assigns them to domains, so ports and grouping are configuration. Custom HV/LV/gas boards start on Modbus RTU; a custom protocol and CAN-FD are later aspirations. Design domain service interfaces so that none of these changes affects them.
 
 Preferred service technologies are protobuf and gRPC. Zenoh/ZeroMQ may be used where distributed communication is required.
 
