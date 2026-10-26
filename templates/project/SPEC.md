@@ -6,6 +6,7 @@ Entry point for the specification (platform engineering process §2). Index only
 |---|---|
 | Requirements (IDs `FR-NNN`; platform-qualified as `<name>:FR-NNN`) | `doc/requirements.md` |
 | Architecture and decisions | `doc/architecture.md` |
+| Behaviour specs (one per capability; changes in `openspec/changes/`) | `openspec/specs/` |
 | Contracts | system contracts (`muon_contracts`, or `core/contracts/system` before extraction; platform ADR-015) |
 | Legacy references | see `AGENTS.md` and `platform/docs/legacy_inventory.md` |
 

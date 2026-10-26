@@ -40,6 +40,19 @@ Releasing a new launcher version, and keeping it compatible with the implementat
 `read_file(<workspace path>)` (and the same path via any symlink you use), plus `command(muon status)`.
 Codex needs nothing extra. Start it at the workspace root when a task spans several repositories.
 
+**OpenSpec** (behaviour specs and changes in component repositories, engineering process §4) needs
+Node.js. Install the workspace version and turn telemetry off:
+
+```sh
+npm install -g @fission-ai/openspec@1.15.0
+openspec config set telemetry.enabled false --allow-unknown
+```
+
+In each component repository with an `openspec/` folder, run `openspec init --tools <your tools>`
+once per host; it generates the per-tool skills and `/opsx:*` commands (git-ignored). Upgrade on
+purpose, not in passing: read the release notes, run `openspec update --dry-run`, then update this
+version line.
+
 **Golden test data** is local to each host and is not in git (ADR-011). Copy or move
 `testdata/golden/` from another host (rsync), or set `data_root` in `.muon/workspace.yml`
 (`MUON_DATA_ROOT` overrides it). `muon doctor` and `muon which` report where it looks.
@@ -81,20 +94,23 @@ While prototyping (engineering process §5):
 - System contracts are drafted in `core/contracts/system/`. Record notable decisions in `governance/decisions.md`.
 - Run `muon status` before pushing, so that no repository is left dirty or on an unexpected branch.
 
-A change proposal (`changes/`, skill `muon-new-change`) is optional. Write one to record a decision, or
-to promote a prototype into the spec baseline (engineering process §4).
+Behaviour that spans repositories is one OpenSpec change per repository, linked from the iteration
+task; a change that depends on another says `Depends on: <repo>/<change>` and is archived after it.
 
-## 5. Prototype → baseline
+## 5. Exploration → baseline → controlled
 
-Prototype freely inside a repository (prototype lane, engineering process §4). When the behaviour should become
-the baseline:
-1. write the specification delta;
-2. give the tests requirement IDs;
-3. record the decision.
+Each capability passes through three stages (engineering process §4):
+1. **Exploration:** prototype freely to find out what is really needed; no gate.
+2. **Baseline:** `/opsx:propose` the capability's first change. Its spec states what the prototype
+   taught, its requirements cite the requirement IDs, its tasks end with verification. The owner
+   approves; `/opsx:apply`, `muon verify`, `/opsx:archive`.
+3. **Controlled:** every later behaviour change to that capability is an OpenSpec change. Refactors,
+   tooling, docs and fixes that restore the spec are ordinary commits.
 
-Design notes (`docs/design/`, brainstorms) become baseline the same way, by restating their content in the
-owning architecture, requirement, ADR, spec or contract and turning the note into a mapping record:
-skill `muon-promote`.
+At the system level, decisions go to ADRs or `governance/decisions.md`, plans to iterations, and
+requirement or architecture changes are commits the owner approves. Design notes (`docs/design/`,
+brainstorms) become baseline by restating their content in the owning document and turning the note
+into a mapping record: skill `muon-promote`.
 
 Domain iterations follow skill `muon-domain-iteration`. Legacy analysis follows skill `muon-legacy-archaeology`.
 
@@ -132,7 +148,7 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
   load `platform/AGENTS.md` from outside the git root; agy also needs `read_file(<workspace>)` and
   `command(muon status)` in its host settings (`muon doctor` checks the first).
 - **Keep the rules lean.** `muon doctor` checks the size limits. Put details in skills or docs.
-- **One fact, one home.** Decisions go in an ADR, or in `governance/decisions.md` if they pass its log test (folded entries move to `governance/decisions/<year>.md`); iteration plans go in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
+- **One fact, one home.** Decisions go in an ADR, or in `governance/decisions.md` if they pass its log test (folded entries move to `governance/decisions/<year>.md`); behaviour specs and changes in each component repository's `openspec/`, iteration plans in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
 - **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
   task scopes and an integrator (see the work scope protocol).

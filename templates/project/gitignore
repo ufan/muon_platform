@@ -5,3 +5,13 @@
 /.claude/skills/muon-*
 /.claude/settings.local.json
 /.claude/.muon-adapter.json
+
+# OpenSpec: per-tool skills and commands, regenerated with `openspec update`
+/.agent/
+/.agents/skills/openspec-*
+/.agents/skills/.openspec-target
+/.agents/workflows/opsx-*
+/.claude/skills/openspec-*
+/.claude/commands/opsx/
+/.gemini/
+/.opencode/

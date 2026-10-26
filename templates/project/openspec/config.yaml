@@ -1,0 +1,34 @@
+# OpenSpec configuration for a component repository (platform engineering process §4).
+# Behaviour specs and their changes only; requirements, architecture and ADRs stay in doc/.
+# Keep rules quoted: an unquoted rule containing ": " is parsed as a mapping and silently dropped.
+schema: spec-driven
+context: |
+  Repository: <name>, <one line: what this component is> of a portable muography instrument.
+  Rules: read AGENTS.md first, then ../platform/AGENTS.md. Requirements: <requirements file>
+  (`FR-NNN`, cited as `<name>:FR-NNN` outside this repository). Specification index: SPEC.md.
+  Verify with `muon verify <name>`. <Where hardware tests run, if any; always say which ran.>
+  A behaviour change is one a client, operator, another component, a data consumer or a black-box
+  test can observe (../platform/governance/engineering_process.md §4).
+rules:
+  proposal:
+    - "Link the platform iteration task this change serves, if any (../platform/iterations/)."
+    - "Name changes this one depends on as `Depends on: <repo>/<change>`."
+    - "End with this section, exactly, left pending: `## Approval` then `Status: pending`. Only the owner changes it to `Status: approved` with `By: <name>` and `Date: <YYYY-MM-DD>`, or an agent on the owner's explicit instruction, quoting it in the commit. Never approve on your own."
+  specs:
+    - "Each requirement cites the requirement ID(s) it refines in its text (e.g. `Refines FR-001.`), and system requirements or platform ADRs where they apply. Do not copy requirement text."
+  design:
+    - "For behaviour with several sources, compare them and state their authority (hardware reference, component spec, current code, legacy evidence)."
+    - "Record decisions with alternatives; a choice that changes system architecture needs a platform ADR, not only design.md."
+  tasks:
+    - "End with a `## Verification` group naming the exact commands (e.g. `muon verify <name>`) and which hardware tests are not run. Tests are named or labelled with the requirement IDs they cover."
+operations:
+  apply:
+    guidance:
+      - "Before any edit, read proposal.md: `## Approval` must say `Status: approved` with a name and date. Otherwise stop and report that the change awaits approval."
+      - "Do not merge spec deltas into openspec/specs/ during apply; archive does that."
+      - "Run `muon verify <name>` before marking Verification tasks done, and say which hardware tests were not run."
+      - "Commit your own work in the workspace format (../platform/governance/engineering_process.md §4)."
+  archive:
+    guidance:
+      - "Archive only an approved change whose tasks are complete and whose verification passed, and only after every change it names in `Depends on:` is archived."
+      - "Then run `openspec validate --all --strict`, commit the archive, and update the linked iteration task."
