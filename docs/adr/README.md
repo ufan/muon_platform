@@ -21,7 +21,7 @@ alternatives where they mattered; the earlier long text and option studies are i
 
 | Decision | Recorded status / later changes | Scope and relationships |
 |---|---|---|
-| [006 — AI-assisted engineering](ADR-006_ai_assisted_engineering_workflow.md) | Not recorded; §2 partly superseded | Repository organization replaced by ADR-009, then ADR-012; spec workflow extended by ADR-010. |
+| 006 — AI-assisted engineering | Retired 2026-10-26 (file removed; text in git) | Fully covered by AGENTS.md and ADR-003, 008, 009, 010, 012 and 013. |
 | [009 — Workspace model](ADR-009_workspace_repository_model.md) | Partly superseded | ADR-012 replaces §1–§4, §6–§10, §12–§13; §5, §11, §14–§15 remain with adaptations. |
 | [010 — Domain iteration](ADR-010_spec_driven_domain_iteration.md) | Accepted; partly superseded | ADR-012 §3, §5–§6 revise repository/contract placement, tooling and the proposal/prototype rules in §2–§3 and §8; the iteration playbook remains. |
 | [012 — Repository baseline and workflow](ADR-012_repository_baseline_and_workflow.md) | Accepted; §8 partly superseded | Repository baseline; replaces parts of ADR-009, revises ADR-010 and amends ADR-011. ADR-013 replaces global iteration discovery and universal iteration handoff. |
