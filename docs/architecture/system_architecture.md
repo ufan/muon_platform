@@ -44,7 +44,7 @@ HV / gas / LV / pose / environment -> domain services -> instrument coordination
 | Environment | Pressure, temperature and humidity. |
 | Instrument | Operating modes, sequencing, interlock policy, service aggregation and operator access. |
 | Core | DAQ, preprocess, event building, reconstruction and conditions interpretation (one repository). |
-| Applications | Imaging/density, analysis, visualization, digital twin and reporting. |
+| Applications | Application products (density inversion, anomaly maps, reports), visualization and digital twin; a layer above the scientific chain. |
 
 Cooling and dehumidification are out of scope. Repository boundaries: [repository model](repository_model.md).
 
@@ -87,8 +87,9 @@ The module chain, contract owners and downstream needs are in the [architecture 
   [core](../../../core/daq/doc/specs/event-builder.md) until the recon module exists.
 - Reconstruction is a configurable DAG (Taskflow initially). Algorithms consume EDM objects and
   immutable conditions; serialization stays outside algorithm logic.
-- Products: hits, clusters, tracks, rates, angular and flux distributions, opacity/density estimates,
-  each with quality and uncertainty. Analytics storage uses Arrow/Parquet.
+- Products, each with quality and uncertainty: hits, clusters and tracks (event reconstruction);
+  rates, angular and flux distributions and opacity (physics products). Density and other
+  application products belong to the application layer ([stages](architecture_overview.md#2-processing-stages)). Analytics storage uses Arrow/Parquet.
 
 ## 6. Conditions, time and provenance
 
@@ -143,4 +144,5 @@ not performed.
 | Topic | State |
 |---|---|
 | Slow-control service interfaces | Deferred. When started: transport-independent, Modbus host adapters first, and each domain states which protection lives in the device and which in its controller. |
+| Physics-products module (imaging) | Home not decided: core or its own repository. |
 | C++ standard | Component builds decide (C++17 toolchain today); no workspace-wide standard yet. |

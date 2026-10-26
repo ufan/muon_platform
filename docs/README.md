@@ -33,7 +33,7 @@ on 2026-10-26 into the [engineering process](workflow/engineering_process.md).
 | 5 | [Design notes](#design-notes) | Proposals, research and historical design records; not decisions |
 | — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
 | — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |
-| — | [context.md](context.md) | Product, architecture and engineering rules for agents (moved out of `AGENTS.md`) |
+| — | [context.md](context.md) | Short agent primer: product, where to look, invariants |
 | — | [legacy_inventory.md](legacy_inventory.md) | Managed legacy projects (`legacy/`) and host-local archive trees (`archive/`), and what each one informs |
 
 ## Design notes
