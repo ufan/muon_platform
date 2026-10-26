@@ -1,6 +1,6 @@
 # ADR-002 Muon EDM and serialization
 
-Status: Accepted (re-baselined 2026-10-25)
+Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26)
 
 ## Decision
 
