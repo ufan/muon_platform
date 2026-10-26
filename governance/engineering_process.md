@@ -89,6 +89,7 @@ Each layer should end in something a program can check. Tests name the requireme
 | A contract stays stable | Maturity `stable`; semver; breaking changes need an ADR |
 | Second developer or an external hardware team | CODEOWNERS; per-domain `consumes:` declarations with reverse-dependency CI; the change classes below become mandatory |
 | Several domains change in parallel | Domain-rooted workspaces (a domain repository carries a `.repos` that imports platform fragments) |
+| Shared behaviour specs owned apart from their consumers (second developer, external team, or several domains in parallel) | Evaluate an OpenSpec store (e.g. `contracts`) that component repositories reference read-only |
 | Second development host needs replay data routinely | Remote store for golden bytes ([ADR-011](../docs/adr/ADR-011_test_data.md)) |
 
 When a trigger fires, add the mechanism and record it in `decisions.md`.

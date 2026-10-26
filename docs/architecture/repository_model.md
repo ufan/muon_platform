@@ -18,6 +18,10 @@ Repository boundaries, dependency directions and contract ownership. Binding; ra
 | `study/`, `tools/*` | Support; changed only on explicit request. |
 | `legacy/*`, `archive/*` | Read-only references, never dependencies ([legacy inventory](../legacy_inventory.md)). |
 
+**Component repository:** a repository that develops part of the system and has its own
+specification index (`SPEC.md`): core, contracts, the domain repositories and instrument. Platform is
+the system level; testdata, study, tools and legacy are not components.
+
 Also planned outside core: detector front-end firmware and application-layer software (density
 inversion and other application products, data platform, digital twin). The home of imaging (physics
 products) is open (system architecture §10). Physics simulation is a separate project, not part of this platform
