@@ -19,8 +19,8 @@ let controllers change without touching central software.
 
 ## Alternatives
 
-- Central software driving low-level hardware itself: rejected, it ties safety and timing to
-  the host software.
+- Orchestration or application code driving devices directly, with no domain controller:
+  rejected, safety and timing logic would spread across unrelated software.
 - One universal instrument bus: rejected. Modbus RTU lacks bandwidth and typing, CAN-FD payloads
   are small, and neither carries DAQ streams; transports are per domain ([ADR-014](ADR-014_slow_control_domains_and_transports.md)).
 
