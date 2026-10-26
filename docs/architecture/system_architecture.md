@@ -7,7 +7,7 @@ are not claims of implementation; component specifications state what exists.
 ## 1. Principles
 
 - Hardware stays behind domain services. Applications and orchestration never address devices
-  ([ADR-003](../adr/ADR-003_hardware_domain_services.md), [ADR-005](../adr/ADR-005_hardware_domain_controllers.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
+  ([ADR-003](../adr/ADR-003_hardware_domains.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
 - Domain controllers own deterministic control, safety and interlocks; central software orchestrates.
 - The instrument commands every domain, core included; core never commands another domain
   ([ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md)).

@@ -4,15 +4,15 @@
 
 Re-baselined on 2026-10-25: each ADR below states the decision in force in short form, with its
 alternatives where they mattered; the earlier long text and option studies are in git (tag
-`docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001–004).
+`docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001–004; 005 merged into 003).
 
 | ADR | Decision | Status |
 |---|---|---|
 | [001](ADR-001_reconstruction_runtime.md) | Reconstruction is an in-process DAG (Taskflow), not services | Accepted |
 | [002](ADR-002_muon_edm_serialization.md) | Muon EDM is the scientific contract; serialization outside algorithms | Accepted |
-| [003](ADR-003_hardware_domain_services.md) | Hardware domains behind protobuf/gRPC domain services | Accepted |
+| [003](ADR-003_hardware_domains.md) | Hardware domains: protobuf/gRPC domain services over domain controllers that own control and safety; DAQ on a dedicated link | Accepted |
 | [004](ADR-004_deployment_and_updates.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
-| [005](ADR-005_hardware_domain_controllers.md) | Domain controllers own control and safety; DAQ on a dedicated link | Accepted |
+| 005 | Domain controllers | Merged into 003 (2026-10-26) |
 | [007](ADR-007_digital_twin_strategy.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_simulation_verification_replay.md) | Live, replay and simulation are equivalent sources | Accepted |
 | [014](ADR-014_slow_control_domains_and_transports.md) | Slow control: stable services, configurable transports, Modbus now | Accepted |

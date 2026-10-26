@@ -1,12 +1,12 @@
 # ADR-014 Slow-control domains and transports
 
 Status: Accepted (2026-10-25; owner answers in discussion)
-Related: [ADR-003](ADR-003_hardware_domain_services.md) (domain services), [ADR-005](ADR-005_hardware_domain_controllers.md) (domain controllers)
+Related: [ADR-003](ADR-003_hardware_domains.md) (domain services and controllers)
 
 ## Context
 
 The documents disagreed on the slow-control bus. One design note described three RS-485/Modbus buses,
-the management-bus draft proposed one RS-485 bus with COBS/protobuf and a DAQ node, ADR-005 favoured
+the management-bus draft proposed one RS-485 bus with COBS/protobuf and a DAQ node, the former ADR-005 favoured
 Modbus for gas and sensors and CAN-FD for distributed control, and engineering context expected one
 shared bus. None separated current hardware from intent.
 
