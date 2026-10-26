@@ -1,5 +1,7 @@
 # Architecture overview: scientific data chain
 
+Status: current (living map, updated at step 0 of each domain iteration).
+
 Living map of the scientific modules and the contracts between them, updated at step 0 of every
 domain iteration ([engineering process §1](../../governance/engineering_process.md#1-development-approach)). Whole-system design: [system architecture](system_architecture.md).
 

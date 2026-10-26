@@ -25,7 +25,7 @@ More: [product and system requirements](requirements/system_requirements.md).
 | Why a decision was made | [adr/README.md](adr/README.md) |
 | How the project is developed: specs, changes, rigor, legacy | [governance/engineering_process.md](../governance/engineering_process.md) |
 | Proposals and research (not decisions) | [design notes](README.md#design-notes) |
-| A component's behaviour | its `SPEC.md` |
+| A component's requirements, architecture and behaviour | its `SPEC.md`; behaviour specs in its `openspec/specs/` (system and component levels: [engineering process §2](../governance/engineering_process.md#2-specification-levels)) |
 
 Authority comes from each document's declared status and scope and from explicit supersession, not
 from specificity or ADR number ([docs index](README.md)). Flag conflicts instead of choosing silently.

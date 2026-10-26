@@ -1,5 +1,7 @@
 # Architecture decision index
 
+Status: current (index).
+
 ## Product and system
 
 Re-baselined on 2026-10-25: each ADR below states the decision in force in short form, with its

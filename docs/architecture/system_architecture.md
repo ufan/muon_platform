@@ -1,5 +1,7 @@
 # System architecture
 
+Status: current (binding).
+
 The components, boundaries and data flow of the muography instrument. This document is binding;
 change it together with the decision behind the change (ADR or decision log). Targets described here
 are not claims of implementation; component specifications state what exists.
