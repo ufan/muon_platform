@@ -1,7 +1,7 @@
 # ADR-014 Slow-control domains and transports
 
 Status: Accepted (2026-10-25; owner answers in discussion)
-Related: [ADR-003](ADR-003_hardware_domain_services.md) (domain services), [ADR-005](ADR-005_hardware_abstraction.md) (domain controllers)
+Related: [ADR-003](ADR-003_hardware_domain_services.md) (domain services), [ADR-005](ADR-005_hardware_domain_controllers.md) (domain controllers)
 
 ## Context
 

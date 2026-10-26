@@ -1,4 +1,4 @@
-# ADR-005 Domain controllers
+# ADR-005 Hardware domain controllers
 
 Status: Accepted (re-baselined 2026-10-25)
 
@@ -10,7 +10,6 @@ Status: Accepted (re-baselined 2026-10-25)
   ([ADR-014](ADR-014_slow_control_domains_and_transports.md)); either way it sits behind the
   domain's service interface ([ADR-003](ADR-003_hardware_domain_services.md)).
 - DAQ uses a dedicated high-rate link (USB today, possibly Ethernet), separate from slow control.
-- Firmware for custom controllers uses Zephyr.
 
 ## Why
 

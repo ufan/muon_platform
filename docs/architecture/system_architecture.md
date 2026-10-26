@@ -7,7 +7,7 @@ are not claims of implementation; component specifications state what exists.
 ## 1. Principles
 
 - Hardware stays behind domain services. Applications and orchestration never address devices
-  ([ADR-003](../adr/ADR-003_hardware_domain_services.md), [ADR-005](../adr/ADR-005_hardware_abstraction.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
+  ([ADR-003](../adr/ADR-003_hardware_domain_services.md), [ADR-005](../adr/ADR-005_hardware_domain_controllers.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
 - Domain controllers own deterministic control, safety and interlocks; central software orchestrates.
 - The instrument commands every domain, core included; core never commands another domain
   ([ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md)).
@@ -121,7 +121,7 @@ The module chain, contract owners and downstream needs are in the [architecture 
 
 - Develop on Linux x86_64; deploy on Linux desktops and ARM64 edge appliances, with systemd and
   Debian packages. Atomic OTA and fleet management are later ([ADR-004](../adr/ADR-004_deployment_and_updates.md)).
-- Firmware: Zephyr on MCU controllers; FPGA for detector front-end processing.
+- Firmware: MCU-based domain controllers (RTOS not fixed); FPGA for detector front-end processing.
 - Software: C++ and CMake, Taskflow, protobuf/gRPC, Muon EDM, Arrow/Parquet; Qt/QML, VTK and
   ParaView for visualization.
 - Add a dependency only when it solves a real problem, supports ARM64 and does not weaken a boundary.
