@@ -15,7 +15,7 @@ are not claims of implementation; component specifications state what exists.
   only as immutable conditions.
 - Raw data is immutable, and every scientific product is traceable to its inputs (§6).
 - Live and replayed acquisition feed one raw-stream contract; online and offline processing share
-  code ([ADR-008](../adr/ADR-008_replay_and_verification.md)).
+  code ([ADR-008](../adr/ADR-008_data_sources_and_verification.md)).
 - Algorithms exchange Muon EDM objects inside a DAG runtime, not through services
   ([ADR-001](../adr/ADR-001_reconstruction_runtime.md), [ADR-002](../adr/ADR-002_muon_edm_serialization.md)).
 - Linux ARM64 stays supported.
@@ -107,7 +107,7 @@ The module chain, contract owners and downstream needs are in the [architecture 
 ## 7. Offline data, replay and digital twin
 
 - Offline datasets (`testdata`) are where single features and components iterate and are
-  verified, run directly without the online pipeline ([ADR-008](../adr/ADR-008_replay_and_verification.md)).
+  verified, run directly without the online pipeline ([ADR-008](../adr/ADR-008_data_sources_and_verification.md)).
 - Replay mainly verifies the online pipeline. It produces the same raw-stream contract as live
   acquisition. Decoding, validation, event building, schemas and publishing are identical in every
   mode; only the source adapter's pacing, clock, backpressure and sink policies differ, and they are

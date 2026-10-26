@@ -1,6 +1,6 @@
-# ADR-008 Replay and verification
+# ADR-008 Data sources and verification
 
-Status: Accepted (re-baselined 2026-10-25; revised by owner 2026-10-26: physics simulation removed)
+Status: Accepted (re-baselined 2026-10-25; revised and confirmed by owner 2026-10-26: physics simulation removed)
 
 ## Decision
 
