@@ -2,16 +2,16 @@
 
 ## Product and system
 
-Re-baselined on 2026-10-25: each ADR below states the decision in force in short form; the long
-option studies behind 004, 005, 007 and 008 are reference [design notes](../README.md#design-notes),
-and the earlier text is in git (tag `docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001–004).
+Re-baselined on 2026-10-25: each ADR below states the decision in force in short form, with its
+alternatives where they mattered; the earlier long text and option studies are in git (tag
+`docs-pre-cleanup`). Owner confirmation of the re-baselined text is noted in each ADR's status line (confirmed so far: 001–004).
 
 | ADR | Decision | Status |
 |---|---|---|
 | [001](ADR-001_reconstruction_runtime.md) | Reconstruction is an in-process DAG (Taskflow), not services | Accepted |
 | [002](ADR-002_muon_edm_serialization.md) | Muon EDM is the scientific contract; serialization outside algorithms | Accepted |
 | [003](ADR-003_hardware_domain_services.md) | Hardware domains behind protobuf/gRPC domain services | Accepted |
-| [004](ADR-004_deployment_update_strategy.md) | ARM64 edge, systemd, Debian packages; versioned config; release identity | Accepted |
+| [004](ADR-004_deployment_update_strategy.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
 | [005](ADR-005_hardware_abstraction.md) | Domain controllers own control and safety; DAQ on a dedicated link | Accepted |
 | [007](ADR-007_digital_twin_strategy.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_simulation_verification_replay.md) | Live, replay and simulation are equivalent sources | Accepted |

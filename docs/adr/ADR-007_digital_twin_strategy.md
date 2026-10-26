@@ -1,6 +1,6 @@
 # ADR-007 Digital twin
 
-Status: Accepted (re-baselined 2026-10-25). Option study: [digital twin report](../design/digital_twin_report.md).
+Status: Accepted (re-baselined 2026-10-25)
 
 ## Decision
 

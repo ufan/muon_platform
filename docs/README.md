@@ -49,10 +49,6 @@ studies are reference design notes.
 | [instrument.md](design/instrument.md) | proposed | Instrument layer: orchestration, operating states and policies, operator CLI, external API. |
 | [instrument_management_bus.md](design/instrument_management_bus.md) | proposed | Future custom slow-control protocol (COBS/protobuf RPC); not decided, see ADR-014. |
 | [agent_coordination_options.md](design/agent_coordination_options.md) | reference | Agent-coordination tool research (2026-10-24). |
-| [deployment_update_report.md](design/deployment_update_report.md) | reference | Option study behind ADR-004. |
-| [hardware_abstraction_report.md](design/hardware_abstraction_report.md) | reference | Option study behind ADR-005. |
-| [digital_twin_report.md](design/digital_twin_report.md) | reference | Option study behind ADR-007. |
-| [simulation_replay_report.md](design/simulation_replay_report.md) | reference | Option study behind ADR-008. |
 
 Outside `docs/`, the platform repository holds the workspace machinery: `repos/` (the repositories, in vcs2l
 format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `changes/` (change

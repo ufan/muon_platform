@@ -1,6 +1,6 @@
 # ADR-005 Domain controllers
 
-Status: Accepted (re-baselined 2026-10-25). Option study: [hardware abstraction report](../design/hardware_abstraction_report.md).
+Status: Accepted (re-baselined 2026-10-25)
 
 ## Decision
 
@@ -16,6 +16,13 @@ Status: Accepted (re-baselined 2026-10-25). Option study: [hardware abstraction 
 
 Local control keeps safety and timing independent of the host and its software; stable interfaces
 let controllers change without touching central software.
+
+## Alternatives
+
+- Central software driving low-level hardware itself: rejected, it ties safety and timing to
+  the host software.
+- One universal instrument bus: rejected. Modbus RTU lacks bandwidth and typing, CAN-FD payloads
+  are small, and neither carries DAQ streams; transports are per domain ([ADR-014](ADR-014_slow_control_domains_and_transports.md)).
 
 ## Consequences
 

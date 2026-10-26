@@ -1,6 +1,6 @@
 # ADR-008 Simulation, replay and verification
 
-Status: Accepted (re-baselined 2026-10-25). Option study: [simulation and replay report](../design/simulation_replay_report.md).
+Status: Accepted (re-baselined 2026-10-25)
 
 ## Decision
 
