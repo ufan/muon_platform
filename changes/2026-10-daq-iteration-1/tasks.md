@@ -1,6 +1,6 @@
 # Tasks
 
-Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are in `core/contracts/`.
+Repositories after 2026-10-23 (ADR-015, repository model): DAQ is `core/daq/`; its contracts are in `core/contracts/`.
 
 | # | Repo | Task | Spec IDs | Verification | Status |
 |---|---|---|---|---|---|
@@ -10,7 +10,7 @@ Repositories after 2026-10-23 (ADR-012): DAQ is `core/daq/`; its contracts are i
 | 4 | core | `contracts/science/fsm/daq_device.yaml` from the state machine spec | FR-001 | table review; transition tests generated or checked | todo |
 | 5 | core | Raw-capture format + run metadata (after decisions 2, 4, 5), including provenance and time-sync fields; `contracts/system/time/` | FR-004, FR-005, FR-011 | schema review | todo |
 | 6 | core | `contracts/system/domain_service/` pattern + `contracts/science/api/` DAQ service API on top of it | FR-007 | schema review | todo |
-| 7 | — | ~~Pin the new `contracts` revision in `west.yml`~~: obsolete, because contracts change together with core (ADR-012) | — | — | obsolete |
+| 7 | — | ~~Pin the new `contracts` revision in `west.yml`~~: obsolete, because contracts change together with core (engineering process §4) | — | — | obsolete |
 | 8 | core | Implementation following `core/daq/doc/implementation-priorities.md` | FR-001…FR-012 | `muon verify core` + hardware tests | in progress (prototype) |
 
 ## Next

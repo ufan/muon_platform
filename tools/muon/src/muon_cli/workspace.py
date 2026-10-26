@@ -1,4 +1,4 @@
-"""Workspace model: the vcs2l `.repos` files in platform/repos/ plus per-repo metadata (ADR-012).
+"""Workspace model: the vcs2l `.repos` files in platform/repos/ plus per-repo metadata (engineering process §6).
 
 A workspace is a plain directory with `platform/` in it; no tool state. Repositories come from,
 in order (later entries for the same path win):

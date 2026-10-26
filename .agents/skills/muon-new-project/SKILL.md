@@ -1,19 +1,19 @@
 ---
 name: muon-new-project
-description: Use when adding a repository (domain, instrument, support or legacy) to the muon workspace. Applies the ADR-012 split test and uses platform/templates/project/.
+description: Use when adding a repository (domain, instrument, support or legacy) to the muon workspace. Applies the ADR-015 split test and uses platform/templates/project/.
 ---
 
 # New repository
 
 ## Domain, instrument or support repository
 
-1. Split test (ADR-012 §3). Is there a different toolchain, lifecycle or audience/ownership? If not,
+1. Split test (ADR-015). Is there a different toolchain, lifecycle or audience/ownership? If not,
    add a directory to an existing repository and stop. A different deployment target alone is not a reason.
 2. Ask the user to create `ufan/muon_<name>` on GitHub, or get approval for `gh repo create`.
 3. Copy `platform/templates/project/` and fill in the placeholders. Write `.muon/repo.yml` with `maturity`
    (normally `incubating`), `role`, `spec` and `verify`. The verify command is a plain shell command run
    from the repo root, with no workspace tool. Internal tooling (west, Conan, pixi, …) is the repository's own choice.
-4. Respect the dependency rules (ADR-012 §4): domains depend only on system contracts, and never on core
+4. Respect the dependency rules (ADR-015, repository model): domains depend only on system contracts, and never on core
    or on each other.
 5. Add an entry to `platform/repos/workspace.repos`, then run `muon ws sync`, `muon verify <name>` and
    `muon agents sync`.

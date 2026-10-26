@@ -1,6 +1,6 @@
 # Change Proposals
 
-Spec-driven changes to the platform ([ADR-010 §3](../docs/adr/ADR-010_spec_driven_domain_iteration.md)).
+Spec-driven changes to the platform ([engineering process §4](../docs/workflow/engineering_process.md#4-changes)).
 
 A change proposal describes **deltas against the living specs**. Specs are
 project `SPEC.md` files, `contracts/`, and the platform docs. A proposal is

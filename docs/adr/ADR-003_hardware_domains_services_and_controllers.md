@@ -35,6 +35,6 @@ host's other software, and lets controllers change without touching central soft
 
 ## Consequences
 
-- The instrument coordinates domains through these APIs ([ADR-012](ADR-012_repository_baseline_and_workflow.md)).
+- The instrument coordinates domains through these APIs ([ADR-015](ADR-015_repository_and_instrument_layering.md)).
 - Scientific algorithms are not services ([ADR-001](ADR-001_reconstruction_runtime.md)).
 - Each domain specification states which protection runs in the device and which in its controller.

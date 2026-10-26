@@ -1,11 +1,11 @@
 ---
 name: muon-domain-iteration
-description: Use when starting or advancing a domain iteration (DAQ, preprocess, recon, ...). Drives the ADR-010 playbook and tracks which step the domain is in.
+description: Use when starting or advancing a domain iteration (DAQ, preprocess, recon, ...). Drives the domain iteration playbook (engineering process §1) and tracks which step the domain is in.
 ---
 
 # Domain iteration playbook
 
-Steps (ADR-010 §4). Each step has an output; do not skip ahead without it.
+Steps (engineering process §1). Each step has an output; do not skip ahead without it.
 
 | Step | Output | Who decides |
 |---|---|---|

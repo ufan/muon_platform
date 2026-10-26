@@ -2,7 +2,8 @@
 
 Status: verified (cut over and tool checks done 2026-10-23)
 Owner: project owner
-Decision record: [ADR-012](../../docs/adr/ADR-012_repository_baseline_and_workflow.md) (approved in discussion, 2026-10-23)
+Decision record: ADR-012 (approved in discussion, 2026-10-23; retired 2026-10-26, text in git: its rules are now in the
+[engineering process](../../docs/workflow/engineering_process.md) and [ADR-015](../../docs/adr/ADR-015_repository_and_instrument_layering.md))
 Affected repositories: platform, core (new `ufan/muon_core`), contracts, testdata; retired: `ufan/muon_daq`
 Requirements: `WS-001` … `WS-008` (specs.md)
 

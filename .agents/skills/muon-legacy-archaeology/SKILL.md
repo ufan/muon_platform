@@ -1,13 +1,13 @@
 ---
 name: muon-legacy-archaeology
-description: Use at the start of a domain iteration to turn legacy code into an as-is spec and golden-data plan (ADR-010 §4, steps 1–2). Legacy code is read-only reference.
+description: Use at the start of a domain iteration to turn legacy code into an as-is spec and golden-data plan (engineering process §1, steps 1–2). Legacy code is read-only reference.
 ---
 
 # Legacy archaeology
 
 Inputs: the domain in scope and its rows in `platform/docs/legacy_inventory.md`.
 
-1. Make sure the legacy references are present and locked: `muon ws sync --legacy`, then `muon legacy status`. They are read-only on disk, with commits and pushes disabled (ADR-009 §15). Never unlock or `chmod` them. To run legacy code, build out of tree in `muon legacy build-dir <name>`.
+1. Make sure the legacy references are present and locked: `muon ws sync --legacy`, then `muon legacy status`. They are read-only on disk, with commits and pushes disabled (engineering process §6). Never unlock or `chmod` them. To run legacy code, build out of tree in `muon legacy build-dir <name>`.
 2. For each legacy module, record in `<change>/as-is.md`:
    - inputs and outputs (formats, units, byte layouts, file names);
    - configuration and calibration dependencies (which `config/` files, which fields);

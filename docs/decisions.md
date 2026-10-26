@@ -1,6 +1,6 @@
 # Decision log
 
-Status: current (active decision log; ADR-012 §8). Every session skims this file, so keep it short.
+Status: current (active decision log; workflow/engineering_process.md §4). Every session skims this file, so keep it short.
 
 ## When to log
 

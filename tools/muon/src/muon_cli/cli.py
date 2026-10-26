@@ -1,4 +1,4 @@
-"""muon: workspace tool of the muon platform (ADR-012).
+"""muon: workspace tool of the muon platform (docs/workflow/developer_guide.md).
 
 This is the implementation pinned by each workspace (platform/tools/muon). Run it through the global
 `muon` launcher (package muon-workspace), which picks the implementation of the workspace you are in.
@@ -92,7 +92,7 @@ def cmd_init(args):
         if args.data_root:
             cfg["data_root"] = os.path.abspath(os.path.expanduser(args.data_root))
         with open(cf, "w", encoding="utf-8") as fh:
-            fh.write("# This workspace's settings (ADR-012 §5); not committed anywhere.\n")
+            fh.write("# This workspace's settings (developer guide §1); not committed anywhere.\n")
             yaml.safe_dump(cfg, fh, sort_keys=False)
     ws = Workspace(topdir=top)
     ok = ops.sync(ws, with_legacy=args.legacy)

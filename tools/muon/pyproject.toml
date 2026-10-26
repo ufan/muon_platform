@@ -1,7 +1,7 @@
 [project]
 name = "muon-cli"
 version = "0.2.0"
-description = "Muon platform workspace tool (implementation; run through muon-workspace): vcs2l workspaces, legacy locks, verify, agent files (ADR-012)"
+description = "Muon platform workspace tool (implementation; run through muon-workspace): vcs2l workspaces, legacy locks, verify, agent files"
 requires-python = ">=3.9"
 dependencies = ["pyyaml>=5.4", "vcs2l>=1.1"]
 
@@ -16,5 +16,5 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.muon]
-# Oldest muon-workspace that can run this implementation (ADR-012 §5).
+# Oldest muon-workspace that can run this implementation (release guide).
 min-launcher = "0.1.0"

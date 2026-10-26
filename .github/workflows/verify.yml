@@ -1,4 +1,4 @@
-# Runs this repository's verify command (.muon/repo.yml; ADR-012 §6).
+# Runs this repository's verify command (.muon/repo.yml; docs/workflow/engineering_process.md §5).
 name: verify
 on: [push, pull_request]
 jobs:

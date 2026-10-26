@@ -10,7 +10,7 @@ are not claims of implementation; component specifications state what exists.
   ([ADR-003](../adr/ADR-003_hardware_domains_services_and_controllers.md), [ADR-014](../adr/ADR-014_hardware_domains_transports.md)).
 - Domain controllers own deterministic control, safety and interlocks; central software orchestrates.
 - The instrument commands every domain, core included; core never commands another domain
-  ([ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md)).
+  ([ADR-015](../adr/ADR-015_repository_and_instrument_layering.md)).
 - Control, scientific data and telemetry are separate planes (§4). Sensor data reaches algorithms
   only as immutable conditions.
 - Raw data is immutable, and every scientific product is traceable to its inputs (§6).
@@ -72,7 +72,7 @@ Application -> instrument -> domain service API
 |---|---|
 | Control | Commands, operating modes, configuration, lifecycle, safety and health. |
 | Scientific data | Raw capture → validated records → EDM objects → products. |
-| Telemetry | Continuous operating measurements and pose, archived and resolved into conditions. |
+| Telemetry | Continuous low-rate operating measurements and pose, stored locally first and then forwarded; resolved into conditions. |
 
 DAQ takes part in control and scientific data; telemetry and raw detector traffic do not share a transport.
 
@@ -96,10 +96,12 @@ The module chain, contract owners and downstream needs are in the [architecture 
   and telemetry-derived intervals into an immutable snapshot with an ID and content hash. Core owns
   schemas and interpretation ([conditions](../../../core/docs/conditions.md)).
 - Online, a live provider supplies and records current values; offline, a builder derives versioned
-  intervals from the telemetry archive. Algorithms never query telemetry.
+  intervals from the telemetry archive (gas state and gain factors, HV good-time intervals, pose
+  segments). Algorithms never query telemetry.
 - The edge appliance clock is the only common time reference (monotonic time with `boot_id`, UTC,
   sync state). Device clocks map to it through correlation records with an uncertainty; the budget
-  is about 1 s.
+  is about 1 s, so no PTP is needed. The raw capture records `boot_id`, sync state and periodic
+  correlation records.
 - Every product records instrument and firmware identity, software (core) revision, algorithm
   version and parameters, conditions snapshot ID and hash, and time. A conditions override keeps
   both identities.

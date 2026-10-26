@@ -1,7 +1,7 @@
-# Muon platform workspace (ADR-012). vcs2l format: `vcs import --input workspace.repos <topdir>`,
+# Muon platform workspace (docs/workflow/engineering_process.md §6). vcs2l format: `vcs import --input workspace.repos <topdir>`,
 # normally through `muon ws init|sync`. The `muon:` blocks are muon metadata (vcs2l ignores them);
 # a repository's own `.muon/repo.yml` overrides its block here.
-# Pins: branches while a repository is incubating; tags once it has a second consumer (ADR-012 §6).
+# Pins: branches while a repository is incubating; tags once it has a second consumer (engineering process §5).
 repositories:
   platform:
     type: git

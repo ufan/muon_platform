@@ -21,15 +21,15 @@ Design-note content becomes baseline through skill `muon-promote` (see the [deve
 
 ADRs carry their own status (proposed, accepted, partly superseded); see the [ADR index](adr/README.md).
 Only `current` documents, accepted ADRs and component specifications bind implementation.
-ADR-001…005, 007 and 008 were re-baselined on 2026-10-25 into short decisions; their original option
-studies are reference design notes.
+Product ADRs were re-baselined on 2026-10-25 into short decisions; the workflow ADRs were retired
+on 2026-10-26 into the [engineering process](workflow/engineering_process.md).
 
 | # | Section | What it answers |
 |---|---|---|
 | 1 | [requirements/](requirements/system_requirements.md) | What the instrument is for (product, applications, deployment modes) and what it must do |
 | 2 | [Architecture index](architecture/readme.md) | Overview for the coarse map, system architecture for detailed design, repository model for boundaries and dependencies |
 | 3 | [ADR topic and status index](adr/README.md) | Decisions that constrain implementation, numbered `ADR-NNN` |
-| 4 | [workflow/](workflow/) | How to work in the workspace: [developer_guide.md](workflow/developer_guide.md); releasing tools: [release_guide.md](workflow/release_guide.md) |
+| 4 | [workflow/](workflow/) | How the project is developed: [engineering_process.md](workflow/engineering_process.md) (rules); [developer_guide.md](workflow/developer_guide.md) (procedures); [release_guide.md](workflow/release_guide.md) (releasing tools) |
 | 5 | [Design notes](#design-notes) | Proposals, research and historical design records; not decisions |
 | — | [Work discovery and session scope](../work/README.md) | Active iteration index, explicit assignments, human and batch sessions |
 | — | [decisions.md](decisions.md) | Short active log of small decisions that pass its admission test; folded entries in [decisions/](decisions/2026.md) |
@@ -52,4 +52,4 @@ studies are reference design notes.
 
 Outside `docs/`, the platform repository holds the workspace machinery: `repos/` (the repositories, in vcs2l
 format), `tools/muon/` (the `muon` CLI), `AGENTS.md` (rules for all AI tools), `changes/` (change
-records), `templates/` (new-repository skeleton) and `.agents/skills/` (playbook skills). See ADR-012.
+records), `templates/` (new-repository skeleton) and `.agents/skills/` (playbook skills). See the [engineering process](workflow/engineering_process.md).

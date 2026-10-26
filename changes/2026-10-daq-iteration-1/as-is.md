@@ -1,6 +1,6 @@
 # As-is specification: legacy DAQ (task 2)
 
-Status: draft for owner review (2026-10-23). ADR-010 §4 step 1. Legacy code is reference only.
+Status: draft for owner review (2026-10-23). Iteration step 1 (engineering process §1). Legacy code is reference only.
 
 **Sources examined (read-only, locked):**
 
@@ -135,7 +135,7 @@ None of these is resolved here; they need owner or hardware decisions.
 | D8 | Status/data demultiplexing | none (status lands in raw files) | not specified | Specify: demultiplex 4-byte `FA..FE` frames while acquiring; never persist them as data |
 | D9 | CRC | ignored | evidence: CRC-32/MPEG-2 | Confirm with firmware and add to the spec |
 | D10 | `frame_index` | never checked | evidence: DCM-wide, reset at Start | Confirm, add to the spec, check continuity (FR-009) |
-| D11 | Timestamp width | 32-bit read | evidence: 32-bit, wraps ~34 s | Confirm; affects ADR-012 §9 clock-correlation design (DAQ decision 5) |
+| D11 | Timestamp width | 32-bit read | evidence: 32-bit, wraps ~34 s | Confirm; affects the clock-correlation design (system architecture §6) (DAQ decision 5) |
 | D12 | Chips per ADM | default 24 / 6 / fixed 6 | evidence: 6 | Is 6 fixed for gen1, or does it vary by ADM variant? |
 | D13 | Threshold algorithm | branches disagree (relative vs absolute) | — | Which one does the firmware expect? (affects baseline tooling, not DAQ) |
 | D14 | Stop scope | broadcast `FF` | `adm_select` selects boards | Always broadcast? |
@@ -151,6 +151,6 @@ None of these is resolved here; they need owner or hardware decisions.
 These are candidates for the spec deltas in DAQ iteration step 3. They are not decided.
 - Treat the IN endpoint as a mixed stream: a framing layer separates status frames from `ffab53xx` USB frames. That way command handling works during acquisition, and raw captures hold only data. Optionally keep status frames in a separate log.
 - Validate per frame: sentinels, the length relation, CRC-32/MPEG-2, global `frame_index` continuity, and `dcm_sync == adm_sync`. Count violations (FR-009) without stopping capture.
-- Unwrap the 32-bit timestamp, and record clock-correlation samples (ADR-012 §9).
+- Unwrap the 32-bit timestamp, and record clock-correlation samples (system architecture §6).
 - Keep the operator sequence of section 3 as the configuration recipe, but make it state-machine driven, with spec-conformant status handling and recovery.
 - Rotate files at frame boundaries, and add run/segment metadata and checksums (FR-004).

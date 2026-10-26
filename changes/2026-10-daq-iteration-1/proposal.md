@@ -8,7 +8,7 @@ Requirements: `daq:FR-001` … `daq:FR-012`
 
 ## Why
 
-DAQ is the first domain of the bottom-up rebuild (ADR-010). Its outputs (the raw-capture
+DAQ is the first domain of the bottom-up rebuild (engineering process §1). Its outputs (the raw-capture
 stream and the control/status API) are the inputs of every later domain.
 
 ## Approach
@@ -45,7 +45,7 @@ Out of scope: preprocess rewrite (iteration 2), online event building beyond wha
    `contracts/` keeps the boundaries between repositories.
 2. Raw-capture container format, e.g. plain segmented binary + JSON sidecar vs. an existing container.
 3. Whether to clone `usb_app2` into the workspace (`muon ws sync --legacy`: cloned and locked read-only) or reference it on GitHub only.
-4. **Raw-capture provenance and time fields** (ADR-012 §9–§10). Recommended: a run header with `boot_id`,
+4. **Raw-capture provenance and time fields** (system architecture §6). Recommended: a run header with `boot_id`,
    clock source and sync state, core SHA, and conditions snapshot ID + content hash (the resolved snapshot
    embedded); periodic **clock-correlation records** in the stream (device timestamp ↔ edge monotonic ↔ UTC),
    because runs last days and the device clock drifts and wraps.

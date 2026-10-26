@@ -12,12 +12,12 @@ owning documents, and the note becomes a record that maps every section to its n
    design notes in the affected repositories) that touch the domain or topic. Read each source fully.
 2. **Find existing homes.** Read the current architecture, requirements, ADRs, component specs and
    contracts the content would land in, so you add to them instead of duplicating or contradicting them.
-3. **Classify every section** of the source. Destinations follow the ADR-010 §2 specification layers
+3. **Classify every section** of the source. Destinations follow the specification layers (engineering process §2)
    and the repository model (component content goes to the owning repository, not to platform):
 
    | Kind of content | Destination | Label |
    |---|---|---|
-   | Required behaviour, acceptance | component spec (`<repo>/…/SPEC.md`, `specs/`) or `platform/docs/requirements/` with an ID (ADR-010 §7) | normative |
+   | Required behaviour, acceptance | component spec (`<repo>/…/SPEC.md`, `specs/`) or `platform/docs/requirements/` with an ID (engineering process §3) | normative |
    | Boundary, ownership, data flow | `platform/docs/architecture/` | current |
    | Consequential choice with alternatives | new ADR (owner decides) | proposed until accepted |
    | Small agreed decision | `platform/docs/decisions.md` | — |

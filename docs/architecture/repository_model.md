@@ -1,7 +1,7 @@
 # Repository model
 
 Repository boundaries, dependency directions and contract ownership. Binding; rationale in
-[ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md). The actual repository list is
+[ADR-015](../adr/ADR-015_repository_and_instrument_layering.md). The actual repository list is
 `platform/repos/*.repos` (`muon list`). Planned repositories are not existing dependencies.
 
 ## Repositories

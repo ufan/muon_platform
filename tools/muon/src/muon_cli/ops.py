@@ -1,4 +1,4 @@
-"""Workspace operations: sync, status, verify, branch, freeze, doctor (ADR-012).
+"""Workspace operations: sync, status, verify, branch, freeze, doctor (engineering process).
 
 vcs2l does the cloning; everything else is plain git so that a checkout is never rewritten
 behind the developer's back: existing repositories are only fast-forwarded when clean.
@@ -17,8 +17,8 @@ import yaml
 from . import __version__, agents, legacy
 from .workspace import REPOS_FILES
 
-RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; ADR-012 lean rules
-DECISIONS_LIMIT = 30                            # active entries in docs/decisions.md; ADR-012 §8
+RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; engineering process §7
+DECISIONS_LIMIT = 30                            # active entries in docs/decisions.md; engineering process §7
 
 
 def git(path, *args, check=False):
@@ -254,11 +254,11 @@ def doctor(ws, log=print):
                f'add "{rule}" to permissions.allow in {AGY_SETTINGS}')
     for path, limit in rules_files(ws):
         size = os.path.getsize(path)
-        check(size <= limit, f"{os.path.relpath(path, ws.topdir)} {size} B (limit {limit})", "keep AGENTS.md lean (ADR-012)")
+        check(size <= limit, f"{os.path.relpath(path, ws.topdir)} {size} B (limit {limit})", "keep AGENTS.md lean (engineering process §7)")
     active = active_decisions(ws)
     if active is not None:
         advise(active <= DECISIONS_LIMIT, f"docs/decisions.md {active} active entries (limit {DECISIONS_LIMIT})",
-               "fold entries into their home documents and docs/decisions/<year>.md (ADR-012 §8)")
+               "fold entries into their home documents and docs/decisions/<year>.md (docs/decisions.md)")
     return problems == 0
 
 

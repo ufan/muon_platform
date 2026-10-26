@@ -13,7 +13,7 @@ tools do not load automatically from outside this repository. Then follow the se
   requires no repository edits. Parallel workers report results to their integrator.
 
 - Spec index: [SPEC.md](SPEC.md). Detailed working guidance (if any): `doc/guides/`.
-- Dependencies (platform ADR-012 §4): system contracts only. Never depend on core or on other domains.
+- Dependencies (platform ADR-015): system contracts only. Never depend on core or on other domains.
 - Legacy references (read-only, never a dependency): `../legacy/<dir>` (<what it informs>).
 - Test data: `<id>@<version>` pinned in `tests/golden.yml`. Missing data is an explicit skip.
 - Verify: `<verify command>` (plain shell, from this directory; `muon verify <name>` in a workspace).

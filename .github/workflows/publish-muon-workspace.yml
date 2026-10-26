@@ -1,6 +1,6 @@
 # Publishes the launcher (tools/muon-workspace) to PyPI when a tag `muon-workspace-v<version>` is
 # pushed. Uses PyPI trusted publishing (no token): register this repository, this workflow file and
-# the environment `pypi` as a trusted publisher of the project `muon-workspace` on pypi.org (ADR-012 §5).
+# the environment `pypi` as a trusted publisher of the project `muon-workspace` on pypi.org (docs/workflow/release_guide.md).
 name: publish muon-workspace
 on:
   push:

@@ -1,4 +1,4 @@
-"""The `muon` launcher (ADR-012 §5): find the workspace, then run *that workspace's* muon.
+"""The `muon` launcher (developer guide §1): find the workspace, then run *that workspace's* muon.
 
 The globally installed `muon` is only a launcher. Inside a workspace it hands the command to the
 implementation in `<workspace>/platform/tools/muon`, run in that project's own uv environment, so

@@ -1,4 +1,4 @@
-"""Tests for the muon launcher (ADR-012 §5): it finds the workspace and runs that workspace's muon."""
+"""Tests for the muon launcher (developer guide §1): it finds the workspace and runs that workspace's muon."""
 
 import pytest
 

@@ -3,14 +3,14 @@
 Status: current.
 
 How to work in the muon platform workspace, for the human developer and for AI agents.
-The decisions behind it are in [ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md).
+The rules behind it are in the [engineering process](engineering_process.md).
 Procedures exist once, as skills in [`.agents/skills/`](../../.agents/skills/). This guide links to them.
 
 ## 1. New host setup
 
 Toolchain: git, Python ≥ 3.9, [uv](https://docs.astral.sh/uv/), CMake ≥ 3.20, a C++17 compiler.
 
-`muon` has two parts (ADR-012 §5):
+`muon` has two parts:
 - **launcher** (`muon-workspace`, installed once per host): finds the workspace you are in and runs
   *that workspace's* implementation;
 - **implementation** (`platform/tools/muon`, pinned by each workspace's platform checkout): the real tool,
@@ -74,7 +74,7 @@ It never rewrites your work.
 
 ## 4. Cross-repository changes
 
-While prototyping (ADR-012 §6):
+While prototyping (engineering process §5):
 - Use the same branch name in each repository: `muon branch <topic> core platform`.
 - Agents may edit any repository, but must **announce** every repository they touched outside their starting one.
 - Contracts used only by core stay in core and change in the same commit as their consumer.
@@ -82,11 +82,11 @@ While prototyping (ADR-012 §6):
 - Run `muon status` before pushing, so that no repository is left dirty or on an unexpected branch.
 
 A change proposal (`changes/`, skill `muon-new-change`) is optional. Write one to record a decision, or
-to promote a prototype into the spec baseline (ADR-010).
+to promote a prototype into the spec baseline (engineering process §4).
 
 ## 5. Prototype → baseline
 
-Prototype freely inside a repository (ADR-010 prototype lane). When the behaviour should become
+Prototype freely inside a repository (prototype lane, engineering process §4). When the behaviour should become
 the baseline:
 1. write the specification delta;
 2. give the tests requirement IDs;
@@ -103,12 +103,12 @@ Domain iterations follow skill `muon-domain-iteration`. Legacy analysis follows 
 Tool releases (the `muon-workspace` launcher): [release_guide.md](release_guide.md).
 
 `muon freeze -o <file>` records exact SHAs of every repository (vcs2l format). Data products
-record the core SHA and the conditions snapshot (ADR-012 §10). Instrument release BOMs start with
-the first instrument release (ADR-012 §6).
+record the core SHA and the conditions snapshot (system architecture §6). Instrument release BOMs start with
+the first instrument release (engineering process §5).
 
 ## 7. Adding repositories
 
-Skill `muon-new-project`. Apply the split test (ADR-012 §3): a new repository is justified only when
+Skill `muon-new-project`. Apply the split test ([ADR-015](../adr/ADR-015_repository_and_instrument_layering.md)): a new repository is justified only when
 the toolchain, lifecycle or audience differs. Otherwise add a directory to an existing repository. Add the
 repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and `AGENTS.md` (template:
 `templates/project/`).
@@ -143,5 +143,5 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 
 ## 10. Hardening
 
-When a trigger in ADR-012 §6 fires (second domain, first release, second developer, …), add the
+When a hardening trigger in [engineering process §5](engineering_process.md#5-staged-rigor) fires (second domain, first release, second developer, …), add the
 listed mechanism and record it in `docs/decisions.md`.

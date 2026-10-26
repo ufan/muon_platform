@@ -1,4 +1,4 @@
-"""Tests for the muon workspace tool (ADR-012), against local bare repositories."""
+"""Tests for the muon workspace tool (docs/workflow/developer_guide.md), against local bare repositories."""
 
 import os
 import subprocess

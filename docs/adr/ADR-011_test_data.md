@@ -1,8 +1,8 @@
 # ADR-011 Test Data Management
 
 Version: 1.0
-Status: Accepted (2026-10-22); amended 2026-10-23 (ADR-012)
-Related: ADR-008 (replay), ADR-009 (workspace), ADR-010 (domain iteration, golden data)
+Status: Accepted (2026-10-22); amended 2026-10-23
+Related: [ADR-008](ADR-008_data_sources_and_verification.md) (data sources), [engineering process](../workflow/engineering_process.md) (golden data in domain iterations, hardening triggers)
 
 ## Decision
 
@@ -31,7 +31,7 @@ not by the platform hub.
   clutter the hub history.
 - The data is too large to push and must stay local. A versioned catalog keeps tests
   reproducible across data changes and lets each host hold a partial cache.
-- A self-contained repository is understandable and usable on its own: its README explains everything, and `python3 tools/testdata.py …` works in a plain clone. In a workspace, `muon testdata …` passes through to it (ADR-012).
+- A self-contained repository is understandable and usable on its own: its README explains everything, and `python3 tools/testdata.py …` works in a plain clone. In a workspace, `muon testdata …` passes through to it (developer guide).
 
 ## Consequences
 
@@ -41,10 +41,10 @@ not by the platform hub.
 - If data must later be shared across hosts or churns often, the byte storage can move to a
   content-addressed store. The `id@version` interface stays.
 
-## Amendment 2026-10-23: several hosts (ADR-012 §8)
+## Amendment 2026-10-23: several hosts
 
 Golden bytes are host-local, so a second development host has no replay data. Until a remote store
 exists, copy `golden/` with rsync, or point `MUON_DATA_ROOT` at a shared copy. `muon doctor` reports
-the data root it uses. When a second host needs the data routinely (an ADR-012 §6 trigger), add an optional
+the data root it uses. When a second host needs the data routinely (a hardening trigger, engineering process §5), add an optional
 remote (NAS, rsync target or object storage) to `tools/testdata.py`, with `fetch <id>@<v>` and `publish <id>@<v>`
 commands that verify against the catalog fingerprints. The `id@version` interface is unchanged.

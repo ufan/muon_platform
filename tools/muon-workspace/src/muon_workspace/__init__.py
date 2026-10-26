@@ -1,3 +1,3 @@
-"""muon launcher: run the workspace-pinned muon implementation (platform ADR-012 §5)."""
+"""muon launcher: run the workspace-pinned muon implementation (platform docs/workflow/developer_guide.md §1)."""
 
 __version__ = "0.1.0"

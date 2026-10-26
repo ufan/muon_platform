@@ -3,7 +3,7 @@
 Status: current (always-read agent context; a summary that points to the owning documents).
 
 Product, architecture and engineering rules that apply to every repository. They moved here from
-`platform/AGENTS.md` to keep the always-loaded rules short (ADR-012 §7). Read this before design
+`platform/AGENTS.md` to keep the always-loaded rules short (engineering process §7). Read this before design
 or architecture work, and when a task touches boundaries, contracts, data or deployment.
 
 ## Product Context

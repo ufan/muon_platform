@@ -4,7 +4,8 @@
 
 Re-baselined on 2026-10-25: each ADR below states the decision in force in short form, with its
 alternatives where they mattered; the earlier long text and option studies are in git (tag
-`docs-pre-cleanup`). All were confirmed by the owner on 2026-10-26 (005 merged into 003).
+`docs-pre-cleanup`). All were confirmed by the owner on 2026-10-26 (005 merged into 003). ADR-011 keeps its
+original form; ADR-015 restates the repository layering of the retired ADR-012.
 
 | ADR | Decision | Status |
 |---|---|---|
@@ -12,21 +13,25 @@ alternatives where they mattered; the earlier long text and option studies are i
 | [002](ADR-002_muon_edm_serialization.md) | Muon EDM is the scientific contract; serialization outside algorithms | Accepted |
 | [003](ADR-003_hardware_domains_services_and_controllers.md) | Hardware domains: services and controllers. gRPC domain services over controllers that own control and safety; DAQ on a dedicated link | Accepted |
 | [004](ADR-004_deployment_and_updates.md) | ARM64 edge, systemd, Debian packages; versioned config; version model open | Accepted |
-| 005 | Domain controllers | Merged into 003 (2026-10-26) |
 | [007](ADR-007_digital_twin.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_data_sources_and_verification.md) | Offline data for components, live and replay for the online pipeline; no physics simulation | Accepted |
+| [011](ADR-011_test_data.md) | Versioned, immutable test datasets; bytes host-local, catalog in git | Accepted; amended 2026-10-23 |
 | [014](ADR-014_hardware_domains_transports.md) | Hardware domains: slow-control transports. Device map, bus owner per port, Modbus RTU now | Accepted |
+| [015](ADR-015_repository_and_instrument_layering.md) | One repository per domain; an instrument layer coordinates; dependencies point one way | Accepted |
 
-## Development and repositories
+## Retired
 
-| Decision | Recorded status / later changes | Scope and relationships |
+| ADR | Topic | Status |
 |---|---|---|
-| 006 — AI-assisted engineering | Retired 2026-10-26 (file removed; text in git) | Fully covered by AGENTS.md and ADR-003, 008, 009, 010, 012 and 013. |
-| [009 — Workspace model](ADR-009_workspace_repository_model.md) | Partly superseded | ADR-012 replaces §1–§4, §6–§10, §12–§13; §5, §11, §14–§15 remain with adaptations. |
-| [010 — Domain iteration](ADR-010_spec_driven_domain_iteration.md) | Accepted; partly superseded | ADR-012 §3, §5–§6 revise repository/contract placement, tooling and the proposal/prototype rules in §2–§3 and §8; the iteration playbook remains. |
-| [012 — Repository baseline and workflow](ADR-012_repository_baseline_and_workflow.md) | Accepted; §8 partly superseded | Repository baseline; replaces parts of ADR-009, revises ADR-010 and amends ADR-011. ADR-013 replaces global iteration discovery and universal iteration handoff. |
-| [013 — Work discovery and session scope](ADR-013_work_discovery_and_session_scope.md) | Accepted | Stable instructions, multiple active plans, explicit assignments and scoped human/batch handoffs; replaces those rules in ADR-012 §8. |
-| [011 — Test data](ADR-011_test_data.md) | Accepted; amended | 2026-10-23 amendment follows ADR-012 §6 and §8 for multiple hosts. |
+| 005 | Domain controllers | Merged into 003 (2026-10-26) |
+| 006 | AI-assisted engineering | Retired 2026-10-26 |
+| 009 | Workspace and repository model | Retired 2026-10-26 |
+| 010 | Spec-driven domain iteration | Retired 2026-10-26 |
+| 012 | Repository baseline and workflow | Retired 2026-10-26; repository layering restated as ADR-015 |
+| 013 | Work discovery and session scope | Retired 2026-10-26 |
+
+Project-management rules from 006, 009, 010, 012 and 013 now live in the
+[engineering process](../workflow/engineering_process.md); their text is in git. Numbers are not reused.
 
 ## Maintaining the record
 
@@ -37,7 +42,7 @@ alternatives where they mattered; the earlier long text and option studies are i
 - For a material change to an accepted decision, add a new ADR. Identify the exact decisions or
   sections it supersedes, and add reciprocal links to the affected ADRs. Preserve their rationale.
 - Platform ADR numbers are unqualified (`ADR-006`). A repository's own decision records keep their
-  numbering and are qualified outside that repository, like requirement IDs (ADR-010 §7):
+  numbering and are qualified outside that repository, like requirement IDs ([engineering process §3](../workflow/engineering_process.md#3-requirement-ids)):
   `daq:ADR-006` is the DAQ decision on online event building, not platform ADR-006.
 - Distinguish related or extending decisions from replacement. For partial supersession, state
   what remains in force; a later number alone does not override earlier text.

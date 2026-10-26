@@ -1,6 +1,6 @@
 /build/
 
-# muon agents sync: generated agent files (ADR-012)
+# muon agents sync: generated agent files (platform docs/workflow/engineering_process.md §7)
 /.agents/skills/muon-*
 /.claude/skills/muon-*
 /.claude/settings.local.json

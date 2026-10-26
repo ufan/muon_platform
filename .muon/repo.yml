@@ -1,4 +1,4 @@
-# muon metadata for this repository (ADR-012); overrides its entry in repos/workspace.repos.
+# muon metadata for this repository (docs/workflow/engineering_process.md §6); overrides its entry in repos/workspace.repos.
 maturity: active
 role: system specs, decisions, workspace definition and the muon tool
 spec: platform/docs/README.md

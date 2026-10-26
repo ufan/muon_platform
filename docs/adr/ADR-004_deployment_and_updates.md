@@ -24,7 +24,7 @@ any past state.
 ## Consequences
 
 - The instrument release manifest (bill of materials) starts with the first instrument release
-  ([ADR-012 §6](ADR-012_repository_baseline_and_workflow.md#6-staged-rigor)).
+  ([engineering process §5](../workflow/engineering_process.md#5-staged-rigor)).
 
 ## Open
 

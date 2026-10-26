@@ -2,15 +2,15 @@
 
 Status: current.
 
-How to release the parts of the muon platform that are versioned and distributed. Decisions behind
-this: [ADR-012 §5](../adr/ADR-012_repository_baseline_and_workflow.md). Day-to-day work:
+How to release the parts of the muon platform that are versioned and distributed. Rules behind
+this: [engineering process](engineering_process.md). Day-to-day work:
 [developer guide](developer_guide.md).
 
 | What | Where | Distributed as | Who uses which version |
 |---|---|---|---|
 | Launcher | `platform/tools/muon-workspace` | PyPI package [`muon-workspace`](https://pypi.org/project/muon-workspace/), command `muon` | one per host, upgraded rarely |
 | Implementation (the workspace tool) | `platform/tools/muon` | **not published** | each workspace runs the copy in its own platform checkout |
-| Product software (core, domains, instruments) | their repositories | tags; instrument BOM later (ADR-012 §6) | not covered here yet |
+| Product software (core, domains, instruments) | their repositories | tags; instrument BOM later (engineering process §5) | not covered here yet |
 
 ## 1. Release the launcher (`muon-workspace`)
 
