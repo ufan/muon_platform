@@ -12,7 +12,7 @@ changed and hardened. Procedures are in the [developer guide](developer_guide.md
   DAQ → preprocess → recon → imaging/analysis. Hardware domains start when their iteration starts.
 - **Strangler fig:** each new domain replaces its legacy stage while the chain keeps working.
 - **Domain iteration playbook** (skill `muon-domain-iteration`): scope → legacy archaeology →
-  golden data → to-be spec and contracts → skeleton and failing tests → implement → differential
+  golden data → to-be spec and contracts (baseline, §4) → skeleton and failing tests → implement → differential
   verification → strangler switch → retire legacy.
 - **Port, refactor or rewrite** is decided per domain at the to-be spec step:
   - refactor in place: the code is sound and in the right language and runtime; only the structure is wrong;
@@ -20,17 +20,36 @@ changed and hardened. Procedures are in the [developer guide](developer_guide.md
     provenance survives;
   - rewrite from spec: legacy is only a behaviour reference and a golden-data source (DAQ, 2026-10).
 
-## 2. Specification layers
+## 2. Specification levels
 
-Each layer should end in something a program can check. Tests name the requirement or spec IDs they cover.
+The project is specified at two levels that follow the same process. Platform is the **system
+level**: what the instrument is and how its parts fit. Each **component repository** (repository
+model) specifies and develops its part in detail.
 
-| Layer | Location | Form |
+| Layer | System level (`platform`) | Component level (each component repository) |
 |---|---|---|
-| Requirement | `platform/docs/requirements/`, `<repo>/…/feature-requirements.md` | prose with stable IDs (§3) |
-| Architecture, decision | `platform/docs/architecture/`, `platform/docs/adr/` | prose |
-| Component spec | `<repo>/SPEC.md` and what it links | behaviour and acceptance criteria referencing requirement IDs |
-| Contract | `core/contracts/` (science; system until extraction), `core/daq/ref/<target>/` (device ↔ host wire protocol) | machine-readable: schemas, protobuf, state-machine tables |
-| Conformance, behaviour | `<repo>/tests/`, golden datasets | contract tests, golden-data and replay tests |
+| Requirement | `docs/requirements/` (`SYS-NNN`, `HV-NNN`, …) | its own requirements (`FR-NNN`; `daq:FR-001` outside it) |
+| Architecture, decision | `docs/architecture/`, `docs/adr/`, `governance/decisions.md` | its own architecture and ADRs (`daq:ADR-006`) |
+| Behaviour spec | — | `openspec/specs/<capability>/`: SHALL requirements with scenarios |
+| Component spec | — | design, rationale and interpretation rules, linked from `SPEC.md` |
+| Contract | interface rules (ADR-003, ADR-014) | machine-readable: protobuf, schemas, state-machine tables (`core/contracts/`; device wire protocol in `core/daq/ref/<target>/`) |
+| Verification | system and integration tests (instrument, later) | unit, contract, conformance, golden-data and replay tests |
+| Plan | iterations (`iterations/`) | its own roadmap, if any |
+
+- **Flow-down:** system requirements, architecture and ADRs constrain every component. A component
+  requirement cites the system requirement or ADR it refines, where one exists.
+- **Encapsulation:** a component's own requirements, architecture, ADRs and specs are internal.
+  Other repositories rely only on its contracts and on the specs it publishes for them, cited with
+  the repository qualifier (`core:domain-service`).
+- **Flow-up:** a component that finds a system requirement or decision wrong or missing raises it at
+  the system level (requirement change or ADR); it never diverges silently.
+- **Shared system behaviour** is specified where its contract lives: in core next to
+  `core/contracts/system/` now, in `contracts` after extraction (§5).
+- **One fact, one home.** The requirement file states the need (one line and its acceptance); the
+  behaviour spec states the observable behaviour and cites the requirement, never copying it; the
+  component spec explains design and rationale and links the behaviour spec and contract instead of
+  repeating them.
+- Each layer should end in something a program can check. Tests name the requirement or spec IDs they cover.
 
 ## 3. Requirement IDs
 
@@ -42,12 +61,67 @@ Each layer should end in something a program can check. Tests name the requireme
 
 ## 4. Changes
 
-- **Prototype lane is the default.** Prototype freely inside a repository; its own `AGENTS.md` governs.
-- A **change proposal** (`platform/changes/`, skill `muon-new-change`) is optional. Write one to record
-  a decision or to promote prototype behaviour into the spec baseline (spec deltas with acceptance
-  criteria). Design notes are promoted with skill `muon-promote`.
+### Stages of a capability
+
+A capability is a cohesive unit of observable behaviour (the DAQ device state machine, the
+domain-service contract, the raw capture format). Each one passes through three stages:
+
+| Stage | When | Rule |
+|---|---|---|
+| Exploration | before its first approved spec | Prototype to expose the real needs (branches, spikes, `/opsx:explore`); no gate. Output: findings and candidate requirements. |
+| Baseline | iteration step 3 of its domain (§1) | The first OpenSpec change of the capability creates its spec from what was learned; the owner approves it. |
+| Controlled | after the baseline | Every behaviour change goes through an approved OpenSpec change. An experiment stays on a throwaway branch and merges only through a change. |
+
+The stage is mechanical: a capability is controlled once `openspec/specs/<capability>/` exists in
+its repository. Repository maturity (§6) summarises the stages of its capabilities.
+
+### Behaviour changes
+
+A behaviour change is one that a client, operator, another component, a data consumer or a
+black-box test can observe through a defined interface:
+
+- control behaviour: states, command acceptance and results, recovery;
+- fault and safety handling: health, alarms, interlock reactions, timeouts;
+- contracts and data formats: messages, fields, record and file layouts, APIs used by another repository;
+- data products and scientific results, including any change in numerical output;
+- configuration meaning: new parameters, defaults, units;
+- performance guarantees the spec states.
+
+Not behaviour changes: refactoring, internal APIs used only inside the repository, speed-ups that
+change no stated guarantee, build and tooling, tests of specified behaviour, documentation, and
+fixes that restore the specified behaviour. A fix where the spec is silent decides behaviour: it is
+a change, and it adds the missing rule.
+
+### OpenSpec changes (component level)
+
+1. **Propose** (`/opsx:propose <name>`): proposal (why, what, impact, the iteration task it serves,
+   `## Approval` with `Status: pending`); spec delta whose requirements cite the requirement IDs they
+   refine; design when there is a real choice (sources compared with their authority, alternatives);
+   tasks ending in a `## Verification` group (exact commands, hardware tests not run). Commit it.
+2. **Approve:** only the owner sets `Status: approved` with name and date, or an agent does so on
+   the owner's instruction and quotes it in the commit.
+3. **Apply** (`/opsx:apply`, any AI tool): stop if the change is not approved; implement, name tests
+   after requirement IDs, run `muon verify <repo>`, commit. Specs are not merged during apply.
+4. **Archive** (`/opsx:archive`): merge the spec delta into `openspec/specs/`, move the change to
+   `openspec/changes/archive/`, commit; then update the iteration task.
+
+Work spanning repositories is one change per repository, linked from the iteration task. A change
+that depends on another names it (`Depends on: <repo>/<change>`) and is archived after it.
+Configuration: `openspec/config.yaml` from `templates/project/openspec/`, without a forked
+OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt by `openspec update`.
+
+### System-level changes (platform)
+
+- **Iterations** (`iterations/`, skill `muon-domain-iteration`) plan and order work across
+  repositories; their tasks link the component changes that carry them out.
+- Requirements, architecture and governance change by commits the owner approves. Design notes are
+  promoted with skill `muon-promote`.
+
+### Rules for every change
+
 - Contracts used only by core change in the same commit as their consumer.
-- **Agents draft; the owner approves** requirements, ADRs, contract changes and merges to platform docs.
+- **Agents draft; the owner approves** requirements, ADRs, behaviour changes and their baselines, and
+  merges to platform docs.
 - Definition of done: `muon verify` passes for changed repositories, specs and docs are updated,
   tests reference requirement IDs.
 - **Agents commit their own work.** After `muon verify` passes, the agent that made a scoped change
@@ -101,7 +175,7 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
 | D0 data | new alignment or dataset version | yes | the data repository's validation |
 | C0 own namespace, additive | new optional field | yes, as a PR | compatibility check and reverse-dependency CI |
 | C1 own namespace, breaking | rename a field in its own API | draft only | affected owners acknowledge; semver major |
-| C2 shared or system spec | lifecycle state machine, requirement, ADR | draft only | change proposal, decided in the upper repository |
+| C2 shared or system spec | lifecycle state machine, requirement, ADR | draft only | OpenSpec change in the repository that owns the shared spec, with consumers named in the proposal; requirement or ADR change at the system level |
 
 ## 6. Repositories and workspace
 
@@ -113,8 +187,8 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
   |---|---|---|
   | `legacy` | old implementation, reference only | read-only and locked; never a dependency |
   | `support` | data or tools off the production path (study, tools, test data) | change only on explicit request |
-  | `incubating` | new; contracts provisional | prototype lane; breaking changes allowed |
-  | `active` | domain in its iteration | spec-driven, full verification |
+  | `incubating` | new; contracts provisional | capabilities mostly in exploration (§4); breaking changes allowed |
+  | `active` | domain in its iteration | baselined capabilities under change control (§4); full verification |
   | `stable` | contracts frozen, semver | breaking changes need an ADR |
 
 - **Workspace:** a plain directory composed from vcs2l `.repos` files in `platform/repos/`; all
@@ -141,7 +215,8 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
   |---|---|
   | Rules, procedures | `AGENTS.md`, skills |
   | Decisions | ADRs; `governance/decisions.md` (at most about 30 active entries) |
-  | Work discovery, plans | `work/index.yml`; linked proposal and task records |
+  | Work discovery, plans | `work/index.yml`; iteration records (`iterations/`) |
+  | Behaviour specs and changes | each component repository's `openspec/` |
   | Scoped work in progress | explicit assignment and its handoff; isolated branches or worktrees |
   | Workspace composition | `platform/repos/*.repos`, `.muon/repo.yml`; `muon freeze` snapshots |
   | Host-local data | `testdata/golden` or `$MUON_DATA_ROOT`, `archive/` |
