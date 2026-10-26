@@ -2,7 +2,7 @@
 
 Status: proposed. Input for the planned `muon_instrument` (coordination, operator CLI and external
 API). Not a decision; the binding boundaries are in the [system architecture](../architecture/system_architecture.md),
-[ADR-003](../adr/ADR-003_hardware_domains.md) and [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md).
+[ADR-003](../adr/ADR-003_hardware_domains.md) and [ADR-014](../adr/ADR-014_slow_control_transports.md).
 Consolidated 2026-10-25 from the former `instrument_architecture.md`, `service_api_shape.md` and
 `cli_command_model.md` (full text in git).
 

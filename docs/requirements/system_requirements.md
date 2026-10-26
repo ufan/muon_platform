@@ -61,6 +61,8 @@ The system shall:
 7. record, for every scientific product, the instrument, firmware, detector configuration, geometry,
    calibration, algorithm and software versions, and time.
 
+Out of scope: cooling and dehumidification; they are no longer a required domain.
+
 ## 5. Operation and lifecycle
 
 The system shall:

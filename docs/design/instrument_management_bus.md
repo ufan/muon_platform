@@ -1,6 +1,6 @@
 # Instrument management bus: protocol draft
 
-Status: proposed. A possible future protocol for custom domain controllers; not decided and not scheduled. Today all slow-control devices, including the first custom boards, use Modbus RTU ([ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)). Requirement IDs `IMB-NNN` apply only if this protocol is adopted.
+Status: proposed. A possible future protocol for custom domain controllers; not decided and not scheduled. Today all slow-control devices, including the first custom boards, use Modbus RTU ([ADR-014](../adr/ADR-014_slow_control_transports.md)). Requirement IDs `IMB-NNN` apply only if this protocol is adopted.
 
 **Document ID:** IMB-SPEC
 

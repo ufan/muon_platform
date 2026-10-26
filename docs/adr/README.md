@@ -15,7 +15,7 @@ alternatives where they mattered; the earlier long text and option studies are i
 | 005 | Domain controllers | Merged into 003 (2026-10-26) |
 | [007](ADR-007_digital_twin_strategy.md) | Layered product architecture with a digital twin | Accepted |
 | [008](ADR-008_data_sources_and_verification.md) | Offline data for components, live and replay for the online pipeline; no physics simulation | Accepted |
-| [014](ADR-014_slow_control_domains_and_transports.md) | Slow control: stable services, configurable transports, Modbus now | Accepted |
+| [014](ADR-014_slow_control_transports.md) | Slow-control transports as configuration: device map, bus owner per port, Modbus RTU now | Accepted |
 
 ## Development and repositories
 

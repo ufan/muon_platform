@@ -1,7 +1,7 @@
 # ADR-003 Hardware domains: services and controllers
 
 Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26; former ADR-005 merged in 2026-10-26)
-Related: [ADR-014](ADR-014_slow_control_domains_and_transports.md) (transports and stages)
+Related: [ADR-014](ADR-014_slow_control_transports.md) (transports and stages)
 
 ## Decision
 
@@ -17,7 +17,7 @@ Software reaches hardware through three layers: domain service → domain contro
   and interlocks. It may be firmware on its own board or a software adapter on the host; either way
   it sits behind the domain service. Central software orchestrates, fuses data, reconstructs and
   communicates externally.
-- **Transport** is configuration, chosen per device ([ADR-014](ADR-014_slow_control_domains_and_transports.md)).
+- **Transport** is configuration, chosen per device ([ADR-014](ADR-014_slow_control_transports.md)).
 - DAQ uses a dedicated high-rate link (USB today, possibly Ethernet), separate from slow control.
 
 ## Why
