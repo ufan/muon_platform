@@ -10,7 +10,7 @@ domain iteration (ADR-010). Whole-system design: [system architecture](system_ar
                         │                  (decode, CRC,               (event building,               (opacity,
                         │                   validation)                 hits, tracking)                inversion)
                         └──▶ raw persistence (immutable)                       └──▶ analysis
- replay / simulation ──same raw-stream contract──▶ preprocess …
+ replay ──same raw-stream contract──▶ preprocess …
 ```
 
 daq, preprocess and recon are modules of `core`; the arrows are contracts in `core/contracts/science/`.

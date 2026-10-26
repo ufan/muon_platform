@@ -1,6 +1,6 @@
-# ADR-003 Instrument services
+# ADR-003 Hardware domain services
 
-Status: Accepted (re-baselined 2026-10-25)
+Status: Accepted (re-baselined 2026-10-25; confirmed by owner 2026-10-26)
 
 ## Decision
 

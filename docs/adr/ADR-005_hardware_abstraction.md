@@ -8,7 +8,7 @@ Status: Accepted (re-baselined 2026-10-25). Option study: [hardware abstraction 
   interlocks. Central software orchestrates, fuses data, reconstructs and communicates externally.
 - A domain controller may be firmware on its own board or a software adapter on the host
   ([ADR-014](ADR-014_slow_control_domains_and_transports.md)); either way it sits behind the
-  domain's service interface ([ADR-003](ADR-003_instrument_service_architecture.md)).
+  domain's service interface ([ADR-003](ADR-003_hardware_domain_services.md)).
 - DAQ uses a dedicated high-rate link (USB today, possibly Ethernet), separate from slow control.
 - Firmware for custom controllers uses Zephyr.
 

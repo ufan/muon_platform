@@ -7,7 +7,7 @@ are not claims of implementation; component specifications state what exists.
 ## 1. Principles
 
 - Hardware stays behind domain services. Applications and orchestration never address devices
-  ([ADR-003](../adr/ADR-003_instrument_service_architecture.md), [ADR-005](../adr/ADR-005_hardware_abstraction.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
+  ([ADR-003](../adr/ADR-003_hardware_domain_services.md), [ADR-005](../adr/ADR-005_hardware_abstraction.md), [ADR-014](../adr/ADR-014_slow_control_domains_and_transports.md)).
 - Domain controllers own deterministic control, safety and interlocks; central software orchestrates.
 - The instrument commands every domain, core included; core never commands another domain
   ([ADR-012](../adr/ADR-012_repository_baseline_and_workflow.md)).
@@ -137,6 +137,4 @@ not evidence of verified detector behaviour; report checks not performed.
 | Topic | State |
 |---|---|
 | Slow-control service interfaces | Deferred. When started: transport-independent, Modbus host adapters first, and each domain states which protection lives in the device and which in its controller. |
-| HV numeric targets | The [system requirements](../requirements/system_requirements.md#7-performance) example (0–2000 V, sub-nA measurement) is not an acceptance limit until confirmed against hardware. |
 | C++ standard | Component builds decide (C++17 toolchain today); no workspace-wide standard yet. |
-| DAQ formats and timestamps | Raw-capture container, provenance and device timestamp semantics: [DAQ iteration](../../changes/2026-10-daq-iteration-1/proposal.md). |
