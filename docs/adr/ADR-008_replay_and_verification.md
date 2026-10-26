@@ -4,20 +4,25 @@ Status: Accepted (re-baselined 2026-10-25; revised by owner 2026-10-26: physics 
 
 ## Decision
 
-- Live acquisition and recorded replay are equivalent sources behind one raw-stream contract.
-  Downstream processing does not know the source.
-- Recorded raw data is an immutable engineering asset, archived and versioned.
-- Physics simulation (detector Monte Carlo such as Geant4) is not part of this project. Offline and
-  replayed data drive reconstruction algorithm development.
+- Recorded raw data is an immutable engineering asset, archived and versioned. Curated recordings
+  are the offline datasets (`testdata`, [ADR-011](ADR-011_test_data.md)).
+- **Offline data** is for iterating and verifying single features and components (decoding, hit
+  building, tracking, …): they run directly on versioned datasets, without the online pipeline.
+- **Live and replay** are equivalent sources behind one raw-stream contract; downstream processing
+  does not know the source. Replay mainly verifies the online pipeline end to end (pacing,
+  ordering, backpressure, event building) without hardware.
+- Physics simulation (detector Monte Carlo such as Geant4) is not part of this project; offline
+  and replayed data drive reconstruction algorithm development.
 - Hardware domain simulators and fakes stay ([ADR-003](ADR-003_hardware_domains.md)); they are the
   integration-test infrastructure for domain services and the instrument.
-- Verification layers: unit and contract tests, dataset regression against golden data,
-  domain-simulator integration tests and hardware-in-the-loop tests.
+- Verification layers: unit and contract tests, offline-dataset regression against golden data,
+  online-pipeline replay, domain-simulator integration tests and hardware-in-the-loop tests.
 
 ## Why
 
 Hardware is scarce and slow to test with; recorded data gives fast, reproducible development,
-regression testing and demonstrations. Physics simulation adds little to rapid prototyping of most
+regression testing and demonstrations. Offline datasets keep component iterations small and fast;
+replay exercises the online pipeline as a whole. Physics simulation adds little to rapid prototyping of most
 components, and offline and replayed data already support the reconstruction algorithm iterations.
 
 ## Alternatives

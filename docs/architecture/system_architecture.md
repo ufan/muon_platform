@@ -104,11 +104,14 @@ The module chain, contract owners and downstream needs are in the [architecture 
   version and parameters, conditions snapshot ID and hash, and time. A conditions override keeps
   both identities.
 
-## 7. Replay and digital twin
+## 7. Offline data, replay and digital twin
 
-- Replay produces the same raw-stream contract as live acquisition. Decoding,
-  validation, event building, schemas and publishing are identical in every mode; only the source
-  adapter's pacing, clock, backpressure and sink policies differ, and they are recorded in metadata
+- Offline datasets (`testdata`) are where single features and components iterate and are
+  verified, run directly without the online pipeline ([ADR-008](../adr/ADR-008_replay_and_verification.md)).
+- Replay mainly verifies the online pipeline. It produces the same raw-stream contract as live
+  acquisition. Decoding, validation, event building, schemas and publishing are identical in every
+  mode; only the source adapter's pacing, clock, backpressure and sink policies differ, and they are
+  recorded in metadata
   ([acquisition sources](../../../core/daq/doc/specs/acquisition-sources.md)).
 - Golden datasets are versioned and immutable ([ADR-011](../adr/ADR-011_test_data.md)).
 - Physics simulation is not part of this project; a separate simulation project could feed the
@@ -128,9 +131,10 @@ The module chain, contract owners and downstream needs are in the [architecture 
 
 ## 9. Verification
 
-Requirements trace to unit and contract tests, replay/golden comparisons, domain-simulator
-integration and hardware-in-the-loop tests. Tests name the requirement IDs they cover. A passing build or replay is
-not evidence of verified detector behaviour; report checks not performed.
+Requirements trace to unit and contract tests, offline-dataset/golden comparisons, online-pipeline
+replay, domain-simulator integration and hardware-in-the-loop tests. Tests name the requirement IDs
+they cover. A passing build or replay is not evidence of verified detector behaviour; report checks
+not performed.
 
 ## 10. Open points
 
