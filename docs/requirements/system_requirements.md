@@ -81,5 +81,4 @@ The system shall:
 ## 7. Performance
 
 To be defined per domain: detector event rate, reconstruction throughput, processing latency, data
-and storage bandwidth, CPU use. Example HV range (not an acceptance limit): 0–2000 V with sub-nA
-current measurement.
+and storage bandwidth, CPU use.
