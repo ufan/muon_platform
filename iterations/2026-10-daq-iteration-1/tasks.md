@@ -6,7 +6,7 @@ Statuses: `todo | draft | provisional | blocked: owner | blocked: external | don
 | # | Repo | Task | Spec IDs | Verification | Status |
 |---|---|---|---|---|---|
 | 1 | platform, core | Decide wire-protocol ownership (DAQ-1): `daq/ref` owns it; `contracts/wire` removed | — | decision recorded in proposal | done |
-| 2 | (legacy) | Archaeology of `usb_app2` and `legacy/muon400_process/src/fx3` → `as-is.md`, `golden-data.md` (skill `muon-legacy-archaeology`) | daq:FR-001…daq:FR-006 | reviewer check; owner settles DAQ-7 … DAQ-12 | provisional (2026-10-23) |
+| 2 | (legacy) | Archaeology of `usb_app2` and `legacy/muon400_process/src/fx3` → `as-is.md`, `golden-data.md` (skill `muon-legacy-archaeology`) | daq:FR-001…daq:FR-006 | reviewer check (owner, citations); owner settles DAQ-7 … DAQ-12 | provisional (DAQ-7 … DAQ-12 approved 2026-10-27; citation check pending) |
 | 3 | core, testdata | Golden-data plan: pick raw datasets from `testdata` (placeholders today, ADR-011), add the first recorded captures from `jw-muon-150test` as new `testdata` ids, pin them in `core/daq/tests/golden.yml` → `golden-data.md` | daq:FR-004, daq:FR-005 | fixtures replay | todo, ready up to the import (DAQ-6 provisional; import is `ask`) |
 | 4 | core | `contracts/science/fsm/daq_device.yaml` from the state machine spec | daq:FR-001 | table review; transition tests generated or checked | todo |
 | 5 | core | Raw-capture format + run metadata (proposes DAQ-2; builds on provisional DAQ-4 and DAQ-5), including provenance and time-sync fields; `contracts/system/time/` | daq:FR-004, daq:FR-005, daq:FR-011 | schema review | todo |
@@ -19,8 +19,10 @@ Statuses: `todo | draft | provisional | blocked: owner | blocked: external | don
 
 ## Next
 
-- Owner: one pass over the provisional requests DAQ-3 … DAQ-12 in `proposal.md` (DAQ-6 is the
-  fixture set F1–F4; DAQ-7 … DAQ-12 the as-is discrepancies that need no external answer).
+- Settled 2026-10-27: DAQ-3 and DAQ-7 … DAQ-12 approved. DAQ-7 … DAQ-12 land in the device FSM and
+  raw capture baseline changes (step 3). Still to settle: DAQ-6 after the full-frame CRC check (task 3),
+  DAQ-4 and DAQ-2 with task 5, DAQ-5 after the firmware answer (task 9).
+- Task 2 exit: an owner check that the `as-is.md` citations resolve.
 - Agents, without waiting: task 11 (OpenSpec in core), task 3 up to the import (T0 cuts, spec scanner as a test helper in
   `core/daq/tests/`, `golden.yml` with the exact values), and task 4 on a task branch. The import
   into `testdata/golden` waits for DAQ-6.
