@@ -91,7 +91,7 @@ While prototyping (engineering process §5):
 - Use the same branch name in each repository: `muon branch <topic> core platform`.
 - Agents may edit any repository, but must **announce** every repository they touched outside their starting one.
 - Contracts used only by core stay in core and change in the same commit as their consumer.
-- System contracts are drafted in `core/contracts/system/`. Record notable decisions in `governance/decisions.md`.
+- System contracts are drafted in `core/contracts/system/`. Record their rationale in the contract's README (a `governance/decision_log.md` entry may point to it).
 - Run `muon status` before pushing, so that no repository is left dirty or on an unexpected branch.
 
 Behaviour that spans repositories is one OpenSpec change per repository, linked from the iteration
@@ -107,7 +107,7 @@ Each capability passes through three stages (engineering process §4):
 3. **Controlled:** every later behaviour change to that capability is an OpenSpec change. Refactors,
    tooling, docs and fixes that restore the spec are ordinary commits.
 
-At the system level, decisions go to ADRs or `governance/decisions.md`, plans to iterations, and
+At the system level, decisions go to ADRs or `governance/decision_log.md`, plans to iterations, and
 requirement or architecture changes are commits the owner approves. Notes (`docs/notes/`,
 brainstorms) become baseline by restating their content in the owning document and turning the note
 into a mapping record: skill `muon-promote`.
@@ -148,7 +148,7 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
   load `platform/AGENTS.md` from outside the git root; agy also needs `read_file(<workspace>)` and
   `command(muon status)` in its host settings (`muon doctor` checks the first).
 - **Keep the rules lean.** `muon doctor` checks the size limits. Put details in skills or docs.
-- **One fact, one home.** Decisions go in an ADR, or in `governance/decisions.md` if they pass its log test (folded entries move to `governance/decisions/<year>.md`); behaviour specs and changes in each component repository's `openspec/`, iteration plans in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
+- **One fact, one home.** Decisions go in an ADR or the document they change, or in `governance/decision_log.md` if they pass its log test (product entries land in their home, engineering process §4) (folded entries move to `governance/decision_log/<year>.md`); behaviour specs and changes in each component repository's `openspec/`, iteration plans in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
 - **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
   task scopes and an integrator (see the work scope protocol).
@@ -160,4 +160,4 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 ## 10. Hardening
 
 When a hardening trigger in [engineering process §5](engineering_process.md#5-staged-rigor) fires (second domain, first release, second developer, …), add the
-listed mechanism and record it in `governance/decisions.md`.
+listed mechanism and record it in `governance/decision_log.md`.

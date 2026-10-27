@@ -40,7 +40,7 @@ the documents relevant to the change. Flag unresolved conflicts instead of silen
 - Run `muon verify <repo>` before claiming done (skill `muon-verify`). Name tests after requirement IDs.
 - Never push, create remotes, delete branches or run destructive commands without the user's confirmation.
 - `support` repositories (study, testdata, tools) change only on explicit request.
-- Durable decisions go in an ADR or, if they pass its log test, `platform/governance/decisions.md`; never only in tool memory.
+- Durable decisions go in an ADR or spec or, if they pass its log test, `platform/governance/decision_log.md`; never only in tool memory.
 - Respect the architecture: hardware stays behind domain services; algorithms use EDM objects and immutable
   conditions; online and offline share code; raw data is immutable and every scientific product is traceable;
   Linux ARM64 stays supported.

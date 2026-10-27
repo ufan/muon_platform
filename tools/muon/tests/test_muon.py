@@ -150,7 +150,7 @@ def test_doctor_counts_active_decisions(remotes):
     assert ops.active_decisions(ws) is None
     gov = top / "platform" / "governance"
     gov.mkdir()
-    (gov / "decisions.md").write_text("# Decision log\n\nFormat: `- YYYY-MM-DD ...`\n\n"
+    (gov / "decision_log.md").write_text("# Decision log\n\nFormat: `- YYYY-MM-DD ...`\n\n"
                                        "- 2026-10-24 [a] one. Home: log-only.\n- 2026-10-21 [b] two.\n")
     assert ops.active_decisions(ws) == 2
 

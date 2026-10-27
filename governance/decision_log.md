@@ -12,18 +12,24 @@ Log a decision only if all three hold:
 
 Otherwise: a decision that changes a document is recorded by that edit and its commit message; a
 consequential choice with alternatives becomes an ADR; an undecided question becomes an open point
-in the owning document.
+in the owning document; an iteration item awaiting approval is a decision request in its iteration.
+
+**Product or process.** This log belongs to the project process (`governance/`); it is never the
+authority for the product. A product decision (requirements, architecture, interfaces, data formats,
+scientific behaviour) may be logged when it is made, but must name its home in `docs/` or a component
+repository, and lands there (engineering process §4). `log-only` is allowed only for process decisions.
 
 ## Format and lifecycle
 
-One line, newest first: `YYYY-MM-DD [area] decision — why, when known. Home: <document> | log-only`.
+One line, newest first: `YYYY-MM-DD [area] decision — why, when known. Home: <document> (pending) | <document> | log-only`.
 
-- **Active:** listed below.
-- **Folded:** once the home document states it, move the entry to [`decisions/<year>.md`](decisions/2026.md)
+- **Active:** listed below. `(pending)` marks a product decision its home does not state yet.
+- **Folded:** once the home document states it, move the entry to [`decision_log/<year>.md`](decision_log/2026.md)
   with its home. Archived entries stay searchable for rationale.
 - **Superseded:** replace the entry with the new one and archive the old one.
 
-Fold entries at the end of each domain iteration, or when `muon doctor` warns (more than 30 active entries).
+Fold entries at the end of each domain iteration, or when `muon doctor` warns (more than 30 active
+entries). A product entry is never folded while its home is pending: land it first (skill `muon-promote`).
 
 ## Active decisions
 

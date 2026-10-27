@@ -38,7 +38,7 @@ delegated envelope, or scope, stop and raise it as `ask`, whatever the step.
 
 **Readiness is not approval.** A reviewer's "ready" report, passing tests or a missing objection never
 approve anything. A provisional request is not a decision: nothing merges to `main` or is archived
-while a request it depends on is still provisional.
+while a request it depends on is still provisional, or approved but not yet landed.
 
 ## Checkpoints
 
@@ -47,7 +47,7 @@ while a request it depends on is still provisional.
 | 0 Scope | owner assignment starting the iteration | proposal and tasks from `iterations/_template/`; boundary and downstream needs in `docs/architecture/system_architecture.md` §5; proposed notes for the domain (skill `muon-promote`); entry in `work/index.yml` | start `ask`; boundary `show` |
 | 1 Archaeology | step 0 recorded; legacy references locked | `as-is.md` (skill `muon-legacy-archaeology`): sources examined, observed vs assumed, citations; exit when every citation resolves and every discrepancy is a decision request or `blocked: external` | `show` |
 | 2 Golden data | `as-is.md` draft | `golden-data.md`; fixtures with provenance; tolerances per quantity in machine-readable form (`tests/golden.yml`); exit when fixtures replay from T0 cuts or `testdata/scratch/` copies on the task branch (before import) | selection, tolerances `show`; import `ask` |
-| 3 Baseline | `as-is.md` and golden plan exist (provisional is enough) | per capability, its first OpenSpec change (engineering process §4); provisional contracts; port/refactor/rewrite; promoted notes; exit when `openspec validate` passes, cited requirement IDs resolve, tasks cover the spec | change `show`; archive `ask` |
+| 3 Baseline | `as-is.md` and golden plan exist (provisional is enough) | per capability, its first OpenSpec change (engineering process §4); provisional contracts; port/refactor/rewrite; promoted notes; the capability's approved decision requests landed in it; exit when `openspec validate` passes, cited requirement IDs resolve, tasks cover the spec | change `show`; archive `ask` |
 | 4 Skeleton | baseline change written | interfaces; failing contract and golden tests named after requirement IDs; exit when they fail for the stated reason | `ship` |
 | 5 Implement | skeleton | code in isolated worktrees, one assignment per capability or feature; exit when `muon verify` passes and an independent review reports ready | `ship` |
 | 6 Differential verify | implementation | automated comparison against golden data per quantity, as a report; exit when every quantity is within tolerance, or each deviation is classed `temporary` (scope and expiry, as a decision request) or `permanent` (an OpenSpec change) | within tolerance `ship`; deviation `ask` |
@@ -61,10 +61,12 @@ means it needs the owner: an `ask` request (name its id) or an owner action such
 ## Decision requests and approval
 
 - Each `show`/`ask` item is a decision request in `## Decision requests`: id, class, capability (or
-  `all`), one question per request,
+  `all`), one question per request, `Lands in` (its home document, OpenSpec change or contract; `—`
+  for process items),
   recommendation, evidence (link), consequence if wrong, `Confirms when` (the evidence or event that
   makes it decidable, or `now`; approval follows it), status
-  (`open` while no recommendation exists, then `provisional`, `approved` or `rejected`).
+  (`open` while no recommendation exists, then `provisional`, `approved` or `rejected`; an approved
+  product request becomes `landed — <commit>` once its home states it; engineering process §4).
 - The owner settles provisional requests in one pass, normally when work is about to merge.
   Approval record: `Status: approved — <approver>, human|agent:<tool/model>, <date>, authority: owner|delegation <id>`.
 - `## Delegation` lists the classes of `show` requests the owner has granted to an agent approver,

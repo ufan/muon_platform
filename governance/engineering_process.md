@@ -33,7 +33,7 @@ model) specifies and develops its part in detail.
 | Layer | System level (`platform`) | Component level (each component repository) |
 |---|---|---|
 | Requirement | `docs/requirements/` (`SYS-NNN`, `HV-NNN`, …) | its own requirements (`FR-NNN`; `daq:FR-001` outside it) |
-| Architecture, decision | `docs/architecture/`, `docs/adr/`, `governance/decisions.md` | its own architecture and ADRs (`daq:ADR-006`) |
+| Architecture, decision | `docs/architecture/`, `docs/adr/` | its own architecture and ADRs (`daq:ADR-006`) |
 | Behaviour spec | — | `openspec/specs/<capability>/`: SHALL requirements with scenarios |
 | Component spec | — | design, rationale and interpretation rules, linked from `SPEC.md` |
 | Contract | interface rules (ADR-003, ADR-014) | machine-readable: protobuf, schemas, state-machine tables (`core/contracts/`; device wire protocol in `core/daq/ref/<target>/`) |
@@ -156,7 +156,13 @@ OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt
     starts a body line with `BREAKING:`. An approval made on the owner's instruction quotes it.
   - Commits made by an AI tool end with `Co-Authored-By: <tool or model> <noreply address>`.
 - Decisions: consequential choices with alternatives become ADRs; small ones go to
-  [decisions.md](decisions.md) if they pass its admission test.
+  [decision_log.md](decision_log.md) if they pass its admission test.
+- **Landing.** A product decision is authoritative only in its home: the requirement, architecture,
+  ADR, component spec, contract or OpenSpec change it belongs to. A decision log entry or an approved
+  decision request names that home and is restated there, citing the record (`landed`). Landing an
+  approved decision is `ship` unless it changes a requirement (`ask`). It happens at the latest when the
+  capability is baselined (iteration step 3), before work that depends on it merges to `main`, and
+  at the end of the iteration. The integrator lands, using skill `muon-promote`.
 
 ## 5. Staged rigor
 
@@ -188,7 +194,7 @@ OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt
 | Shared behaviour specs owned apart from their consumers (second developer, external team, or several domains in parallel) | Evaluate an OpenSpec store (e.g. `contracts`) that component repositories reference read-only |
 | Second development host needs replay data routinely | Remote store for golden bytes ([ADR-011](../docs/adr/ADR-011_test_data.md)) |
 
-When a trigger fires, add the mechanism and record it in `decisions.md`.
+When a trigger fires, add the mechanism and record it in `decision_log.md`.
 
 **Change classes for upper layers** (mandatory from the second-developer trigger):
 
@@ -236,7 +242,7 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
   | State | Home |
   |---|---|
   | Rules, procedures | `AGENTS.md`, skills |
-  | Decisions | ADRs; `governance/decisions.md` (at most about 30 active entries) |
+  | Decisions | ADRs; `governance/decision_log.md` (at most about 30 active entries) |
   | Work discovery, plans | `work/index.yml`; iteration records (`iterations/`) |
   | Behaviour specs and changes | each component repository's `openspec/` |
   | Scoped work in progress | explicit assignment and its handoff; isolated branches or worktrees |

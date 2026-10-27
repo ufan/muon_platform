@@ -56,8 +56,9 @@ Project-management rules from 006, 009, 010, 012 and 013 now live in the
 
 ## Maintaining the record
 
-- Use ADRs for consequential choices with alternatives and lasting implications. Keep small
-  decisions in [decisions.md](../../governance/decisions.md) and implementation details in component docs.
+- Use ADRs for consequential choices with alternatives and lasting implications. Small
+  decisions live in the document they change (a [decision log](../../governance/decision_log.md)
+  entry may point to it) and implementation details in component docs.
 - Edit proposed ADRs during review. Correct wording, links and factual errors in place; record
   meaningful clarifications in a revision note.
 - For a material change to an accepted decision, add a new ADR. Identify the exact decisions or

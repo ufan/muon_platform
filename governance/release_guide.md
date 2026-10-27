@@ -45,7 +45,7 @@ in `tools/muon/` never need a launcher release.
    curl -s https://pypi.org/pypi/muon-workspace/json | python3 -c "import sys,json; print(json.load(sys.stdin)['info']['version'])"
    uv tool upgrade muon-workspace && muon which
    ```
-8. **Record it** in `platform/governance/decisions.md` if the change affects how people work.
+8. **Record it** in `platform/governance/decision_log.md` if the change affects how people work.
 
 A PyPI version can never be re-uploaded. If a release is broken, fix it and release the next
 version. You can also "yank" the broken one on pypi.org, which hides it from new installs.

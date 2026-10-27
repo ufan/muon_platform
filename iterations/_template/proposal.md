@@ -23,8 +23,8 @@ Out of scope:
 
 Classes and fields: skill `muon-domain-iteration`. Only the integrator edits this section.
 
-| Id | Class | Capability | Decision | Recommendation | Evidence | If wrong | Confirms when | Status |
-|---|---|---|---|---|---|---|---|---|
+| Id | Class | Capability | Decision | Recommendation | Evidence | If wrong | Confirms when | Lands in | Status |
+|---|---|---|---|---|---|---|---|---|---|
 
 ## Delegation
 

@@ -1,6 +1,6 @@
 ---
 name: muon-promote
-description: Use when content from a note or brainstorm (platform/docs/notes/ or similar) should become formal architecture, requirements, ADRs, component specs or contracts, and at domain iteration steps 0 and 3 to harvest proposed notes for that domain.
+description: Use when content from a note or brainstorm (platform/docs/notes/ or similar), a decision log entry with a pending home, or an approved decision request should become formal architecture, requirements, ADRs, component specs or contracts (landing), and at domain iteration steps 0 and 3 to harvest proposed notes and approved requests for that domain.
 ---
 
 # Promote note content
@@ -10,6 +10,10 @@ owning documents, and the note becomes a record that maps every section to its n
 
 1. **Find sources.** List the `proposed` notes in the `platform/docs/README.md` notes index (and any
    notes in the affected repositories) that touch the domain or topic. Read each source fully.
+   Decisions are sources too: `Home: … (pending)` entries in `platform/governance/decision_log.md`
+   and `approved` product requests in the iteration's `## Decision requests`. For them, steps 3–5
+   apply to the one decision; instead of step 6, mark the log entry's home as stated and fold it, or
+   set the request to `landed — <commit>`.
 2. **Find existing homes.** Read the current architecture, requirements, ADRs, component specs and
    contracts the content would land in, so you add to them instead of duplicating or contradicting them.
 3. **Classify every section** of the source. Destinations follow the specification layers (engineering process §2)
@@ -20,7 +24,7 @@ owning documents, and the note becomes a record that maps every section to its n
    | Required behaviour, acceptance | component spec (`<repo>/…/SPEC.md`, `specs/`) or `platform/docs/requirements/` with an ID (engineering process §3) | normative |
    | Boundary, ownership, data flow | `platform/docs/architecture/` | current |
    | Consequential choice with alternatives | new ADR (owner decides) | proposed until accepted |
-   | Small agreed decision | `platform/governance/decisions.md` | — |
+   | Small agreed process decision | `platform/governance/decision_log.md` | — |
    | Record or message fields | `contracts/…` README or schema | proposed until frozen |
    | Plausible but undecided rule | the owning spec, marked "proposed default (not yet decided)" | proposed |
    | Useful design detail | "Reference design (non-normative)" section of the owning spec | non-normative |
@@ -39,7 +43,7 @@ owning documents, and the note becomes a record that maps every section to its n
    the status line.
 7. **Update indexes and record it.** Update the notes index in `platform/docs/README.md` and any
    index of the destination repositories. The commit message records the migration; add a
-   `platform/governance/decisions.md` line only for a new owner decision that passes its log test.
+   `platform/governance/decision_log.md` line only for a new owner decision that passes its log test.
 8. **Verify.** Check that all relative links and anchors resolve. Use the same branch name in every
    repository you changed (`muon branch`), announce them, and run `muon verify` (skill `muon-verify`).
    Mark contract changes additive or breaking in the commit message.
