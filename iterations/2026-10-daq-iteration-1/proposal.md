@@ -1,10 +1,23 @@
 # DAQ iteration 1: fx3/gen1 acquisition service
 
 Status: active
-Playbook step: 1 (legacy archaeology). Step 0 is done in `docs/architecture/system_architecture.md` §5.
 Owner: project owner
 Affected repositories: `core` (`daq/`, `contracts/`; active); references: `legacy/usb_app2`, `legacy/muon400_process` (`src/fx3`)
 Requirements: `daq:FR-001` … `daq:FR-012`
+
+## Capabilities
+
+Step 0 is done in `docs/architecture/system_architecture.md` §5. Archaeology and the golden-data plan
+(steps 1–2) cover the whole domain; both are provisional (tasks 2 and 3). No capability has a baseline yet (`core` has no `openspec/`), so
+the prototype in task 8 is exploration.
+
+| Capability | Repository | Playbook step | Stage (§4) |
+|---|---|---|---|
+| Device state machine (`daq_device`) | core | 2 | exploration |
+| Raw capture and run metadata | core | 2 | exploration |
+| Domain-service pattern and DAQ service API | core | 2 | exploration |
+| Time base and clock correlation | core | 2 | exploration |
+| Raw stream to consumers | core | 2 | exploration |
 
 ## Why
 
@@ -35,22 +48,37 @@ In scope:
 
 Out of scope: preprocess rewrite (iteration 2), online event building beyond what `daq:FR-012` needs as a consumer interface.
 
-## Decisions needed (human)
+## Decision requests
 
-1. ~~**Wire-protocol ownership.**~~ **Decided 2026-10-22:** `daq/ref/<target>/` owns the
-   device ↔ host protocol. `contracts/wire/` was a stale April snapshot (identical to
-   `daq/ref/fx3/gen1` apart from one broken link) and has been removed, including its Chinese
-   translation. The data-frame schemas `daq/ref/fx3/gen1/schema/protocol.{fbs,proto}` are
-   candidates for `contracts/pipeline/` (decide in the preprocess iteration).
-   `contracts/` keeps the boundaries between repositories.
-2. Raw-capture container format, e.g. plain segmented binary + JSON sidecar vs. an existing container.
-3. Whether to clone `usb_app2` into the workspace (`muon ws sync --legacy`: cloned and locked read-only) or reference it on GitHub only.
-4. **Raw-capture provenance and time fields** (system architecture §6). Recommended: a run header with `boot_id`,
-   clock source and sync state, core SHA, and conditions snapshot ID + content hash (the resolved snapshot
-   embedded); periodic **clock-correlation records** in the stream (device timestamp ↔ edge monotonic ↔ UTC),
-   because runs last days and the device clock drifts and wraps.
-5. **Device timestamp semantics** (ask the hardware side): the width of the 8 ns `timestamp` word (32 bits would wrap
-   every ~34 s), and whether `Stop`/reset clears it. Record the answer in `core/daq/ref/fx3/gen1/`.
+Classes and fields: skill `muon-domain-iteration`. Only the integrator edits this section.
+Converted 2026-10-27 from the former "Decisions needed" list. Approved requests are decisions; its full wording is in git history.
+
+| Id | Class | Capability | Decision | Recommendation | Evidence | If wrong | Confirms when | Status |
+|---|---|---|---|---|---|---|---|---|
+| DAQ-0 | ask | all | Start DAQ iteration 1; rewrite from spec, legacy as reference only | — | `governance/decisions.md` 2026-10-21 | — | — | approved — owner, human, 2026-10-21, authority: owner |
+| DAQ-1 | ask | all | Wire-protocol ownership | `daq/ref/<target>/` owns the device ↔ host protocol; `contracts/wire/` removed. The data-frame schemas `daq/ref/fx3/gen1/schema/protocol.{fbs,proto}` are candidates for `contracts/pipeline/`, decided in the preprocess iteration | stale April snapshot, identical apart from one broken link | two sources of truth for the protocol | — | approved — owner, human, 2026-10-22, authority: owner |
+| DAQ-2 | show | raw capture | Raw-capture container format | none yet; task 5 proposes one (candidates: segmented binary + JSON sidecar, an existing container) | — | replay and provenance redone; format version bump | task 5 proposal written | open |
+| DAQ-3 | show | all | Clone `usb_app2` into the workspace or reference it on GitHub only | keep it cloned and locked (already `legacy/usb_app2`, `repos/legacy.repos`) | `muon status`: LOCKED | none; reversible | now | provisional |
+| DAQ-4 | show | raw capture, time base | Raw-capture provenance and time fields (system architecture §6) | run header with `boot_id`, clock source and sync state, core SHA, conditions snapshot ID + content hash (resolved snapshot embedded); periodic clock-correlation records (device timestamp ↔ edge monotonic ↔ UTC) | runs last days; the device clock drifts and wraps (DAQ-5) | data products not traceable; time reconstruction impossible for old runs | task 5 schema written | provisional |
+| DAQ-5 | show | time base | Device timestamp semantics | treat the 8 ns `timestamp` as 32-bit, wrapping about every 34.4 s; unwrap with the clock-correlation records of DAQ-4 | `as-is.md` D11: 32-bit in all four fixtures, 18 wraps in F4 | wrong unwrapping; time drift in products | firmware answer on width and on whether `Stop`/reset clears it (task 9) | provisional |
+| DAQ-6 | show | raw capture | Fixture set F1–F4 as `fx3-gen1-raw@v1`, exact expected values (tolerance 0), T0 cuts of F1 and F2 | as `golden-data.md` §3–4 | scan of 2026-10-23 | tests anchored to a wrong oracle | full-frame CRC check in task 3. Approval is also the explicit request to change `testdata` (a support repository); the import itself is `ask` | provisional |
+| DAQ-7 | show | device FSM | D5 status timeout | use the spec's 2 s | `as-is.md` §5 D5 | spurious or late faults | now | provisional |
+| DAQ-8 | show | device FSM | D6 failure handling | spec wins: Stop → recover → reconfigure (FR-002) | `as-is.md` §5 D6 | unrecoverable runs | now | provisional |
+| DAQ-9 | show | device FSM | D7 status validation | spec wins: check header, tail, op and ack bitmap | `as-is.md` §5 D7 | accepting corrupt status | now | provisional |
+| DAQ-10 | show | raw capture | D8 status/data demultiplexing | demultiplex 4-byte `FA..FE` frames while acquiring; never persist them as data | `as-is.md` §5 D8; F1, F2 contain status frames | raw stream polluted; replay not byte-identical | now | provisional |
+| DAQ-11 | show | raw capture | D15 data loss | never drop raw data (already in requirements) | `as-is.md` §5 D15 | silent data loss | now | provisional |
+| DAQ-12 | show | raw capture | D16 frame alignment of files | the capture format must not rely on files starting on frame boundaries | `as-is.md` §5 D16 | replay breaks on split frames | now | provisional |
+
+The hardware and firmware questions D1–D4 and D9–D14 are `blocked: external` (task 9).
+
+## Delegation
+
+None: the owner settles every `show` request.
+
+## Revisions
+
+| Date | What changed | Affected artifacts | Approvals reopened |
+|---|---|---|---|
 
 ## Risks and verification impact
 

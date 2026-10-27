@@ -13,7 +13,7 @@ rules:
   proposal:
     - "Link the platform iteration task this change serves, if any (../platform/iterations/)."
     - "Name changes this one depends on as `Depends on: <repo>/<change>`."
-    - "End with this section, exactly, left pending: `## Approval` then `Status: pending`. Only the owner changes it to `Status: approved` with `By: <name>` and `Date: <YYYY-MM-DD>`, or an agent on the owner's explicit instruction, quoting it in the commit. Never approve on your own."
+    - "End with this section, exactly, left pending: `## Approval` then `Status: pending`. Only the owner changes it to `Status: approved` with `By: <name>` and `Date: <YYYY-MM-DD>`, or an agent on the owner's explicit instruction, quoting it in the commit, or an agent approver within a delegation the owner recorded (engineering process §7). Never approve a change you authored."
   specs:
     - "Each requirement cites the requirement ID(s) it refines in its text (e.g. `Refines FR-001.`), and system requirements or platform ADRs where they apply. Do not copy requirement text."
   design:
@@ -24,7 +24,7 @@ rules:
 operations:
   apply:
     guidance:
-      - "Before any edit, read proposal.md: `## Approval` must say `Status: approved` with a name and date. Otherwise stop and report that the change awaits approval."
+      - "Before any edit, read proposal.md `## Approval`. A change to a capability already in openspec/specs/ needs `Status: approved` with a name and date; otherwise stop and report that it awaits approval. A baseline change (no spec yet) may be applied on its task branch while pending; never merge it to main before approval."
       - "Do not merge spec deltas into openspec/specs/ during apply; archive does that."
       - "Run `muon verify <name>` before marking Verification tasks done, and say which hardware tests were not run."
       - "Commit your own work in the workspace format (../platform/governance/engineering_process.md §4)."

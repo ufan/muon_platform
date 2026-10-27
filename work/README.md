@@ -35,10 +35,12 @@ A prompt or task document is sufficient; no new CLI, service or environment vari
 An autonomous assignment must identify:
 
 - task identity and objective (for existing task tables, iteration ID plus row number is sufficient);
+- role (worker, reviewer, integrator, ...; engineering process §7);
 - allowed repositories/paths and input task/spec references;
 - acceptance criteria and verification commands;
 - working checkout/worktree and where results should be handed off;
-- bounds: authorized task set, review gates, and what to do on blockers or failed verification.
+- bounds: authorized task set, `ask` requests and hard stops (skill `muon-domain-iteration`), and
+  what to do on blockers or failed verification.
 
 For example: “Implement `daq-iteration-1/#4` in the assigned isolated core worktree. Use its task,
 spec and review prerequisites; scope is the device FSM and its conformance tests. Run `muon verify
@@ -53,8 +55,9 @@ safe autonomous work queues. Concurrent writers use separate worktrees/checkouts
 use the same task branch name across repositories involved in that assignment. A user or coordinator
 assigns non-overlapping scopes and integrates results. Do not commit another session's changes.
 
-A worker reports its task ID, result, commit(s), verification, blockers and remaining approvals to its
-assigned handoff destination. Only the designated integrator updates shared iteration summaries.
+A worker reports its task ID, result, commit(s), verification, blockers, proposed `show` decision requests and
+remaining approvals to its assigned handoff destination. Only the designated integrator updates shared
+iteration summaries and the decision requests. Roles and their authority: engineering process §7.
 For human-directed iteration work, update that iteration's `## Next` with pending actions, questions
 and hardware validation limits. Keep completed maintenance out of unrelated iteration handoffs.
 Unrelated maintenance can be handed off through its commit and final report. Discussion requires no

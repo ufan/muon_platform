@@ -22,6 +22,7 @@ description: Orient and hand off muon workspace sessions, including discussion, 
 ## During the session
 
 - Respect the request's intent: discussion and backup do not authorize iteration implementation.
+- Act within your assigned role. Never review or approve work you authored.
 - Announce each additional repository changed. Use the same task branch name across changed repos.
 - Concurrent writers use isolated worktrees/checkouts; the index provides no claims or locks.
 - Record agreed durable decisions in an ADR, or in `platform/governance/decisions.md` if they pass its log
@@ -32,8 +33,9 @@ description: Orient and hand off muon workspace sessions, including discussion, 
 1. For changed repositories, run `muon verify <repo>` (skill `muon-verify`), inspect the scoped diff
    and commit only this session's changes, in the commit format of
    `governance/engineering_process.md` §4. No mandatory writes or commits for discussion alone.
-2. Hand off to the destination specified by the assignment. Workers report task ID, commits,
-   verification, blockers and pending approvals; only the integrator updates shared summaries.
+2. Hand off to the destination specified by the assignment, according to your role (engineering
+   process §7). Workers report task ID, commits, verification, blockers, proposed `show` decision requests
+   and pending approvals; only the integrator updates shared summaries and the decision requests.
    For human-directed iteration work, keep its `tasks.md` `## Next` focused on pending actions,
    questions and hardware validation limits. Unrelated maintenance needs no iteration update.
 3. Report what was verified and what was not. Push only with the user's confirmation.

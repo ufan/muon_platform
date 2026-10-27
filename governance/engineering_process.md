@@ -13,7 +13,11 @@ changed and hardened. Procedures are in the [developer guide](developer_guide.md
 - **Strangler fig:** each new domain replaces its legacy stage while the chain keeps working.
 - **Domain iteration playbook** (skill `muon-domain-iteration`): scope → legacy archaeology →
   golden data → to-be spec and contracts (baseline, §4) → skeleton and failing tests → implement → differential
-  verification → strangler switch → retire legacy.
+  verification → strangler switch → retire legacy. Steps are tracked per capability. Every agent
+  choice in an iteration has an autonomy class: `ship` (agent proceeds), `show` (agent proceeds on a
+  provisional decision request that an approver settles later) or `ask` (wait for the owner). Only `ask` blocks: hard stops, the other
+  `ask` classes (new iterations, requirements, ADRs, governance, breaking contracts, controlled specs)
+  and the escalation triggers in the skill.
 - **Port, refactor or rewrite** is decided per domain at the to-be spec step:
   - refactor in place: the code is sound and in the right language and runtime; only the structure is wrong;
   - port: the logic is valuable, the language, runtime or structure is not; import history so
@@ -61,6 +65,16 @@ model) specifies and develops its part in detail.
 
 ## 4. Changes
 
+### Terms
+
+| Term | Meaning |
+|---|---|
+| Decision | a settled choice, approved by someone with the authority; lives in an ADR, a spec or the decision log. Only decisions are authoritative |
+| Decision request | an iteration item asking for a decision (`open → provisional → approved / rejected`); approved, it becomes a decision and is restated in its home document |
+| Approval | the act that settles a request or an OpenSpec change, recorded with approver, kind, date and authority (§7) |
+| Autonomy class | how far an agent may go alone: `ship`, `show`, `ask` (skill `muon-domain-iteration`) |
+| Change class | ownership and compatibility of an upper-layer change, D0/C0/C1/C2 (§5); C1 and C2 are at least `ask`, D0 and C0 at least `show` |
+
 ### Stages of a capability
 
 A capability is a cohesive unit of observable behaviour (the DAQ device state machine, the
@@ -99,11 +113,15 @@ a change, and it adds the missing rule.
    refine; design when there is a real choice (sources compared with their authority, alternatives);
    tasks ending in a `## Verification` group (exact commands, hardware tests not run). Commit it.
 2. **Approve:** only the owner sets `Status: approved` with name and date, or an agent does so on
-   the owner's instruction and quotes it in the commit.
-3. **Apply** (`/opsx:apply`, any AI tool): stop if the change is not approved; implement, name tests
-   after requirement IDs, run `muon verify <repo>`, commit. Specs are not merged during apply.
-4. **Archive** (`/opsx:archive`): merge the spec delta into `openspec/specs/`, move the change to
-   `openspec/changes/archive/`, commit; then update the iteration task.
+   the owner's instruction and quotes it in the commit, or an agent approver within a delegation the
+   owner recorded (§7).
+3. **Apply** (`/opsx:apply`, any AI tool): implement, name tests after requirement IDs, run
+   `muon verify <repo>`, commit. A baseline change (the capability is not yet controlled) may be
+   applied on its task branch before approval; a change to a controlled capability waits for
+   approval. Specs are not merged during apply.
+4. **Archive** (`/opsx:archive`): only after approval. Merge the spec delta into `openspec/specs/`,
+   move the change to `openspec/changes/archive/`, commit; then update the iteration task. Nothing
+   that depends on an unapproved change merges to `main`.
 
 Work spanning repositories is one change per repository, linked from the iteration task. A change
 that depends on another names it (`Depends on: <repo>/<change>`) and is archived after it.
@@ -121,7 +139,8 @@ OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt
 
 - Contracts used only by core change in the same commit as their consumer.
 - **Agents draft; the owner approves** requirements, ADRs, behaviour changes and their baselines, and
-  merges to platform docs.
+  merges to platform docs. An agent approver may settle only the classes of decision request the owner
+  has delegated (§7).
 - Definition of done: `muon verify` passes for changed repositories, specs and docs are updated,
   tests reference requirement IDs.
 - **Agents commit their own work.** After `muon verify` passes, the agent that made a scoped change
@@ -152,7 +171,10 @@ OpenSpec workflow; generated per-tool OpenSpec files are git-ignored and rebuilt
 
 - agents may edit any repository; they announce every repository touched outside the starting one,
   use the same branch name across repositories (`muon branch`) and run `muon status` before push;
-- one CI job per code repository runs its verify command.
+- one CI job per code repository runs its verify command;
+- work is non-blocking by default: agents proceed on `show` decision requests, recorded as
+  provisional, and the owner settles them in one pass when work merges. Only `ask` waits: irreversible
+  actions, the other `ask` classes and the escalation triggers (skill `muon-domain-iteration`).
 
 **Hardening triggers:**
 
@@ -227,3 +249,27 @@ When a trigger fires, add the mechanism and record it in `decisions.md`.
   several active iterations. Unassigned unattended sessions stop. Concurrent writers use isolated
   checkouts, and a designated integrator maintains shared iteration summaries. Evaluate existing
   coordination tools before building claims, leases or scheduling.
+
+### Agent roles
+
+Roles are responsibilities and authority, not identities. In solo work, one session (or the owner)
+may hold several roles. With multiple agents, each assignment names its role (`work/README.md`).
+
+| Role | Does | Decides | Never |
+|---|---|---|---|
+| Owner (human) | sets scope and the delegation policy | `ask` requests; hard stops; governance; the delegation policy | — |
+| Coordinator | splits an iteration into bounded, non-overlapping assignments; tracks blockers | which worker gets which assignment | approves; implements |
+| Worker | implements one assignment (a capability or feature) in an isolated worktree | `ship` choices; proposes `show` requests in its handoff | edits shared iteration summaries; reviews its own work |
+| Reviewer | independent readiness, citation and consistency checks; golden comparison reports | whether work is ready; `show` approvals only where delegated | reviews work it authored |
+| Integrator | integrates worker results on the task branch; keeps the decision requests, `## Revisions` and `## Next`; prepares merges | how results are integrated | approves its own merge |
+| Documentation (optional) | keeps indexes, `context.md` and cross-links consistent | wording and structure | changes behaviour content (one fact, one home) |
+
+- **Approver** is a role the delegation policy binds. Today it is the owner. An iteration's
+  `## Delegation` may grant classes of `show` requests to an agent approver, with conditions.
+- **Separation of duties:** author, reviewer and approver of one artifact are different sessions, and
+  preferably different tools or models. In solo work the owner is the approver, and the author and
+  reviewer are still separate agent sessions. A directed session without a named integrator is its own
+  integrator.
+- **Never delegated:** hard stops (push, merge to `main`, spec archive, golden-data import, strangler
+  switch, retire), new iterations, requirements, ADRs, governance and the delegation policy itself.
+- **Approval record:** `Status: approved — <approver>, human|agent:<tool/model>, <date>, authority: owner|delegation <id>`.

@@ -1,6 +1,6 @@
 # Golden-data plan: DAQ (task 2 → task 3)
 
-Status: draft for owner review (2026-10-23). Iteration step 2 (engineering process §1), ADR-011.
+Status: provisional (2026-10-23; fixture set and values are decision request DAQ-6). Iteration step 2 (engineering process §1), ADR-011.
 
 ## 1. What exists
 

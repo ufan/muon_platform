@@ -10,7 +10,8 @@ repository's `openspec/`, and an iteration task links the change that carries it
 ```text
 iterations/
   <yyyy-mm>-<domain>-iteration-<n>/   copy of _template/
-    proposal.md      status, playbook step, why, scope, affected repositories, decisions needed
+    proposal.md      status, capabilities and their playbook steps, why, scope, decision requests,
+                     delegation, revisions
     tasks.md         task table (repository, task, requirement IDs, OpenSpec change, verification, status)
                      and `## Next` (pending actions, questions, hardware validation limits)
     as-is.md         legacy archaeology (step 1, skill `muon-legacy-archaeology`), when there is legacy
@@ -21,7 +22,8 @@ iterations/
 ## Status
 
 `proposal.md` starts with `Status:` (`active`, `paused` or `completed`, as in
-[`work/index.yml`](../work/index.yml)) and `Playbook step:` (0–8). Register an iteration in the
+[`work/index.yml`](../work/index.yml)); its `## Capabilities` table holds each capability's playbook
+step (0–8). Decisions are classed and recorded as in skill `muon-domain-iteration`. Register an iteration in the
 work index when its proposal and tasks exist. Move it to `archive/` when it is completed.
 
 Records in `archive/` dated before 2026-10-26 are change proposals from the earlier process, which

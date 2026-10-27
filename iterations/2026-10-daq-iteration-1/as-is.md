@@ -1,6 +1,6 @@
 # As-is specification: legacy DAQ (task 2)
 
-Status: draft for owner review (2026-10-23). Iteration step 1 (engineering process §1). Legacy code is reference only.
+Status: provisional (2026-10-23; disputed facts are decision requests DAQ-7 … DAQ-12, external questions task 9). Iteration step 1 (engineering process §1). Legacy code is reference only.
 
 **Sources examined (read-only, locked):**
 
