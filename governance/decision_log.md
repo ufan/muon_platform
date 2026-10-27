@@ -30,6 +30,8 @@ One line, newest first: `YYYY-MM-DD [area] decision — why, when known. Home: <
 
 Fold entries at the end of each domain iteration, or when `muon doctor` warns (more than 30 active
 entries). A product entry is never folded while its home is pending: land it first (skill `muon-promote`).
+`muon doctor` warns about pending homes older than 30 days and about approved, unlanded decision
+requests in completed iterations.
 
 ## Active decisions
 

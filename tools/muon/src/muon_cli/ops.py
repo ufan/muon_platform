@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import date
 
 import yaml
 
@@ -19,6 +20,7 @@ from .workspace import REPOS_FILES
 
 RULES_LIMITS = {"root": 3500, "repo": 2500}     # bytes; engineering process §7
 DECISIONS_LIMIT = 30                            # active entries in governance/decision_log.md; engineering process §7
+PENDING_HOME_DAYS = 30                          # age of a product log entry whose home is pending; engineering process §4
 
 
 def git(path, *args, check=False):
@@ -259,6 +261,17 @@ def doctor(ws, log=print):
     if active is not None:
         advise(active <= DECISIONS_LIMIT, f"governance/decision_log.md {active} active entries (limit {DECISIONS_LIMIT})",
                "fold entries into their home documents and governance/decision_log/<year>.md (governance/decision_log.md)")
+    pending = pending_homes(ws)
+    if pending is not None:
+        stale = [d for d in pending if (date.today() - d).days > PENDING_HOME_DAYS]
+        advise(not stale, f"decision log: {len(pending)} entries with a pending home, "
+               f"{len(stale)} older than {PENDING_HOME_DAYS} days",
+               "land them in their home documents (skill muon-promote; engineering process §4)")
+    unlanded = unlanded_requests(ws)
+    if unlanded is not None:
+        advise(not unlanded, f"completed iterations: {len(unlanded)} approved decision requests not landed"
+               + (f" ({', '.join(unlanded)})" if unlanded else ""),
+               "land them in their home documents (skill muon-promote; engineering process §4)")
     return problems == 0
 
 
@@ -271,6 +284,54 @@ def active_decisions(ws):
     except OSError:
         return None
     return len(re.findall(r"^- \d{4}-\d{2}-\d{2}\b", text, re.M))
+
+
+def pending_homes(ws):
+    """Dates of active decision log entries whose home is pending, or None without a platform checkout."""
+    if not ws.hub:
+        return None
+    try:
+        text = open(os.path.join(ws.hub.abspath, "governance", "decision_log.md"), encoding="utf-8").read()
+    except OSError:
+        return None
+    return [date.fromisoformat(m) for m in
+            re.findall(r"^- (\d{4}-\d{2}-\d{2})\b.*Home:[^\n]*\(pending\)", text, re.M)]
+
+
+def unlanded_requests(ws):
+    """`<iteration>/<id>` of approved, not landed decision requests in completed iterations.
+
+    Reads `## Decision requests` tables (columns `Id`, `Lands in`, `Status`) of the proposals listed
+    in work/index.yml; process requests (`Lands in` = `—`) are skipped. None without a work index.
+    """
+    if not ws.hub:
+        return None
+    try:
+        with open(os.path.join(ws.hub.abspath, "work", "index.yml"), encoding="utf-8") as fh:
+            index = yaml.safe_load(fh) or {}
+    except OSError:
+        return None
+    out = []
+    for it in index.get("iterations") or []:
+        if it.get("status") != "completed" or not it.get("proposal"):
+            continue
+        try:
+            text = open(os.path.join(ws.topdir, it["proposal"]), encoding="utf-8").read()
+        except OSError:
+            continue
+        cols = None
+        for line in text.splitlines():
+            if not line.startswith("|"):
+                cols = None
+                continue
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if cols is None:
+                cols = cells if {"Id", "Lands in", "Status"} <= set(cells) else []
+            elif cols and len(cells) == len(cols) and not set(cells[0]) <= set("-: "):
+                row = dict(zip(cols, cells))
+                if row["Status"].startswith("approved") and row["Lands in"] not in ("", "—", "-"):
+                    out.append(f"{it.get('id', '?')}/{row['Id']}")
+    return out
 
 
 def rules_files(ws):

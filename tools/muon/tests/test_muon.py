@@ -155,6 +155,45 @@ def test_doctor_counts_active_decisions(remotes):
     assert ops.active_decisions(ws) == 2
 
 
+def test_doctor_finds_pending_homes(remotes):
+    from muon_cli import ops
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform)
+    ws = Workspace(topdir=str(top))
+    assert ops.pending_homes(ws) is None
+    gov = top / "platform" / "governance"
+    gov.mkdir()
+    (gov / "decision_log.md").write_text("# Decision log\n\n"
+                                          "- 2026-10-24 [a] one. Home: docs/x.md (pending).\n"
+                                          "- 2026-10-22 [b] two. Home: docs/y.md.\n"
+                                          "- 2026-10-21 [c] three. Home: log-only.\n")
+    from datetime import date
+    assert ops.pending_homes(ws) == [date(2026, 10, 24)]
+
+
+def test_doctor_finds_unlanded_requests_in_completed_iterations(remotes):
+    from muon_cli import ops
+    tmp_path, platform = remotes
+    top = init(tmp_path, platform)
+    ws = Workspace(topdir=str(top))
+    work = top / "platform" / "work"
+    work.mkdir()
+    (work / "index.yml").write_text(yaml.safe_dump({"version": 1, "iterations": [
+        {"id": "x-1", "status": "completed", "proposal": "platform/iterations/x/proposal.md"},
+        {"id": "y-1", "status": "active", "proposal": "platform/iterations/y/proposal.md"}]}))
+    table = ("## Decision requests\n\n"
+             "| Id | Class | Decision | Lands in | Status |\n|---|---|---|---|---|\n"
+             "| X-1 | show | a | `core/a` | approved — owner, human, 2026-10-27, authority: owner |\n"
+             "| X-2 | show | b | `core/b` | landed — abc123 |\n"
+             "| X-3 | show | c | — | approved — owner, human, 2026-10-27, authority: owner |\n"
+             "| X-4 | show | d | `core/d` | provisional |\n")
+    for name in ("x", "y"):
+        d = top / "platform" / "iterations" / name
+        d.mkdir(parents=True)
+        (d / "proposal.md").write_text(table)
+    assert ops.unlanded_requests(ws) == ["x-1/X-1"]
+
+
 def test_claude_adapter_uses_edit_rules_and_drops_entries_after_a_move(remotes, monkeypatch):
     import json
     import shutil
