@@ -15,12 +15,13 @@ Statuses: `todo | draft | provisional | blocked: owner | blocked: external | don
 | 8 | core | Implementation following `core/daq/doc/implementation-priorities.md` | daq:FR-001…daq:FR-012 | `muon verify core` + hardware tests | draft (exploration prototype) |
 | 9 | (external) | Hardware/firmware answers to `as-is.md` D1–D4, D9–D14; record them in `core/daq/ref/fx3/gen1/` | daq:FR-001…daq:FR-006 | answers recorded | blocked: external |
 | 10 | core, testdata | Hardware reference session on `jw-muon-150test` (`golden-data.md` §5) → `fx3-gen1-session@v1` | daq:FR-001, daq:FR-002 | session recorded | blocked: owner (hardware access) |
+| 11 | core | Set up `core/openspec/` from `platform/templates/project/openspec/` (`openspec init`; `openspec/config.yaml` with core's placeholders), needed before any baseline change (step 3) | — | `openspec validate --all --strict`; `muon verify core` | todo |
 
 ## Next
 
 - Owner: one pass over the provisional requests DAQ-3 … DAQ-12 in `proposal.md` (DAQ-6 is the
   fixture set F1–F4; DAQ-7 … DAQ-12 the as-is discrepancies that need no external answer).
-- Agents, without waiting: task 3 up to the import (T0 cuts, spec scanner as a test helper in
+- Agents, without waiting: task 11 (OpenSpec in core), task 3 up to the import (T0 cuts, spec scanner as a test helper in
   `core/daq/tests/`, `golden.yml` with the exact values), and task 4 on a task branch. The import
   into `testdata/golden` waits for DAQ-6.
 - External (task 9): questions D1, D2, D3, D4, D9, D10, D11, D12, D13, D14 for the hardware/firmware side.

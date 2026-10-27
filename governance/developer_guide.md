@@ -102,8 +102,9 @@ task; a change that depends on another says `Depends on: <repo>/<change>` and is
 Each capability passes through three stages (engineering process §4):
 1. **Exploration:** prototype freely to find out what is really needed; no gate.
 2. **Baseline:** `/opsx:propose` the capability's first change. Its spec states what the prototype
-   taught, its requirements cite the requirement IDs, its tasks end with verification. The owner
-   approves; `/opsx:apply`, `muon verify`, `/opsx:archive`.
+   taught, its requirements cite the requirement IDs, its tasks end with verification. It may be
+   applied (`/opsx:apply`, `muon verify`) on its task branch while approval is pending; the owner
+   approves before it merges to `main` and before `/opsx:archive` (engineering process §4).
 3. **Controlled:** every later behaviour change to that capability is an OpenSpec change. Refactors,
    tooling, docs and fixes that restore the spec are ordinary commits.
 
@@ -151,7 +152,7 @@ repository to `platform/repos/workspace.repos`, and give it `.muon/repo.yml` and
 - **One fact, one home.** Decisions go in an ADR or the document they change, or in `governance/decision_log.md` if they pass its log test (product entries land in their home, engineering process §4) (folded entries move to `governance/decision_log/<year>.md`); behaviour specs and changes in each component repository's `openspec/`, iteration plans in their task records, pending iteration actions in `tasks.md` `## Next`, and worker results in their assigned handoff (see the work scope protocol).
   Tool memories are caches only.
 - **Parallel agents:** isolate concurrent writers in separate worktrees/checkouts; assign bounded
-  task scopes and an integrator (see the work scope protocol).
+  task scopes, a role each and an integrator (agent roles: engineering process §7; work scope protocol).
 - **Review diffs, not prose.** Agents propose; you merge. Agents never push, create remotes or
   delete branches without your confirmation.
 - **Fresh-session check:** occasionally start a new session (in each AI tool you use) with a small task in

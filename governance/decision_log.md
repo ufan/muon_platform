@@ -35,5 +35,7 @@ requests in completed iterations.
 
 ## Active decisions
 
+- 2026-10-27 [process] Adopt the agent-native workflow gradually: review stays human in the loop (owner, or a separate agent session at the owner's request) until DAQ iteration 1 is complete; no agent review skill or delegation before then. Why: the project is still in its documentation and infrastructure phase; finish one iteration and fix more serious gaps first. Revisit at the end of DAQ iteration 1. Home: log-only.
+
 - 2026-10-21 [workflow] Development is bottom-up, one domain at a time: DAQ first (rewrite from spec; legacy is reference only), then preprocess. Home: log-only.
 - 2026-10-21 [repos] GitHub (`ufan`) is the default remote; legacy and support repositories may keep gitee or other remotes. Home: log-only.

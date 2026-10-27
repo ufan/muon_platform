@@ -83,7 +83,9 @@ reopen (they return to `provisional`). Then redo the affected work.
 
 ## Roles and resuming
 
-Roles are in engineering process §7. Workers make `ship` choices and propose `show` requests in their
+Roles are in engineering process §7. For now the review is human in the loop: the owner reviews, or
+asks a separate agent session to; there is no agent review procedure or delegation yet (decision log
+2026-10-27). Workers make `ship` choices and propose `show` requests in their
 handoff; only the integrator edits `## Decision requests`, `## Revisions`, task statuses and `## Next`. A
 directed session without a named integrator is its own integrator.
 
